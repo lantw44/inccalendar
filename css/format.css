@@ -1,0 +1,51 @@
+body{
+	margin: 0px;
+}
+div#topprodname{
+	color: rgb(203, 203, 203);
+	background-color: black;
+	text-align: center;
+	font-size: 18px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+div#controlpanel{
+	margin: 4px;
+	height: 28px;
+}
+div#controlpanel input{
+	background-color: blue;
+	color: white;
+	border-width: thin;
+	border-radius: 4px;
+	padding: 4px 8px;
+	font-size: large;
+}
+div#controlpanel input.selected{
+	border-style: inset;
+	background-color: navy;
+}
+div#controlleft{
+	width: 50%;
+	float: left;
+	position: relative;
+	left: 2px;
+	text-align: left;
+}
+div#controlright{
+	width: 50%;
+	float: left;
+	position: relative;
+	right: 2px;
+	text-align: right;
+}
+div#statusbar{
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	width: 100%;
+	border-top-style: dotted;
+	border-top-width: 2px;
+}

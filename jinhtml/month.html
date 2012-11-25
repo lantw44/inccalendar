@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+		<title>{{ productname }}</title>
+		<link rel="stylesheet" href="css/format.css" type="text/css">
+		<style type="text/css">
+			div#timeselect{
+				margin-top: 20px;
+				margin-bottom: 20px;
+				font-size: x-large;
+				text-align: center;
+			}
+			div#timeselect input{
+				vertical-align: text-top;
+			}
+			table#cal{
+				min-width: 800px;
+				width: 100%;
+			}
+			tbody#calbody{
+				border-width: 2px;
+				border-style: solid;
+				height: 100px;
+			}
+			#timeedit_month, #timeedit_year, #timeedit_apply, #timeedit_cancel{
+				display: none;
+			}
+			#timeedit_month, #timeedit_year{
+				width: 50px;
+			}
+		</style>
+		<script src="js/cookie.js" type="text/javascript"></script>
+		<script src="js/month.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			function google_logout(){
+				window.location = "{{ logouturl }}";				
+			}
+		</script>
+	</head>
+	<body onload="setyearmonth(); createcaltable(); setmonthcal();">
+		<div id="topprodname">
+			{{ googleuser }} - {{ productname }}
+		</div>
+		<div id="controlpanel">
+			<div id="controlleft">
+				<input type="button" value="月曆" id="switchmonth" class="selected">
+				<input type="button" value="清單" id="switchlist">
+			</div>
+			<div id="controlright">
+				<input type="button" value="匯入" id="buttonimport">
+				<input type="button" value="匯出" id="buttonexport">
+				<input type="button" value="登出" onclick="google_logout()" style="background-color: darkgray">
+			</div>
+		</div>
+		<div id="statusbar">
+			載入中......
+		</div>
+		<div id="timeselect">
+			<input type="button" value="<" id="timeselect_prev" onclick="timeselect_prev()">
+			<span id="timeselect_year" onclick="timeselect_direct()">XXXX</span>
+			<input type="text" maxlength="4" id="timeedit_year">
+			年
+			<span id="timeselect_month" onclick="timeselect_direct()">XX</span>
+			<input type="text" maxlength="4" id="timeedit_month">
+			月 
+			<input type="button" value=">" id="timeselect_fwd" onclick="timeselect_fwd()">
+			<input type="button" value="確定" id="timeedit_apply" onclick="timeedit_apply()">
+			<input type="button" value="取消" id="timeedit_cancel" onclick="timeedit_cancel()">
+		</div>
+		<div id="monthcal">
+			<table id="cal">
+				<thead>
+					<tr>
+						<td>週日</td>
+						<td>週一</td>
+						<td>週二</td>
+						<td>週三</td>
+						<td>週四</td>
+						<td>週五</td>
+						<td>週六</td>
+					</tr>
+				</thead>
+				<tbody id="calbody">
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>

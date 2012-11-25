@@ -1,0 +1,6 @@
+/datastore
+/.project
+/.pydevproject
+*.pyc
+*.swp
+*.swo
