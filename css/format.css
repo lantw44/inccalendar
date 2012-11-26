@@ -8,6 +8,7 @@ div#topprodname{
 	font-size: 18px;
 	padding-top: 4px;
 	padding-bottom: 4px;
+	white-space: nowrap;
 }
 div#controlpanel{
 	margin: 4px;
@@ -43,9 +44,15 @@ div#statusbar{
 	position: fixed;
 	left: 0px;
 	bottom: 0px;
+	height: 27px;
+	font-size: 18px;
 	padding-top: 2px;
 	padding-bottom: 2px;
 	width: 100%;
-	border-top-style: dotted;
-	border-top-width: 2px;
+	background-color: black;
+	color: white;
+	white-space: nowrap;
+}
+div#bottomemptybar{
+	height: 27px;
 }
