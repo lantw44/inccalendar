@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8">
+		<title> {{ productname }} </title>
+		<link rel = "stylesheet" href = "css/format.css" type = "text/css">
+		<style>
+			thead tr > td {
+				font-size:1.5em;
+			}
+			td {
+				border-width:0px 1px 1px 0px;
+				border-style:solid;
+				font-size:1.2em;
+			}
+			table#listcal {
+				border-width:1px 0px 0px 1px;
+				border-style:solid;
+				text-align:center;
+				width:99%;
+			}
+			tr.event > td {
+				padding:20px;
+			}
+			td {
+				height:20px;
+			}
+			td.date {
+				min-width:25px;
+				width:100px;
+			}
+			td.week {
+				width:80px;
+			}
+			td.time {
+				width:150px;
+			}
+		</style>
+		<script type = "text/javascript">
+			function google_logout () {
+				window.location = "{{ logouturl }}";				
+			}
+		</script>
+		<script type = "text/javascript">
+			function loadevent () {
+				var eventbody = document.getElementById ("eventbody");
+				var dataclass = ["date", "week", "time", "content"];
+				var Event, data;
+				for (var i = 0 ; i < 10 ; i++) {
+					Event = document.createElement ("tr");
+					Event.className = "event";
+					for (var j = 0 ; j < 4 ; j++) {
+						data = document.createElement ("td");
+						data.className = dataclass[j];
+						Event.appendChild (data);
+					}
+					eventbody.appendChild (Event);
+				}
+			}
+		</script>
+	</head>
+	<body onload = "loadevent ();">
+		<div id = "topprodname">
+			{{ googleuser }} - {{ productname }}
+		</div>
+		<div id = "controlpanel">
+			<div id = "controlleft">
+				<input type = "button" value = "月曆" id = "switchmonth">
+				<input type = "button" value = "清單" id = "switchlist" class = "selected">
+			</div>
+			<div id = "controlright">
+				<input type = "button" value = "匯入" id = "buttonimport">
+				<input type = "button" value = "匯出" id = "buttonexport">
+				<input type = "button" value = "登出" onclick = "google_logout()" style = "background-color:darkgray;">
+			</div>
+		</div>
+		<div id = "statusbar">
+			載入中......
+		</div>
+		<div align = "center">
+			<table id = "listcal" cellpadding = "0" cellspacing = "0">
+				<thead>
+					<tr>
+						<td colspan = "3" id = "date"> 日期 </td>
+						<td id = "eventcontent"> 內容 </td>
+					</tr>
+				</thead>
+				<tbody id = "eventbody">
+					<tr class = "event">
+						<td class = "date"> 2012.11.27 </td>
+						<td class = "week"> 星期二 </td>
+						<td class = "time"> 20:13 - 22:00 </td>
+						<td class = "content"> final project online </td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
