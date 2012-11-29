@@ -4,7 +4,7 @@
 var cookie_year = "inccal_year";    /* 存放目前選取年份的 cookie 名稱 */
 var cookie_month = "inccal_month";  /* 存放目前選取月份的 cookie 名稱 */
 var value_year;    /* 目前選取的年份（整數） */
-var value_month;   /* 目前選取的月份（整數），注意與 javascript 中 Date() 表示的不同 */
+var value_month;   /* 目前選取的月份（整數），注意與 javascript 中的相差 1 */
 var objyear;       /* 顯示年份的物件 */
 var objmonth;      /* 顯示月份的物件 */
 var row_count = 0; /* 月曆列數 */
@@ -148,7 +148,8 @@ function updatecaltable(){
 	if(newcount < oldcount){
 		for(i=newcount+1; i<=oldcount; i++){
 			for(j=0; j<7; j++){
-				toremove = document.getElementById("cal" + i.toString() + j.toString());
+				toremove = document.getElementById("cal" + i.toString() + 
+						j.toString());
 				toremove.parentNode.removeChild(toremove);
 			}
 			toremove = document.getElementById("calrow" + i.toString());
@@ -160,7 +161,8 @@ function updatecaltable(){
 			node_tr.setAttribute("id", "calrow" + i.toString());
 			for(j=0; j<7; j++){
 				node_td = document.createElement("td");
-				node_td.setAttribute("id", "cal" + i.toString() + j.toString());
+				node_td.setAttribute("id", "cal" + i.toString() + 
+						j.toString());
 				node_tr.appendChild(node_td);
 			}
 			objbd.appendChild(node_tr);
@@ -194,7 +196,8 @@ function setmonthcal(){
 		od_day = objdate.getDay();
 		od_month = objdate.getMonth();
 		od_year = objdate.getYear();
-		objcal = document.getElementById("cal" + i.toString() + od_day.toString());
+		objcal = document.getElementById("cal" + i.toString() + 
+				od_day.toString());
 		if(od_month == tomonth){
 			objcal.style.borderColor = "black";
 			objcal.style.color = "black";
@@ -202,11 +205,13 @@ function setmonthcal(){
 		}else if(od_year < toyear || od_month < tomonth){
 			objcal.style.borderColor = "lightgray";
 			objcal.style.color = "gray";
-			objcal.innerHTML = (od_month + 1).toString() + "/" + todate.toString();
+			objcal.innerHTML = (od_month + 1).toString() + "/" + 
+				todate.toString();
 		}else if(od_year > toyear || od_month > tomonth){
 			objcal.style.borderColor = "lightgray";
 			objcal.style.color = "gray";
-			objcal.innerHTML = (od_month + 1).toString() + "/" + todate.toString();
+			objcal.innerHTML = (od_month + 1).toString() + "/" + 
+				todate.toString();
 		}else{
 			alert("setmonthcal(): fatal error");
 			return;

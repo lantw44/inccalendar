@@ -38,6 +38,9 @@
 			function google_logout(){
 				window.location = "{{ logouturl }}";				
 			}
+			function switch_list(){
+				window.location = "{{ myurl }}?view=list";
+			}
 		</script>
 	</head>
 	<body onload="setyearmonth(); setmonthcal();">
@@ -47,7 +50,7 @@
 		<div id="controlpanel">
 			<div id="controlleft">
 				<input type="button" value="月曆" id="switchmonth" class="selected">
-				<input type="button" value="清單" id="switchlist">
+				<input type="button" value="清單" id="switchlist" onclick="switch_list()">
 			</div>
 			<div id="controlright">
 				<input type="button" value="匯入" id="buttonimport">
