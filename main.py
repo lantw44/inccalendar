@@ -14,6 +14,7 @@ class MainPage(webapp2.RedirectHandler):
 		guserid = users.get_current_user()
 		productname = cgi.escape(u'#include <行事曆.h>')
 		myurl = self.request.uri
+		mysimple = self.request.path_url
 		useview = self.request.get('view')
 		if guserid:
 			logouturl = cgi.escape(users.create_logout_url(myurl))
@@ -21,7 +22,7 @@ class MainPage(webapp2.RedirectHandler):
 				'logouturl': logouturl,
 				'productname': productname,
 				'googleuser': guserid,
-				'myurl': myurl
+				'mysimple': mysimple
 			}
 			
 			if not useview:
