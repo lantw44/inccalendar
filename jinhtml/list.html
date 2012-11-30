@@ -45,6 +45,9 @@
 			function google_logout () {
 				window.location = "{{ logouturl }}";				
 			}
+			function switch_month () {
+				window.location = "{{ mysimple }}?view=month";
+			}
 		</script>
 		<script type = "text/javascript">
 			function pushevent () {//將活動放入行事曆中
@@ -65,17 +68,37 @@
 				}
 			}
 			function searchevent () {//搜尋符合的活動
-				var string = document.getElementById ("searchingstring").value;
+				var obj = document.getElementById ("searchingoption");//obj = <select>
+				var option = obj[obj.selectedIndex].value;//option = date or content
 				var events = document.getElementById ("eventbody").getElementsByClassName ("event");
-				var eventscontent = document.getElementById ("eventbody").getElementsByClassName ("content");
 				var matchedNum = 0;
-				for (var i = 0 ; i < eventscontent.length ; i++) {
-					if (eventscontent[i].innerHTML.search (string) == -1) {//Not Match
-						events[i].style.display = "none";
+				if (option == "content") {
+					var string = document.getElementById ("searchingcontent").value;
+					var eventscontent = document.getElementById ("eventbody").getElementsByClassName ("content");
+					for (var i = 0 ; i < eventscontent.length ; i++) {
+						if (eventscontent[i].innerHTML.search (string) != -1) {
+							events[i].style.display = "table-row";
+							matchedNum++;
+						}
+						else {//Not Match
+							events[i].style.display = "none";
+						}
 					}
-					else {
-						events[i].style.display = "table-row";
-						matchedNum++;
+				}
+				else if (option == "date") {
+					var month = document.getElementById ("searchingdatemonth").value;
+					var day = document.getElementById ("searchingdateday").value;
+					var eventsdate = document.getElementById ("eventbody").getElementsByClassName ("date");
+					var dateinfo = new Array ();
+					for (var i = 0 ; i < eventsdate.length ; i++) {
+						dateinfo = eventsdate[i].innerHTML.split (".");
+						if ((month == "" || dateinfo[1] == month) && (day == "" || dateinfo[2] == day)) {
+							events[i].style.display = "table-row";
+							matchedNum++;
+						}
+						else {//Not Match
+							events[i].style.display = "none";
+						}
 					}
 				}
 				if (matchedNum == 0) {
@@ -83,6 +106,18 @@
 				}
 				else {
 					document.getElementById ("unmatchedmessage").style.display = "none";
+				}
+			}
+			function changesearchingbar (obj) {
+				var searchingdate = document.getElementById ("searchingdate");
+				var searchingcontent = document.getElementById ("searchingcontent");
+				if (obj.value == "date") {
+					searchingdate.style.display = "inline";
+					searchingcontent.style.display = "none";
+				}
+				else if (obj.value == "content") {
+					searchingdate.style.display = "none";
+					searchingcontent.style.display = "inline";
 				}
 			}
 		</script>
@@ -110,7 +145,7 @@
 		</div>
 		<div id = "controlpanel">
 			<div id = "controlleft">
-				<input type = "button" value = "月曆" id = "switchmonth">
+				<input type = "button" value = "月曆" id = "switchmonth" onclick = "switch_month ();">
 				<input type = "button" value = "清單" id = "switchlist" class = "selected">
 			</div>
 			<div id = "controlright">
@@ -123,7 +158,15 @@
 			載入中......
 		</div>
 		<div id = "searchbar" align = "center">
-			<input id = "searchingstring" type = "text" onkeyup = "searchevent ();">
+			<select id = "searchingoption" onchange = "changesearchingbar (this);">
+				<option value = "date"> 日期 </option>
+				<option value = "content" selected = "selected"> 內容 </option>
+			</select>
+			<input id = "searchingcontent" type = "text" onkeyup = "searchevent ();">
+			<div id = "searchingdate" style = "display:none;">
+				<input id = "searchingdatemonth" type = "text" size = "2" onkeyup = "searchevent ();"> 月
+				<input id = "searchingdateday" type = "text" size = "2" onkeyup = "searchevent ();"> 日
+			</div>
 		</div>
 		<div align = "center">
 			<table id = "listcal" cellpadding = "0" cellspacing = "0" style = "width:1880px;">
