@@ -17,8 +17,8 @@ handlers:
   static_dir: js
   secure: optional
 
-- url: /access/.*
-  script: access/\1.app
+- url: /access/(.*)
+  script: access.\1.app
   secure: always
 
 - url: /.*
