@@ -39,10 +39,15 @@
   var switchmonthobj = document.getElementById("switchmonth");
   switchmonthobj.className += "selected";
   switchmonthobj.onclick = "";
+  status_bar_append("(y)修改年份 (m)修改月份");
 {% endblock %} 
   
 {% block headjs %}
   <script src="js/month.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(document).bind("keydown", "m", timeedit_month_kbd);
+    $(document).bind("keydown", "y", timeedit_year_kbd);
+  </script>
 {% endblock %}
 
 {% block body %}
@@ -52,7 +57,7 @@
     <input type="text" maxlength="4" id="timeedit_year">
     年
     <span id="timeselect_month" onclick="timeselect_direct()">XX</span>
-    <input type="text" maxlength="4" id="timeedit_month">
+    <input type="text" maxlength="2" id="timeedit_month">
     月 
     <input type="button" value=">" id="timeselect_fwd" onclick="timeselect_fwd()">
     <input type="button" value="改" id="timeedit_button" onclick="timeselect_direct()">

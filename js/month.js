@@ -9,6 +9,9 @@ var objyear;       /* 顯示年份的物件 */
 var objmonth;      /* 顯示月份的物件 */
 var row_count = 0; /* 月曆列數 */
 
+var timeedit_year_backgroundcolor;
+var timeedit_month_backgroundcolor;
+
 function setyearmonth(){
 	var useryear = parseInt(getcookievalue(cookie_year));
 	var usermonth = parseInt(getcookievalue(cookie_month));
@@ -47,6 +50,18 @@ function timeselect_fwd(){
 	setmonthcal();
 }
 
+function timeedit_year_kbd(){
+	timeselect_direct();
+	$("#timeedit_year").focus();
+	return false;
+}
+
+function timeedit_month_kbd(){
+	timeselect_direct();
+	$("#timeedit_month").focus();
+	return false;
+}
+
 function timeselect_direct(){
 	document.getElementById("timeedit_year").style.display = "inline";
 	document.getElementById("timeedit_month").style.display = "inline";
@@ -60,27 +75,56 @@ function timeselect_direct(){
 	
 	document.getElementById("timeedit_year").value = value_year;
 	document.getElementById("timeedit_month").value = value_month;
+	
+	$(document).bind("keydown", "esc", timeedit_cancel_kbd);
+	$(document).bind("keydown", "return", timeedit_apply_kbd);
+	$(document).unbind("keydown", "m", timeedit_month_kbd);
+    $(document).unbind("keydown", "y", timeedit_year_kbd);
+	
+	timeedit_year_backgroundcolor = 
+		document.getElementById("timeedit_year").style.backgroundColor;
+	timeedit_month_backgroundcolor = 
+		document.getElementById("timeedit_month").style.backgroundColor;
+	
+	status_bar_save();
+	status_bar_set("(Esc)取消 (Enter)確定");
 }
 
 function timeedit_apply(){
-	var newyear = parseInt(document.getElementById("timeedit_year").value);
-	var newmonth = parseInt(document.getElementById("timeedit_month").value);
+	var edityearobj = document.getElementById("timeedit_year");
+	var editmonthobj = document.getElementById("timeedit_month");
+	var newyear = parseInt(edityearobj.value);
+	var newmonth = parseInt(editmonthobj.value);
 	try{
-		if(!isFinite(newyear) || !isFinite(newmonth)){
-			throw "請輸入正確的數字！";
+		if(!isFinite(newyear)){
+			status_bar_warning("請輸入正確的年份！");
+			edityearobj.style.backgroundColor = "red";
+			throw false;
+		}else if(!isFinite(newmonth)){
+			status_bar_warning("請輸入正確的月份！");
+			editmonthobj.style.backgroundColor = "red";
+			throw false;
 		}else if(newyear < 1970){
-			throw "請輸入 1970 年以後的年份！";
+			status_bar_warning("請輸入 1970 年以後的年份！");
+			edityearobj.style.backgroundColor = "red";
+			throw false;
 		}else if(newmonth < 1 || newmonth > 12){
-			throw "請輸入正確的月份！";
+			status_bar_warning("請輸入正確的月份！");
+			editmonthobj.style.backgroundColor = "red";
+			throw false;
 		}
 	}catch(err){
-		alert(err);
-		return;
+		return err;
 	}
 	value_year = newyear;
 	value_month = newmonth;
 	setmonthcal();
 	timeedit_cancel();
+}
+
+function timeedit_apply_kbd(){
+	timeedit_apply();
+	return false;
 }
 
 function timeedit_cancel(){
@@ -93,6 +137,23 @@ function timeedit_cancel(){
 	document.getElementById("timeselect_month").style.display = "inline";
 	document.getElementById("timeselect_prev").style.display = "inline";
 	document.getElementById("timeselect_fwd").style.display = "inline";
+	
+	$(document).unbind("keydown", "esc", timeedit_cancel_kbd);
+	$(document).unbind("keydown", "return", timeedit_apply_kbd);
+	$(document).bind("keydown", "m", timeedit_month_kbd);
+    $(document).bind("keydown", "y", timeedit_year_kbd);
+	
+	document.getElementById("timeedit_year").style.backgroundColor = 
+		timeedit_year_backgroundcolor;
+	document.getElementById("timeedit_month").style.backgroundColor = 
+		timeedit_month_backgroundcolor;
+
+	status_bar_restore();
+}
+
+function timeedit_cancel_kbd(){
+	timeedit_cancel();
+	return false;
 }
 
 function get_month_max_day(year, month){
