@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+  <title>{{ productname }}</title>
+  <link rel="stylesheet" href="css/format.css" type="text/css">
+  {% block headcss %}{% endblock %}
+  <script src="js/cookie.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    function google_logout(){
+		window.location = "{{ logouturl }}";				
+	}
+	function switch_month(){
+		window.location = "{{ mysimple }}?view=month";
+	}
+	function switch_list(){
+		window.location = "{{ mysimple }}?view=list";
+	}
+	window.onload = function(){
+		{% block onload %}{% endblock %}
+	}
+  </script>
+  {% block headjs %}{% endblock %}
+</head>
+<body>
+  <div id="topprodname">
+    {{ googleuser }} - {{ productname }}
+  </div>
+  <div id="controlpanel">
+    <div id="controlleft">
+      <input type="button" value="月曆" id="switchmonth" onclick="switch_month()">
+      <input type="button" value="清單" id="switchlist" onclick="switch_list()">
+    </div>
+    <div id="controlright">
+      <input type="button" value="匯入" id="buttonimport">
+      <input type="button" value="匯出" id="buttonexport">
+      <input type="button" value="登出" onclick="google_logout()" style="background-color: darkgray">
+    </div>
+  </div>
+  <div id="statusbar">
+    載入中......
+  </div>
+  <div id="bottomemptybar">
+  </div>
+  {% block body %}{% endblock %}
+</body>
+</html>
