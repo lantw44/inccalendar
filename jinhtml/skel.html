@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="css/format.css" type="text/css">
   {% block headcss %}{% endblock %}
   <script src="js/cookie.js" type="text/javascript"></script>
+  <script src="js/common.js" type="text/javascript"></script>
   <script type="text/javascript">
     function google_logout(){
 		window.location = "{{ logouturl }}";				
@@ -17,6 +18,7 @@
 		window.location = "{{ mysimple }}?view=list";
 	}
 	window.onload = function(){
+		status_bar_init();
 		{% block onload %}{% endblock %}
 	}
   </script>
