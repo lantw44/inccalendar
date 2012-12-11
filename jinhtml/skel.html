@@ -7,9 +7,11 @@
   {% block headcss %}{% endblock %}
   <script src="js/cookie.js" type="text/javascript"></script>
   <script src="js/common.js" type="text/javascript"></script>
+  <script src="js/jquery.js" type="text/javascript"></script>
+  <script src="js/jquery.hotkeys.js" type="text/javascript"></script>
   <script type="text/javascript">
     function google_logout(){
-		window.location = "{{ logouturl }}";				
+		window.location = "{{ logouturl }}";
 	}
 	function switch_month(){
 		window.location = "{{ mysimple }}?view=month";
@@ -40,7 +42,6 @@
     </div>
   </div>
   <div id="statusbar">
-    載入中......
   </div>
   <div id="bottomemptybar">
   </div>
