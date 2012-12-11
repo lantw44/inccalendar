@@ -21,6 +21,9 @@
       height: 100px;
       width: 14.285%;
     }
+    #timeselect_year, #timeselect_month{
+      font-family: serif;
+    }
     #timeedit_month, #timeedit_year, #timeedit_apply, #timeedit_cancel{
       display: none;
     }
@@ -52,6 +55,7 @@
     <input type="text" maxlength="4" id="timeedit_month">
     月 
     <input type="button" value=">" id="timeselect_fwd" onclick="timeselect_fwd()">
+    <input type="button" value="改" id="timeedit_button" onclick="timeselect_direct()">
     <input type="button" value="確定" id="timeedit_apply" onclick="timeedit_apply()">
     <input type="button" value="取消" id="timeedit_cancel" onclick="timeedit_cancel()">
   </div>

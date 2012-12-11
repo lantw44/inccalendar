@@ -52,6 +52,7 @@ function timeselect_direct(){
 	document.getElementById("timeedit_month").style.display = "inline";
 	document.getElementById("timeedit_apply").style.display = "inline";
 	document.getElementById("timeedit_cancel").style.display = "inline";
+	document.getElementById("timeedit_button").style.display = "none";
 	document.getElementById("timeselect_year").style.display = "none";
 	document.getElementById("timeselect_month").style.display = "none";
 	document.getElementById("timeselect_prev").style.display = "none";
@@ -87,6 +88,7 @@ function timeedit_cancel(){
 	document.getElementById("timeedit_month").style.display = "none";
 	document.getElementById("timeedit_apply").style.display = "none";
 	document.getElementById("timeedit_cancel").style.display = "none";
+	document.getElementById("timeedit_button").style.display = "inline";
 	document.getElementById("timeselect_year").style.display = "inline";
 	document.getElementById("timeselect_month").style.display = "inline";
 	document.getElementById("timeselect_prev").style.display = "inline";
