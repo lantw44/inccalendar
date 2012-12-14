@@ -45,10 +45,12 @@ function status_bar_save(){
 
 function status_bar_restore(){
 	var stbgetnode = stbstack.pop();
-	if(stbgetnode.warn){
-		status_bar_warning(stbgetnode.str);
-	}else{
-		status_bar_set(stbgetnode.str);
+	if(stbgetnode){
+		if(stbgetnode.warn){
+			status_bar_warning(stbgetnode.str);
+		}else{
+			status_bar_set(stbgetnode.str);
+		}
 	}
 }
 
