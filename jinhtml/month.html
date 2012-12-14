@@ -20,6 +20,7 @@
       vertical-align: top;
       height: 100px;
       width: 14.285%;
+      color: black;
     }
     #timeselect_year, #timeselect_month{
       font-family: serif;
@@ -39,14 +40,13 @@
   var switchmonthobj = document.getElementById("switchmonth");
   switchmonthobj.className += "selected";
   switchmonthobj.onclick = "";
-  status_bar_append("(y)修改年份 (m)修改月份");
+  status_bar_append("(Ctrl-L)清單模式 (Ctrl-左右)切換月份 (y)修改年 (m)修改月");
 {% endblock %} 
   
 {% block headjs %}
   <script src="js/month.js" type="text/javascript"></script>
   <script type="text/javascript">
-    $(document).bind("keydown", "m", timeedit_month_kbd);
-    $(document).bind("keydown", "y", timeedit_year_kbd);
+  	shortcut_bind();
   </script>
 {% endblock %}
 
