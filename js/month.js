@@ -339,16 +339,19 @@ function setfocusblock(thisdt, reset){
 	if(reset){
 		resetblock(value_date);
 	}
-	var thisobj = document.getElementById(
+	var thisobj;
+	try{
+		thisobj = document.getElementById(
 			"cal" + alldata[thisdt].row + alldata[thisdt].col);
-	if(thisobj != null){
-		calfocus_bdc_org = thisobj.style.borderColor;
-		thisobj.style.borderColor = "blue";
-		thisobj.style.borderWidth = "3px";
-		thisobj.style.color = "green";
-		setcookievalue(cookie_date, thisdt);
-		value_date = thisdt;
+	}catch(err){
+		return;
 	}
+	calfocus_bdc_org = thisobj.style.borderColor;
+	thisobj.style.borderColor = "blue";
+	thisobj.style.borderWidth = "3px";
+	thisobj.style.color = "green";
+	setcookievalue(cookie_date, thisdt);
+	value_date = thisdt;
 }
 
 function movefocus_up(){
@@ -358,16 +361,19 @@ function movefocus_up(){
 
 function movefocus_down(){
 	var newdate = value_date + 7;
-	var maxdate = get_month_max_day(value_year, value_month);
+	var maxdate = get_month_max_day(value_year, value_month - 1);
 	setfocusblock(newdate >= maxdate ? maxdate : newdate, true);
 }
 
 function movefocus_left(){
-	setfocusblock(value_date - 1, true);
+	var newdate = value_date - 1;
+	setfocusblock(newdate <= 0 ? 1 : newdate, true);
 }
 
 function movefocus_right(){
-	setfocusblock(value_date + 1, true);
+	var newdate = value_date + 1;
+	var maxdate = get_month_max_day(value_year, value_month - 1);
+	setfocusblock(newdate >= maxdate ? maxdate : newdate, true);
 }
 
 function shortcut_bind(){
