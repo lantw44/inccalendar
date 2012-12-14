@@ -47,6 +47,8 @@ function timeselect_prev(){
 	}else{
 		value_month--;
 	}
+	var maxdate = get_month_max_day(value_year, value_month - 1);
+	value_date = value_date > maxdate ? maxdate : value_date;
 	setmonthcal();
 }
 
@@ -57,31 +59,31 @@ function timeselect_fwd(){
 	}else{
 		value_month++;
 	}
+	var maxdate = get_month_max_day(value_year, value_month - 1);
+	value_date = value_date > maxdate ? maxdate : value_date;
 	setmonthcal();
 }
 
 function timeselect_prev_kbd(evt){
 	timeselect_prev();
 	evt.preventDefault();
-	return false;
 }
 
 function timeselect_fwd_kbd(evt){
 	timeselect_fwd();
 	evt.preventDefault();
-	return false;
 }
 
-function timeedit_year_kbd(){
+function timeedit_year_kbd(evt){
+	evt.preventDefault();
 	timeselect_direct();
 	$("#timeedit_year").focus();
-	return false;
 }
 
-function timeedit_month_kbd(){
+function timeedit_month_kbd(evt){
+	evt.preventDefault();
 	timeselect_direct();
 	$("#timeedit_month").focus();
-	return false;
 }
 
 function timeselect_direct(){
@@ -98,9 +100,9 @@ function timeselect_direct(){
 	document.getElementById("timeedit_year").value = value_year;
 	document.getElementById("timeedit_month").value = value_month;
 	
-	shortcut_unbind();
-	$(document).bind("keydown", "esc", timeedit_cancel_kbd);
-	$(document).bind("keydown", "return", timeedit_apply_kbd);
+	$(document).unbind("keydown.main");
+	$(document).bind("keydown.timeedit", "esc", timeedit_cancel_kbd);
+	$(document).bind("keydown.timeedit", "return", timeedit_apply_kbd);
 	
 	timeedit_year_backgroundcolor = 
 		document.getElementById("timeedit_year").style.backgroundColor;
@@ -143,9 +145,9 @@ function timeedit_apply(){
 	timeedit_cancel();
 }
 
-function timeedit_apply_kbd(){
+function timeedit_apply_kbd(evt){
+	evt.preventDefault();
 	timeedit_apply();
-	return false;
 }
 
 function timeedit_cancel(){
@@ -159,8 +161,7 @@ function timeedit_cancel(){
 	document.getElementById("timeselect_prev").style.display = "inline";
 	document.getElementById("timeselect_fwd").style.display = "inline";
 	
-	$(document).unbind("keydown", "esc", timeedit_cancel_kbd);
-	$(document).unbind("keydown", "return", timeedit_apply_kbd);
+	$(document).unbind("keydown.timeedit");
 	shortcut_bind();
 	
 	document.getElementById("timeedit_year").style.backgroundColor = 
@@ -376,26 +377,70 @@ function movefocus_right(){
 	setfocusblock(newdate >= maxdate ? maxdate : newdate, true);
 }
 
-function shortcut_bind(){
-    $(document).bind("keydown", "m", timeedit_month_kbd);
-    $(document).bind("keydown", "y", timeedit_year_kbd);
-    $(document).bind("keydown", "z", timeselect_prev_kbd);
-    $(document).bind("keydown", "x", timeselect_fwd_kbd);
-    $(document).bind("keydown", "ctrl+left", timeselect_prev_kbd);
-    $(document).bind("keydown", "ctrl+right", timeselect_fwd_kbd);
-	$(document).bind("keydown", "up", movefocus_up);
-	$(document).bind("keydown", "down", movefocus_down);
-	$(document).bind("keydown", "left", movefocus_left);
-	$(document).bind("keydown", "right", movefocus_right);
-	$(document).bind("keydown", "ctrl+l", switch_list);
+function direct0(evt){setfocusbykbdinput(evt,0);}
+function direct1(evt){setfocusbykbdinput(evt,1);}
+function direct2(evt){setfocusbykbdinput(evt,2);}
+function direct3(evt){setfocusbykbdinput(evt,3);}
+function direct4(evt){setfocusbykbdinput(evt,4);}
+function direct5(evt){setfocusbykbdinput(evt,5);}
+function direct6(evt){setfocusbykbdinput(evt,6);}
+function direct7(evt){setfocusbykbdinput(evt,7);}
+function direct8(evt){setfocusbykbdinput(evt,8);}
+function direct9(evt){setfocusbykbdinput(evt,9);}
+
+function setfocusbykbdinput(evt, defval){
+	evt.preventDefault();
+	$(document).unbind("keydown.main");
+	var fcjobj = document.getElementById("focusjumper");
+	fcjobj.value = defval;
+	fcjobj.style.display = "inline";
+	fcjobj.focus();
+	fcjobj.setSelectionRange(1, 1);
+	$(document).bind("keydown.sfk", "esc", setfocusbykbdinput_terminate);
+	$(document).bind("keydown.sfk", "return", setfocusbykbdinput_apply);
+	status_bar_save();
+	status_bar_set("移至特定日期：(Esc)取消 (Enter)確定");
 }
 
-function shortcut_unbind(){
-    $(document).unbind("keydown", "m", timeedit_month_kbd);
-    $(document).unbind("keydown", "y", timeedit_year_kbd);
-    $(document).unbind("keydown", "z", timeselect_prev_kbd);
-    $(document).unbind("keydown", "x", timeselect_fwd_kbd);
-    $(document).unbind("keydown", "ctrl+left", timeselect_prev_kbd);
-    $(document).unbind("keydown", "ctrl+right", timeselect_fwd_kbd);
-	$(document).unbind("keydown", "ctrl+l", switch_list);
+function setfocusbykbdinput_terminate(){
+	var fcjobj = document.getElementById("focusjumper");
+	fcjobj.value = "";
+	fcjobj.style.display = "none";
+	$(document).unbind("keydown.sfk");
+	status_bar_restore();
+	shortcut_bind();
+}
+
+function setfocusbykbdinput_apply(){
+	var fcjobj = document.getElementById("focusjumper");
+	var newvalue = parseInt(fcjobj.value);
+	if(isFinite(newvalue) && newvalue >= 1 && 
+		newvalue <= get_month_max_day(value_year, value_month - 1) ){
+		setfocusblock(newvalue, true);
+	}
+	setfocusbykbdinput_terminate();
+}
+
+function shortcut_bind(){
+	$(document).bind("keydown.main", "m", timeedit_month_kbd);
+	$(document).bind("keydown.main", "y", timeedit_year_kbd);
+	$(document).bind("keydown.main", "z", timeselect_prev_kbd);
+	$(document).bind("keydown.main", "x", timeselect_fwd_kbd);
+	$(document).bind("keydown.main", "ctrl+left", timeselect_prev_kbd);
+	$(document).bind("keydown.main", "ctrl+right", timeselect_fwd_kbd);
+	$(document).bind("keydown.main", "up", movefocus_up);
+	$(document).bind("keydown.main", "down", movefocus_down);
+	$(document).bind("keydown.main", "left", movefocus_left);
+	$(document).bind("keydown.main", "right", movefocus_right);
+	$(document).bind("keydown.main", "0", direct0);
+	$(document).bind("keydown.main", "1", direct1);
+	$(document).bind("keydown.main", "2", direct2);
+	$(document).bind("keydown.main", "3", direct3);
+	$(document).bind("keydown.main", "4", direct4);
+	$(document).bind("keydown.main", "5", direct5);
+	$(document).bind("keydown.main", "6", direct6);
+	$(document).bind("keydown.main", "7", direct7);
+	$(document).bind("keydown.main", "8", direct8);
+	$(document).bind("keydown.main", "9", direct9);
+	$(document).bind("keydown.main", "ctrl+l", switch_list);
 }
