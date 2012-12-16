@@ -8,6 +8,9 @@ libraries:
 - name: jinja2
   version: latest
 
+- name: lxml
+  version: latest
+
 handlers:
 - url: /css
   static_dir: css
@@ -15,6 +18,10 @@ handlers:
 
 - url: /js
   static_dir: js
+  secure: optional
+
+- url: /images
+  static_dir: images
   secure: optional
 
 - url: /access/(.*)
