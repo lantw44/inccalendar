@@ -1,65 +1,6 @@
 {% extends "jinhtml/skel.html" %}
 {% block headcss %}
-  <style type="text/css">
-    div#timeselect{
-      margin-top: 20px;
-      margin-bottom: 20px;
-      font-size: x-large;
-      text-align: center;
-    }
-    div#timeselect input{
-      vertical-align: text-top;
-    }
-    table#cal{
-      min-width: 800px;
-      width: 100%;
-    }
-    tbody#calbody td{
-      border-width: 1px;
-      border-style: solid;
-      vertical-align: top;
-      height: 100px;
-      width: 14.285%;
-      color: black;
-    }
-    #timeselect_year, #timeselect_month{
-      font-family: serif;
-    }
-    #timeedit_month, #timeedit_year, #timeedit_apply, #timeedit_cancel{
-      display: none;
-    }
-    #timeedit_month, #timeedit_year{
-      width: 50px;
-    }
-    #caledit_left, #caledit_right{
-      float: left;
-      width: 42%;
-      margin: 3%;
-      min-width: 350px;
-    }
-    #caledit_select{
-      width: 100%;
-      min-width: 350px;
-    }
-    #caledit_static_year, #caledit_static_month, #caledit_static_date,
-    #caledit_static_hour, #caledit_static_minute
-    {
-      display: inline-block;
-      width: 40px;
-    }
-    #caledit_dyn_year, #caledit_dyn_month, #caledit_dyn_date,
-    #caledit_dyn_hour, #caledit_dyn_minute
-    {
-      width: 40px;
-    }
-    #caledit_dyn_content{
-      width: 100%;
-      resize: vertical;
-    }
-    [name=caledit_write] {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="css/month.css" type="text/css">
 {% endblock %}
 
 {% block onload %}
