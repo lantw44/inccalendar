@@ -3,12 +3,13 @@ function caledit(year, month, date){
 	var alldetailobj = document.getElementsByName("caldetail");
 	var i;
 	$(document).unbind("keydown.main");
-	$(document).bind("keydown.caledit", "ctrl+e", caledit_edit);
-	$(document).bind("keydown.caledit", "ctrl+1", caledit_focus_left);
-	$(document).bind("keydown.caledit", "ctrl+2", caledit_focus_right);
+	$(document).bind("keydown.caledit", "ctrl+m", caledit_edit);
+	$(document).bind("keydown.caledit", "ctrl+left", caledit_focus_left);
+	$(document).bind("keydown.caledit", "ctrl+right", caledit_focus_right);
 	$(document).bind("keydown.caledit", "alt+q", caledit_quit);
 	status_bar_save();
-	status_bar_set("(Alt-Q)返回 (Ctrl-E)切換編輯 (Ctrl-1)左側 (Ctrl-2)右側 ");
+	status_bar_set("(Alt-Q)返回 (Ctrl-M)切換編輯 (Ctrl-左)左側" 
+		   + " (Ctrl-右)右側 ");
 	caledit_switchedit_disable();
 	for(i=0; i<allbrowseobj.length; i++){
 		allbrowseobj[i].style.display = "none";

@@ -9,7 +9,8 @@
   var switchmonthobj = document.getElementById("switchmonth");
   switchmonthobj.className += "selected";
   switchmonthobj.onclick = "";
-  status_bar_append("(Ctrl-L)清單模式 (Ctrl-左右)切換月份 (y)修改年 (m)修改月");
+  status_bar_append("(Ctrl-L)清單模式 (Ctrl-左右)切換月份 (y)修改年 (m)修改月" 
+      + " (Enter)查看或編輯資料");
   status_bar_append("(0-9)快速選擇日期");
 {% endblock %} 
   
@@ -87,6 +88,11 @@
           <span name="caledit_read" id="caledit_static_minute"></span>
           <input name="caledit_write" id="caledit_dyn_minute" type="text" maxlength="2">
           分
+          <br>
+          提醒：
+          <span name="caledit_read" id="caledit_static_remind"></span>
+          <input name="caledit_write" id="caledit_dyn_remind" type="text" maxlength="5">
+          分鐘前
           <br>
           標題：
           <span name="caledit_read" id="caledit_static_title"></span>

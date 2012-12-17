@@ -39,13 +39,13 @@ tbody#calbody td{
   min-width: 350px;
 }
 #caledit_static_year, #caledit_static_month, #caledit_static_date,
-#caledit_static_hour, #caledit_static_minute
+#caledit_static_hour, #caledit_static_minute, #caledit_static_remind
 {
   display: inline-block;
   width: 40px;
 }
 #caledit_dyn_year, #caledit_dyn_month, #caledit_dyn_date,
-#caledit_dyn_hour, #caledit_dyn_minute
+#caledit_dyn_hour, #caledit_dyn_minute, #caledit_dyn_remind
 {
   width: 40px;
 }
