@@ -66,7 +66,7 @@
 			$.ajax ({
 				type: "POST",
 				url: "/access/insert",
-				data: "title=123&content=eventcontent&icon=5&beginyear=2012&beginmonth=12&begindate=16&endyear=2012&endmonth=12&enddate=22&datafrom=google",
+				data: "title=123&content=eventcontent&icon=5&beginyear=2012&beginmonth=12&begindate=16&datafrom=google",
 				success: function () {
 					alert ("POST SUCCESS!!");
 				}
@@ -88,11 +88,11 @@
 		</div>
 	</div>
 	<div align = "center">
-		<table id = "listcal" cellpadding = "0" cellspacing = "0" style = "width:1880px;">
+		<table id = "listcal" cellpadding = "0" cellspacing = "0" style = "width:100%;">
 			<thead>
 				<tr>
 					<td colspan = "3" id = "date"> 日期 </td>
-					<td id = "eventcontent" style = "width:1418px;"> 內容 </td>
+					<td id = "eventcontent"> 內容 </td>
 				</tr>
 			</thead>
 			<tbody id = "eventbody">
@@ -100,7 +100,7 @@
 		</table>
 	</div>
 	<div id = "unmatchedmessage">
-		找不到匹配項
+		找不到活動
 	</div>
 	<button type = "button" onclick = "pushdata ();"> Click Me !! </button>
 {% endblock %}

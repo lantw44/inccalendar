@@ -23,20 +23,17 @@ class InsertEvent(webapp2.RequestHandler):
 		thisbeginyear = int(self.request.get('beginyear'))
 		thisbeginmonth = int(self.request.get('beginmonth'))
 		thisbegindate = int(self.request.get('begindate'))
-		thisendyear = int(self.request.get('endyear'))
-		thisendmonth = int(self.request.get('endmonth'))
-		thisenddate = int(self.request.get('enddate'))
+		thisbegin = datetime.datetime (
+		year = thisbeginyear,
+		month = thisbeginmonth,
+		day = thisbegindate
+		);
 		thisdatafrom = self.request.get('datafrom')
 
 		newcalevent = CalEvent(
 		db.Key.from_path('user', guserid.email()),
 		content = thiscontent,
-		beginyear = thisbeginyear,
-		beginmonth = thisbeginmonth,
-		begindate = thisbegindate,
-		endyear = thisendyear,
-		endmonth = thisendmonth,
-		enddate = thisenddate,
+		begin = thisbegin,
 		datafrom = thisdatafrom
 		)
 
