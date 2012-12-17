@@ -299,6 +299,9 @@ function setmonthcal(){
 			objcal.setAttribute("name", "date" + todate);
 			objcal.setAttribute("onclick", 
 				"setfocusblock(" + todate + ", true)");
+			objcal.setAttribute("ondblclick",
+				"caledit(" + value_year + ", " + value_month + ", " +
+				todate + ")");
 			objcaldate.innerHTML = todate;
 			alldata[todate] = new Object();
 			alldata[todate].row = i;
@@ -421,6 +424,11 @@ function setfocusbykbdinput_apply(){
 	setfocusbykbdinput_terminate();
 }
 
+function call_caledit_kbd(evt){
+	evt.preventDefault();
+	caledit(value_year, value_month, value_date);
+}
+
 function shortcut_bind(){
 	$(document).bind("keydown.main", "m", timeedit_month_kbd);
 	$(document).bind("keydown.main", "y", timeedit_year_kbd);
@@ -432,6 +440,7 @@ function shortcut_bind(){
 	$(document).bind("keydown.main", "down", movefocus_down);
 	$(document).bind("keydown.main", "left", movefocus_left);
 	$(document).bind("keydown.main", "right", movefocus_right);
+	$(document).bind("keydown.main", "return", call_caledit_kbd);
 	$(document).bind("keydown.main", "0", direct0);
 	$(document).bind("keydown.main", "1", direct1);
 	$(document).bind("keydown.main", "2", direct2);

@@ -31,6 +31,34 @@
     #timeedit_month, #timeedit_year{
       width: 50px;
     }
+    #caledit_left, #caledit_right{
+      float: left;
+      width: 42%;
+      margin: 3%;
+      min-width: 350px;
+    }
+    #caledit_select{
+      width: 100%;
+      min-width: 350px;
+    }
+    #caledit_static_year, #caledit_static_month, #caledit_static_date,
+    #caledit_static_hour, #caledit_static_minute
+    {
+      display: inline-block;
+      width: 40px;
+    }
+    #caledit_dyn_year, #caledit_dyn_month, #caledit_dyn_date,
+    #caledit_dyn_hour, #caledit_dyn_minute
+    {
+      width: 40px;
+    }
+    #caledit_dyn_content{
+      width: 100%;
+      resize: vertical;
+    }
+    [name=caledit_write] {
+      display: none;
+    }
   </style>
 {% endblock %}
 
@@ -41,17 +69,19 @@
   switchmonthobj.className += "selected";
   switchmonthobj.onclick = "";
   status_bar_append("(Ctrl-L)清單模式 (Ctrl-左右)切換月份 (y)修改年 (m)修改月");
+  status_bar_append("(0-9)快速選擇日期");
 {% endblock %} 
   
 {% block headjs %}
   <script src="js/month.js" type="text/javascript"></script>
+  <script src="js/caledit.js" type="text/javascript"></script>
   <script type="text/javascript">
   	shortcut_bind();
   </script>
 {% endblock %}
 
 {% block body %}
-  <div id="timeselect">
+  <div name="calbrowse" id="timeselect">
     <input type="button" value="<" id="timeselect_prev" onclick="timeselect_prev()">
     <span id="timeselect_year" onclick="timeselect_direct()">XXXX</span>
     <input type="text" maxlength="4" id="timeedit_year">
@@ -64,10 +94,10 @@
     <input type="button" value="確定" id="timeedit_apply" onclick="timeedit_apply()">
     <input type="button" value="取消" id="timeedit_cancel" onclick="timeedit_cancel()">
   </div>
-  <div style="text-align: center;">
-  	<input type="text" maxlength="2" id="focusjumper" style="display: none;">
+  <div name="calbrowse" style="text-align: center;">
+      <input type="text" maxlength="2" id="focusjumper" style="display: none;">
   </div>
-  <div id="monthcal">
+  <div name="calbrowse" id="monthcal">
     <table id="cal">
       <thead>
         <tr>
@@ -83,5 +113,53 @@
       <tbody id="calbody">
       </tbody>
     </table>
+  </div>
+  <div name="caldetail" id="caleditor" style="display: none;">
+    <div style="text-align: center;">
+        <input type="button" value="返回月曆" style="background-color: #00FF00; font-size: large;" onclick="caledit_quit()">
+    </div>
+    <div id="caledit_left">
+      <select id="caledit_select" size="20">
+      </select>
+    </div>
+    <div id="caledit_right">
+      <form id="cal" name="caleditform" onsubmit="">
+        <input id="caledit_switchedit" type="button" value="編輯" onclick="caledit_edit()">
+        <span id="caledit_enabled"></span>
+        <fieldset>
+          <legend>詳細資料</legend>
+          日期：
+          <span name="caledit_read" id="caledit_static_year"></span>
+          <input name="caledit_write" id="caledit_dyn_year" type="text" maxlength="4">
+          年
+          <span name="caledit_read" id="caledit_static_month"></span>
+          <input name="caledit_write" id="caledit_dyn_month" type="text" maxlength="2">
+          月
+          <span name="caledit_read" id="caledit_static_date"></span>
+          <input name="caledit_write" id="caledit_dyn_date" type="text" maxlength="2">
+          日
+          <br>
+          時間：
+          <span name="caledit_read" id="caledit_static_hour"></span>
+          <input name="caledit_write" id="caledit_dyn_hour" type="text" maxlength="2">
+          時
+          <span name="caledit_read" id="caledit_static_minute"></span>
+          <input name="caledit_write" id="caledit_dyn_minute" type="text" maxlength="2">
+          分
+          <br>
+          標題：
+          <span name="caledit_read" id="caledit_static_title"></span>
+          <input name="caledit_write" id="caledit_dyn_title" type="text">
+          <br>
+          內容：
+          <div name="caledit_read_block" id="caledit_static_content"></div>
+          <textarea name="caledit_write_block" id="caledit_dyn_content" rows="6"></textarea>
+          資料來源：
+          <span id="caledit_datafrom"></span>
+        </fieldset>
+        <input type="submit" value="儲存">
+        <input type="button" value="取消">
+      </form>
+    </div>
   </div>
 {% endblock %}
