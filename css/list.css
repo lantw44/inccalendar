@@ -1,0 +1,35 @@
+thead tr > td {
+	font-size:1.5em;
+}
+td {
+	border-width:0px 1px 1px 0px;
+	border-style:solid;
+	font-size:1.2em;
+}
+table#listcal {
+	border-width:1px 0px 0px 1px;
+	border-style:solid;
+	border-color:black;
+	text-align:center;
+}
+tr.event > td {
+	padding:20px;
+}
+td {
+	height:20px;
+}
+td.date {
+	min-width:25px;
+	width:100px;
+}
+td.week {
+	width:80px;
+}
+td.time {
+	width:150px;
+}
+div#unmatchedmessage {
+	text-align:center;
+	font-size:2em;
+	display:none;
+}

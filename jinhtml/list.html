@@ -1,42 +1,6 @@
 {% extends "jinhtml/skel.html" %}
 {% block headcss %}
-	<style>
-		thead tr > td {
-			font-size:1.5em;
-		}
-		td {
-			border-width:0px 1px 1px 0px;
-			border-style:solid;
-			font-size:1.2em;
-		}
-		table#listcal {
-			border-width:1px 0px 0px 1px;
-			border-style:solid;
-			border-color:black;
-			text-align:center;
-		}
-		tr.event > td {
-			padding:20px;
-		}
-		td {
-			height:20px;
-		}
-		td.date {
-			min-width:25px;
-			width:100px;
-		}
-		td.week {
-			width:80px;
-		}
-		td.time {
-			width:150px;
-		}
-		div#unmatchedmessage {
-			text-align:center;
-			font-size:2em;
-			display:none;
-		}
-	</style>
+	<link rel = "stylesheet" type = "text/css" href = "/css/list.css">
 {% endblock %}
 
 {% block onload %}
@@ -79,7 +43,7 @@
 	<div id = "searchbar" align = "center">
 		<select id = "searchingoption" onchange = "changesearchingbar (this);">
 			<option value = "date"> 日期 </option>
-			<option value = "content" selected = "selected"> 內容 </option>
+			<option value = "content" selected = "selected"> 標題 </option>
 		</select>
 		<input id = "searchingcontent" type = "text" onkeyup = "searchevent ();">
 		<div id = "searchingdate" style = "display:none;">
@@ -92,7 +56,7 @@
 			<thead>
 				<tr>
 					<td colspan = "3" id = "date"> 日期 </td>
-					<td id = "eventcontent"> 內容 </td>
+					<td id = "eventcontent"> 標題 </td>
 				</tr>
 			</thead>
 			<tbody id = "eventbody">
