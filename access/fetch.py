@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import webapp2
+import datetime
 
 from google.appengine.api import users
 from google.appengine.ext import db
@@ -18,17 +19,15 @@ def XMLBuildCalEvent(calevent, entry):
 	newdata = etree.SubElement(calevent, 'icon')
 	newdata.text = str(entry.icon)
 	newdata = etree.SubElement(calevent, 'beginyear')
-	newdata.text = str(entry.beginyear)
+	newdata.text = str(entry.begin.year)
 	newdata = etree.SubElement(calevent, 'beginmonth')
-	newdata.text = str(entry.beginmonth)
+	newdata.text = str(entry.begin.month)
 	newdata = etree.SubElement(calevent, 'begindate')
-	newdata.text = str(entry.begindate)
-	newdata = etree.SubElement(calevent, 'endyear')
-	newdata.text = str(entry.endyear)
-	newdata = etree.SubElement(calevent, 'endmonth')
-	newdata.text = str(entry.endmonth)
-	newdata = etree.SubElement(calevent, 'enddate')
-	newdata.text = str(entry.enddate)
+	newdata.text = str(entry.begin.day)
+	newdata = etree.SubElement(calevent, 'beginhour')
+	newdata.text = str(entry.begin.hour)
+	newdata = etree.SubElement(calevent, 'beginminute')
+	newdata.text = str(entry.begin.minute)
 	newdata = etree.SubElement(calevent, 'datafrom')
 	newdata.text = entry.datafrom
 
@@ -51,23 +50,41 @@ class FetchEvent(webapp2.RequestHandler):
 		if not guserid:
 			return
 
-		byear = self.request.get('byear')
-		bmonth = self.request.get('bmonth')
+		year = int(self.request.get('year'))
+		month = int(self.request.get('month'))
+		withcursor = self.request.get('gqlcursor')
+		if month >= 12:
+			nextmonth = 1
+			nextyear = year + 1
+		else:
+			nextmonth = month + 1
+			nextyear = year
+
+		if withcursor == "":
+			withcursor = None
+
 		data = db.GqlQuery("SELECT * FROM CalEvent "
-					"WHERE ANCESTOR IS :1 ORDER BY begindate",
-					db.Key.from_path('user', guserid.email()))
+					"WHERE ANCESTOR IS :1 AND "
+					"begin >= :2 AND "
+					"begin < :3 "
+					"ORDER BY begin",
+					db.Key.from_path('user', guserid.email()),
+					datetime.datetime(year, month, 1),
+					datetime.datetime(nextyear, nextmonth, 1))
+
+		data.with_cursor(withcursor)
 
 		eventroot = etree.Element('inccalender')
-		for entry in data:
+		for entry in data.run(limit=10):
 			calevent = etree.SubElement(eventroot, 'calevent')
 			XMLBuildCalEvent(calevent, entry)
+
+		gqlcursor = etree.SubElement(eventroot, 'gqlcursor')
+		gqlcursor.text = data.cursor()
 	
 		self.response.headers['Content-Type'] = 'text/xml; charset=UTF-8'
 		self.response.out.write(
 			etree.tostring(eventroot, pretty_print=True, xml_declaration=True,
 				encoding='UTF-8'))
-
-
-
 
 app = webapp2.WSGIApplication([('/access/fetch', FetchEvent)])
