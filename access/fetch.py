@@ -28,6 +28,8 @@ def XMLBuildCalEvent(calevent, entry):
 	newdata.text = str(entry.begin.hour)
 	newdata = etree.SubElement(calevent, 'minute')
 	newdata.text = str(entry.begin.minute)
+	newdata = etree.SubElement(calevent, 'remind')
+	newdata.text = str(entry.remind)
 	newdata = etree.SubElement(calevent, 'datafrom')
 	newdata.text = entry.datafrom
 
