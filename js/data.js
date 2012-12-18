@@ -3,8 +3,8 @@ var caleventok;
 
 function CalEvent(){
 	this.key = null;
-	this.title = "Event Title";
-	this.content = "Description";
+	this.title = "活動標題";
+	this.content = "活動內容";
 	this.icon = 0;
 	this.remind = 30;
 	this.datafrom = "native";
@@ -75,7 +75,11 @@ function inccal_fetch(year, month){
 				0, 0);
 			caleventlist.push(eventobj);
 		}
-		gqlcursor = retrdata.getElementsByTagName("gqlcursor")[0].childNodes[0].nodeValue;
+		try{
+			gqlcursor = retrdata.getElementsByTagName("gqlcursor")[0].childNodes[0].nodeValue;
+		}catch(err){
+			should_continue = false;
+		}
 	}
 	caleventok = true;
 	status_bar_restore();
