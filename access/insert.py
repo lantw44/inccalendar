@@ -23,10 +23,14 @@ class InsertEvent(webapp2.RequestHandler):
 		thisbeginyear = int(self.request.get('beginyear'))
 		thisbeginmonth = int(self.request.get('beginmonth'))
 		thisbegindate = int(self.request.get('begindate'))
+		thisbeginhour = int(self.request.get('beginhour'))
+		thisbeginminute = int(self.request.get('beginminute'))
 		thisbegin = datetime.datetime (
 		year = thisbeginyear,
 		month = thisbeginmonth,
-		day = thisbegindate
+		day = thisbegindate,
+		hour = thiebeginhour,
+		minute = thisbeginminute
 		);
 		thisdatafrom = self.request.get('datafrom')
 		thisremind = self.request.get('remind')
