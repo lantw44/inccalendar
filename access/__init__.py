@@ -9,4 +9,5 @@ class CalEvent(db.Model):
 	icon = db.IntegerProperty()
 	begin = db.DateTimeProperty(required=True)
 	datafrom = db.StringProperty(required=True)
+	remind = db.IntegerProperty()
 

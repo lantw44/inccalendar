@@ -29,6 +29,7 @@ class InsertEvent(webapp2.RequestHandler):
 		day = thisbegindate
 		);
 		thisdatafrom = self.request.get('datafrom')
+		thisremind = self.request.get('remind')
 
 		newcalevent = CalEvent(
 		db.Key.from_path('user', guserid.email()),
@@ -39,6 +40,7 @@ class InsertEvent(webapp2.RequestHandler):
 
 		newcalevent.title = thistitle
 		newcalevent.icon = thisicon
+		newcalevent.remind = thisremind
 
 		newcalevent.put()
 
