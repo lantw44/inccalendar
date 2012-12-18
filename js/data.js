@@ -1,6 +1,28 @@
 var caleventlist;
 var caleventok;
 
+function CalEvent(){
+	this.key = null;
+	this.title = "Event Title";
+	this.content = "Description";
+	this.icon = 0;
+	this.remind = 30;
+	this.datafrom = "native";
+	this.datetime = new Date();
+	this.equal = function(another){
+		return this.key == another.key &&
+			this.equalIgnoreKey(another);
+	}
+	this.equalIgnoreKey = function(another){
+		return this.title == another.title && 
+			this.content == another.content &&
+			this.icon == another.icon &&
+			this.remind == another.remind &&
+			this.datafrom == another.datafrom &&
+			this.datetime.toString() == another.datetime.toString();
+	}
+}
+
 function create_xmlhttp_object(){
 	var rq;
 	rq = new XMLHttpRequest();
@@ -34,7 +56,7 @@ function inccal_fetch(year, month){
 			should_continue = false;
 		}
 		for(i=0; i<calevent.length; i++){
-			eventobj = new Object();
+			eventobj = new CalEvent();
 			eventobj.key = calevent[i].getElementsByTagName("key")[0].childNodes[0].nodeValue;
 			eventobj.title = calevent[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
 			eventobj.content = calevent[i].getElementsByTagName("content")[0].childNodes[0].nodeValue;
