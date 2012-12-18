@@ -40,6 +40,7 @@ function inccal_fetch(year, month){
 	var retrdata;
 	var calevent;
 	var eventobj;
+	var rq;
 	var i;
 	while(should_continue){
 		rq = create_xmlhttp_object();
@@ -83,4 +84,28 @@ function inccal_fetch(year, month){
 	}
 	caleventok = true;
 	status_bar_restore();
+}
+
+function inccal_send(calevt){
+	var rq = create_xmlhttp_object();
+	var str = "";
+	str = 'icon=' + encodeURIComponent(calevt.icon.toString()) + '&' +
+		'title=' + encodeURIComponent(calevt.title) + '&' +
+		'content=' + encodeURIComponent(calevt.content) + '&' + 
+		'remind=' + encodeURIComponent(calevt.remind.toString()) + '&' + 
+		'datafrom=' + encodeURIComponent(calevt.datafrom) + '&' +
+		'year=' + encodeURIComponent(calevt.datetime.getFullYear()) + '&' +
+		'month=' + encodeURIComponent(calevt.datetime.getMonth()) + '&' +
+		'date=' + encodeURIComponent(calevt.datetime.getDate()) + '&' +
+		'hour=' + encodeURIComponent(calevt.datetime.getHours()) + '&' + 
+		'minute=' + encodeURIComponent(calevt.datetime.getMinutes());
+	if(calevt.key == null){
+		rq.open('POST', '/access/insert');
+		rq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		rq.send(str);
+	}else{
+		rq.open('POST', '/access/update');
+		rq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		rq.send(str + '&key=' + encodeURIComponent(calevt.key));
+	}
 }

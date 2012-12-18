@@ -319,6 +319,7 @@ function setmonthcal(){
 				todate + ")");
 			objcaldate.innerHTML = todate;
 			objcaldatalist.setAttribute("name", "datalist" + todate);
+			objcaldatalist.innerHTML = "";
 			alldata[todate] = new Object();
 			alldata[todate].row = i;
 			alldata[todate].col = od_day;
@@ -336,6 +337,7 @@ function setmonthcal(){
 			objcal.removeAttribute("onclick");
 			objcal.removeAttribute("ondblclick");
 			objcaldatalist.removeAttribute("name");
+			objcaldatalist.innerHTML = "";
 		}else if(od_year > toyear || od_month > tomonth){
 			objcal.style.borderColor = "lightgray";
 			objcal.style.color = "gray";
@@ -345,6 +347,7 @@ function setmonthcal(){
 			objcal.removeAttribute("onclick");
 			objcal.removeAttribute("ondblclick");
 			objcaldatalist.removeAttribute("name");
+			objcaldatalist.innerHTML = "";
 		}else{
 			alert("setmonthcal(): fatal error");
 			return;
@@ -353,6 +356,8 @@ function setmonthcal(){
 			i++;
 		}
 	}
+	inccal_fetch(value_year, value_month);
+	calload();
 }
 
 function resetblock(thisdt){
@@ -386,6 +391,8 @@ function setfocusblock(thisdt, reset){
 	thatobj.style.fontWeight = "bold";
 	setcookievalue(cookie_date, thisdt);
 	value_date = thisdt;
+	status_bar_set(value_year + "年" + value_month + "月" + thisdt + "日" +
+		" " + shortcut_mainmsg);
 }
 
 function movefocus_up(){
@@ -484,6 +491,12 @@ function shortcut_bind(){
 	$(document).bind("keydown.main", "ctrl+l", switch_list);
 }
 
+function generate_display_string(calevt){
+	return add_zero_padding(calevt.datetime.getHours().toString(), 2) + ':' +
+		add_zero_padding(calevt.datetime.getMinutes().toString(), 2) + ' ' +
+		calevt.title;
+}
+
 function calload(){
 	var i;
 	var thisdate;
@@ -497,12 +510,7 @@ function calload(){
 		alldata[thisdate].data.push(caleventlist[i]);
 		ulobj = document.getElementsByName("datalist" + thisdate)[0];
 		liobj = document.createElement("li");
-		liobj.innerHTML = 
-			add_zero_padding(
-				caleventlist[i].datetime.getHours().toString(), 2) + ':' +
-			add_zero_padding(
-				caleventlist[i].datetime.getMinutes().toString(), 2) + ' ' +
-			caleventlist[i].title;
+		liobj.innerHTML = generate_display_string(caleventlist[i]);
 		ulobj.appendChild(liobj);
 	}
 	
