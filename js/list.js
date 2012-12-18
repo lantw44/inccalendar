@@ -1,19 +1,25 @@
 ﻿function pushevent () {//將活動放入行事曆中
-	var eventbody = document.getElementById ("eventbody");
-	var dataclass = ["date", "week", "time", "content"];
-	var Event, data;
-	for (var i = 0 ; i < 10 ; i++) {
-		Event = document.createElement ("tr");
-		Event.id = "event" + (i + 1);//建立每一個活動的id
-		Event.className = "event";
-		for (var j = 0 ; j < 4 ; j++) {
-			data = document.createElement ("td");
-			data.id = Event.id + dataclass[j];//建立每一個欄位的id	format = event<i><className>
-			data.className = dataclass[j];
-			Event.appendChild (data);
+	var calevent;
+	var dataclass = ["date", "week", "time", "title"];
+	var eventid, dataid;
+	// for (var month = 1 ; month <= 12 ; month++) {
+		// calevent = inccal_fetch (year, month);
+		for (var i = 0 ; i < 10 ; i++) {
+			eventid = "event" + (i + 1);
+			$ ("#eventbody").append ("<tr id = \"" + eventid + "\"></tr>");
+			$ ("#" + eventid).addClass ("event");
+			for (var j = 0 ; j < 4 ; j++) {
+				dataid = eventid + dataclass[j];
+				$ ("#" + eventid).append ("<td id = \"" + dataid + "\"></td>");
+				$ ("#" + dataid).addClass (dataclass[j]);
+				$ ("#" + dataid).attr ({"onclick":"togglecontent (this.id);"});
+			}
+			$ ("#eventbody").append ("<tr class = \"event\"><td id = \"" + eventid + "content\"></td></tr>");
+			$ ("#" + eventid + "content").addClass ("content");
+			$ ("#" + eventid + "content").attr ({"colspan":"4"});
+			$ ("#" + eventid + "content").css ("display", "none");
 		}
-		eventbody.appendChild (Event);
-	}
+	// }
 }
 
 function searchevent () {//搜尋符合的活動
@@ -67,4 +73,15 @@ function changesearchingbar (obj) {
 		$ ("#searchingdate").css ("display", "none");
 		$ ("#searchingcontent").css ("display", "inline");
 	}
+}
+
+function togglecontent (eventid) {
+	var contentid, i;
+	for (i = 5 ; i < eventid.length ; i++) {
+		if (!(eventid[i] >= '0' && eventid[i] <= '9')) {
+			break;
+		}
+	}
+	contentid = eventid.substring (0, i) + "content";
+	$ ("#" + contentid).toggle (250);
 }
