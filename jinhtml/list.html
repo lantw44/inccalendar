@@ -5,18 +5,23 @@
 		.event {
 			cursor:pointer;
 		}
+		#timebar {
+			font-size:x-large;
+		}
 	</style>
 {% endblock %}
 
 {% block onload %}
 	pushevent (); 
 	pushtestdata ();
+	setyear ();
 	var switchlistobj = document.getElementById("switchlist")
 	switchlistobj.className += "selected";
 	switchlistobj.onclick = "";
 {% endblock %}
 
 {% block headjs %}
+	<script src = "/js/data.js" type = "text/javascript"></script>
 	<script src = "/js/list.js" type = "text/javascript"></script>
 	<script>
 		function pushtestdata () {//push test data
@@ -63,12 +68,20 @@
 {% endblock %}
 
 {% block body %}
+	<div id = "timebar" align = "center">
+		<input type = "button" value = "<" onclick = "changeyear (-1);"></input>
+		<span id = "year"> XXXX </span>
+		年
+		<input type = "button" value = ">" onclick = "changeyear (1);"></input>
+	</div>
 	<div id = "searchbar" align = "center">
+		搜尋選項：
 		<select id = "searchingoption" onchange = "changesearchingbar (this);">
 			<option value = "date"> 日期 </option>
-			<option value = "content" selected = "selected"> 標題 </option>
+			<option value = "title" selected = "selected"> 標題 </option>
+			<option value = "content"> 內容 </option>
 		</select>
-		<input id = "searchingcontent" type = "text" onkeyup = "searchevent ();">
+		<input id = "searchinginput" type = "text" onkeyup = "searchevent ();">
 		<div id = "searchingdate" style = "display:none;">
 			<input id = "searchingdatemonth" type = "text" size = "2" onkeyup = "searchevent ();"> 月
 			<input id = "searchingdateday" type = "text" size = "2" onkeyup = "searchevent ();"> 日
