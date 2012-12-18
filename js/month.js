@@ -316,11 +316,17 @@ function setmonthcal(){
 			objcal.style.color = "gray";
 			objcaldate.innerHTML = (od_month + 1).toString() + "/" + 
 				todate.toString();
+			objcal.removeAttribute("name");
+			objcal.removeAttribute("onclick");
+			objcal.removeAttribute("ondblclick");
 		}else if(od_year > toyear || od_month > tomonth){
 			objcal.style.borderColor = "lightgray";
 			objcal.style.color = "gray";
 			objcaldate.innerHTML = (od_month + 1).toString() + "/" + 
 				todate.toString();
+			objcal.removeAttribute("name");
+			objcal.removeAttribute("onclick");
+			objcal.removeAttribute("ondblclick");
 		}else{
 			alert("setmonthcal(): fatal error");
 			return;
