@@ -6,6 +6,8 @@
 {% block onload %}
   setyearmonth();
   setmonthcal();
+  inccal_fetch(value_year, value_month);
+  calload();
   var switchmonthobj = document.getElementById("switchmonth");
   switchmonthobj.className += "selected";
   switchmonthobj.onclick = "";
@@ -17,6 +19,7 @@
 {% block headjs %}
   <script src="js/month.js" type="text/javascript"></script>
   <script src="js/caledit.js" type="text/javascript"></script>
+  <script src="js/data.js" type="text/javascript"></script>
   <script type="text/javascript">
   	shortcut_bind();
   </script>

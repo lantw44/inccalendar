@@ -62,3 +62,14 @@ function status_bar_special(mgstr){
 		}
 	}
 }
+
+function add_zero_padding(num, digits){
+	var i;
+	var needlen = digits - num.toString().length;
+	var newnum = num;
+	if(needlen > 0){
+		for(i=0; i<needlen; i++)
+		newnum = '0' + newnum;
+	}
+	return newnum;
+}

@@ -8,6 +8,7 @@ div#timeselect input{
   vertical-align: text-top;
 }
 table#cal{
+  table-layout: fixed;
   min-width: 800px;
   width: 100%;
 }
@@ -18,6 +19,20 @@ tbody#calbody td{
   height: 100px;
   width: 14.285%;
   color: black;
+}
+tbody#calbody td div{
+  font-size: large;
+}
+tbody#calbody td ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  max-height: 200px;
 }
 #timeselect_year, #timeselect_month{
   font-family: serif;

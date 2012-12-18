@@ -228,13 +228,22 @@ function updatecaltable(){
 	var node_tr;
 	var node_td;
 	var node_datediv;
+	var node_datalist;
 	var toremove;
-	var i, j;
+	var toremoveiter;
+	var i, j, k;
 	if(newcount < oldcount){
 		for(i=newcount+1; i<=oldcount; i++){
 			for(j=0; j<7; j++){
 				toremove = document.getElementById("caldate" + i.toString() + 
 						j.toString());
+				toremove.parentNode.removeChild(toremove);
+				toremove = document.getElementById("caldatalist" + 
+						i.toString() + j.toString());
+				for(k=0; k<toremove.childNodes.length; k++){
+					toremoveiter = toremove.childNodes[i];
+					toremoveiter.parentNode.removeChild(toremoveiter);
+				}
 				toremove.parentNode.removeChild(toremove);
 				toremove = document.getElementById("cal" + i.toString() + 
 						j.toString());
@@ -254,7 +263,11 @@ function updatecaltable(){
 				node_datediv = document.createElement("div");
 				node_datediv.setAttribute("id", "caldate" + i.toString() +
 						j.toString());
+				node_datalist = document.createElement("ul");
+				node_datalist.setAttribute("id", "caldatalist" +
+						i.toString() + j.toString());
 				node_td.appendChild(node_datediv);
+				node_td.appendChild(node_datalist);
 				node_tr.appendChild(node_td);
 			}
 			objbd.appendChild(node_tr);
@@ -293,6 +306,8 @@ function setmonthcal(){
 				od_day.toString());
 		objcaldate = document.getElementById("caldate" + i.toString() + 
 				od_day.toString());
+		objcaldatalist = document.getElementById("caldatalist" + i.toString() +
+				od_day.toString());
 		if(od_month == tomonth){
 			objcal.style.borderColor = "black";
 			objcal.style.color = "black";
@@ -303,6 +318,7 @@ function setmonthcal(){
 				"caledit(" + value_year + ", " + value_month + ", " +
 				todate + ")");
 			objcaldate.innerHTML = todate;
+			objcaldatalist.setAttribute("name", "datalist" + todate);
 			alldata[todate] = new Object();
 			alldata[todate].row = i;
 			alldata[todate].col = od_day;
@@ -319,6 +335,7 @@ function setmonthcal(){
 			objcal.removeAttribute("name");
 			objcal.removeAttribute("onclick");
 			objcal.removeAttribute("ondblclick");
+			objcaldatalist.removeAttribute("name");
 		}else if(od_year > toyear || od_month > tomonth){
 			objcal.style.borderColor = "lightgray";
 			objcal.style.color = "gray";
@@ -327,6 +344,7 @@ function setmonthcal(){
 			objcal.removeAttribute("name");
 			objcal.removeAttribute("onclick");
 			objcal.removeAttribute("ondblclick");
+			objcaldatalist.removeAttribute("name");
 		}else{
 			alert("setmonthcal(): fatal error");
 			return;
@@ -340,26 +358,32 @@ function setmonthcal(){
 function resetblock(thisdt){
 	var oldobj = document.getElementById(
 		"cal" + alldata[thisdt].row + alldata[thisdt].col);
+	var oldobjtext = document.getElementById(
+		"caldate" + alldata[thisdt].row + alldata[thisdt].col);
 	oldobj.style.borderColor = calfocus_bdc_org;
 	oldobj.style.borderWidth = "1px";
-	oldobj.style.color = "black";
+	oldobjtext.style.color = "black";
+	oldobjtext.style.fontWeight = "normal";
 }
 
 function setfocusblock(thisdt, reset){
 	if(reset){
 		resetblock(value_date);
 	}
-	var thisobj;
+	var thisobj, thatobj;
 	try{
 		thisobj = document.getElementById(
 			"cal" + alldata[thisdt].row + alldata[thisdt].col);
+		thatobj = document.getElementById(
+			"caldate" + alldata[thisdt].row + alldata[thisdt].col);
 	}catch(err){
 		return;
 	}
 	calfocus_bdc_org = thisobj.style.borderColor;
 	thisobj.style.borderColor = "blue";
 	thisobj.style.borderWidth = "3px";
-	thisobj.style.color = "green";
+	thatobj.style.color = "green";
+	thatobj.style.fontWeight = "bold";
 	setcookievalue(cookie_date, thisdt);
 	value_date = thisdt;
 }
@@ -458,4 +482,28 @@ function shortcut_bind(){
 	$(document).bind("keydown.main", "8", direct8);
 	$(document).bind("keydown.main", "9", direct9);
 	$(document).bind("keydown.main", "ctrl+l", switch_list);
+}
+
+function calload(){
+	var i;
+	var thisdate;
+	var ulobj, liobj;
+	inccal_fetch(value_year, value_month);
+	for(i=1; i<alldata.length; i++){
+		alldata[i].data = new Array();
+	}
+	for(i=0; i<caleventlist.length; i++){
+		thisdate = caleventlist[i].datetime.getDate();
+		alldata[thisdate].data.push(caleventlist[i]);
+		ulobj = document.getElementsByName("datalist" + thisdate)[0];
+		liobj = document.createElement("li");
+		liobj.innerHTML = 
+			add_zero_padding(
+				caleventlist[i].datetime.getHours().toString(), 2) + ':' +
+			add_zero_padding(
+				caleventlist[i].datetime.getMinutes().toString(), 2) + ' ' +
+			caleventlist[i].title;
+		ulobj.appendChild(liobj);
+	}
+	
 }
