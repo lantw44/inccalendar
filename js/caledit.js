@@ -34,6 +34,8 @@ function caledit(year, month, date){
 	caledit_createoption();
 	caledit_ismodified = false;
 	caledit_loaded = false;
+	document.getElementById("caledit_select").value = "new";
+	caledit_loader(document.getElementById("caledit_newentry"));
 }
 
 function caledit_quit(){
@@ -299,6 +301,14 @@ function caledit_validate(){
 			tmp > get_month_max_day(yearvalue, monthvalue - 1)){
 			throw "請輸入正確的日期！";
 		}
+		tmp = parseInt(hourobjw.value);
+		if(!isFinite(tmp) || tmp < 0 || tmp >= 24){
+			throw "請輸入正確的時間（小時）！";
+		}
+		tmp = parseInt(minuteobjw.value);
+		if(!isFinite(tmp) || tmp < 0 || tmp >= 60){
+			throw "請輸入正確的時間（分鐘）！";
+		}
 		tmp = parseInt(remindobjw.value);
 		if(!isFinite(tmp)){
 			throw "請輸入正確的提醒時間！";
@@ -367,6 +377,9 @@ function caledit_loader(myself){
 			saved_form = newcalevent.clone();
 			current_form = newcalevent.clone();
 			status_bar_set("新增" + " " + caledit_defmsg);
+			caledit_switchedit_enable();
+			document.getElementById("caledit_save").value = "新增";
+			document.getElementById("caledit_delete").style.display = "none";
 		}else{
 			dataindex = parseInt(myself.value);
 			caledit_fill(activecalevt[dataindex]);
@@ -374,6 +387,9 @@ function caledit_loader(myself){
 			current_form = activecalevt[dataindex].clone();
 			dataindex++;
 			status_bar_set(dataindex.toString() + " " + caledit_defmsg);
+			caledit_switchedit_disable();
+			document.getElementById("caledit_save").value = "儲存";
+			document.getElementById("caledit_delete").style.display = "inline";
 		}
 		caledit_select_oldval = myself.value;
 	}else{
@@ -389,15 +405,42 @@ function caledit_discard_func(){
 }
 
 function caledit_save_func(){
+	var oldtree;
+	var newnode;
+	var newcount;
 	if(caledit_validate()){
 		caledit_write_current();
 	}else{
 		return false;
 	}
 	inccal_send(current_form, function(){
-			saved_form = current_form;
-			caledit_ismodified = true;
-		});
+		if(current_form.key == null){
+			newcount = activecalevt.length + 1;
+			activecalevt[newcount - 1] = current_form.clone();
+			oldtree = document.getElementById("caledit_select");
+			newnode = document.createElement("option");
+			newnode.setAttribute("id", "calselopt" + newcount.toString());
+			newnode.value = newcount;
+			newnode.innerHTML = '<新> ' + 
+				generate_display_string(current_form);
+			oldtree.appendChild(newnode);
+		}else{
+			activecalevt[caledit_select_oldval] = current_form.clone();
+			if(current_form.datetime.getFullYear() == value_year &&
+				current_form.datetime.getMonth() == value_month - 1 &&
+				current_form.datetime.getDate() == value_date){
+				document.getElementById("calselopt" + 
+					caledit_select_oldval.toString()).innerHTML = 
+					'<改> ' + generate_display_string(current_form);
+			}else{
+				document.getElementById("calselopt" + 
+					caledit_select_oldval.toString()).innerHTML = 
+					'<改> 其他日期';
+			}
+		}
+		saved_form = current_form;
+		caledit_ismodified = true;
+	});
 	return false; /* 這樣才不會真的 submit */
 }
 
@@ -407,15 +450,17 @@ function caledit_createoption(){
 	var newoption;
 	var i;
 	newoption = document.createElement("option");
+	newoption.setAttribute("id", "caledit_newentry");
 	newoption.value = "new";
 	newoption.innerHTML = "新增活動......";
 	calselect.appendChild(newoption);
 	for(i=0; i<addoption.length; i++){
 		newoption = document.createElement("option");
+		newoption.setAttribute("id", "calselopt" + i.toString());
 		newoption.value = i;
 		newoption.innerHTML = generate_display_string(addoption[i]);
 		calselect.appendChild(newoption);
-		activecalevt.push(addoption[i]);
+		activecalevt.push(addoption[i].clone());
 	}
 }
 

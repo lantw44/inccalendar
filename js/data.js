@@ -3,8 +3,8 @@ var caleventok;
 
 function CalEvent(){
 	this.key = null;
-	this.title = "活動標題";
-	this.content = "活動內容";
+	this.title = "新活動";
+	this.content = "關於此活動的描述";
 	this.icon = 0;
 	this.remind = 30;
 	this.datafrom = "native";
