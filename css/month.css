@@ -1,5 +1,9 @@
 body {
-	 background:-webkit-gradient(linear, left top, left bottom, from(#FFFFCC), to(#FFFF66));
+  background: -webkit-gradient(linear, left top, left bottom, from(#FFFFCC), to(#FFFF66));
+  background: -moz-linear-gradient(top, #FFFFCC 0%, #FFFF66 100%);
+  background: -ms-linear-gradient(top, #FFFFCC 0%, #FFFF66 100%);
+  background: -o-linear-gradient(top, #FFFFCC 0%, #FFFF66 100%);
+  background: linear-gradient(top, #FFFFCC 0%, #FFFF66 100%);
 }
 div#timeselect{
   margin-top: 20px;
@@ -11,7 +15,7 @@ div#timeselect{
 div#timeselect input{
   vertical-align: text-top;
 }
-div#timeedit_button :{
+div#timeedit_button {
   color:#EE0000;
 }
 table#cal{
