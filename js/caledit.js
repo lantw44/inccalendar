@@ -364,14 +364,14 @@ function caledit_loader(myself){
 					value_year, value_month - 1, value_date);
 			newcalevent.datetime.setHours(0, 0);
 			caledit_fill(newcalevent);
-			$.extend(true, saved_form, newcalevent);
-			$.extend(true, current_form, newcalevent);
+			saved_form = newcalevent.clone();
+			current_form = newcalevent.clone();
 			status_bar_set("新增" + " " + caledit_defmsg);
 		}else{
 			dataindex = parseInt(myself.value);
 			caledit_fill(activecalevt[dataindex]);
-			$.extend(true, saved_form, activecalevt[dataindex]);
-			$.extend(true, current_form, activecalevt[dataindex]);
+			saved_form = activecalevt[dataindex].clone();
+			current_form = activecalevt[dataindex].clone();
 			dataindex++;
 			status_bar_set(dataindex.toString() + " " + caledit_defmsg);
 		}

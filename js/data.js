@@ -21,6 +21,23 @@ function CalEvent(){
 			this.datafrom == another.datafrom &&
 			this.datetime.toString() == another.datetime.toString();
 	}
+	this.clone = function(){
+		var newobj = new CalEvent();
+		newobj.key = this.key;
+		newobj.title = this.title;
+		newobj.content = this.content;
+		newobj.icon = this.icon;
+		newobj.remind = this.remind;
+		newobj.datafrom = this.datafrom;
+		newobj.datetime.setFullYear(
+			this.datetime.getFullYear(),
+			this.datetime.getMonth(),
+			this.datetime.getDate());
+		newobj.datetime.setHours(
+			this.datetime.getHours(),
+			this.datetime.getMinutes(), 0, 0);
+		return newobj;
+	}
 }
 
 function create_xmlhttp_object(){
