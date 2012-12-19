@@ -444,9 +444,9 @@ function caledit_save_func(){
 	}
 	inccal_send(current_form, function(resp){
 		if(current_form.key == null){
-			current_form.key = resp;
 			newcount = activecalevt.length;
 			activecalevt[newcount] = current_form.clone();
+			activecalevt[newcount].key = resp;
 			oldtree = document.getElementById("caledit_select");
 			newnode = document.createElement("option");
 			newnode.setAttribute("id", "calselopt" + newcount.toString());
