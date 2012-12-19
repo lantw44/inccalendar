@@ -52,24 +52,40 @@ class FetchEvent(webapp2.RequestHandler):
 		if not guserid:
 			return
 
-		year = int(self.request.get('year'))
-		month = int(self.request.get('month'))
+		year = self.request.get('year')
+		month = self.request.get('month')
 		withcursor = self.request.get('gqlcursor')
-		if month >= 12:
-			nextmonth = 1
-			nextyear = year + 1
-		else:
-			nextmonth = month + 1
-			nextyear = year
 
-		data = db.GqlQuery("SELECT * FROM CalEvent "
-					"WHERE ANCESTOR IS :1 AND "
-					"begin >= :2 AND "
-					"begin < :3 "
-					"ORDER BY begin",
-					db.Key.from_path('user', guserid.email()),
-					datetime.datetime(year, month, 1),
-					datetime.datetime(nextyear, nextmonth, 1))
+		if month == "":
+			year = int(year)
+			data = db.GqlQuery("SELECT * FROM CalEvent "
+						"WHERE ANCESTOR IS :1 AND "
+						"begin >= :2 AND "
+						"begin < :3 "
+						"ORDER BY begin",
+						db.Key.from_path('user', guserid.email()),
+						datetime.datetime(year, 1, 1),
+						datetime.datetime(year + 1, 1, 1))
+
+		else:
+			year = int(year)
+			month = int(month)
+
+			if month >= 12:
+				nextmonth = 1
+				nextyear = year + 1
+			else:
+				nextmonth = month + 1
+				nextyear = year
+
+			data = db.GqlQuery("SELECT * FROM CalEvent "
+						"WHERE ANCESTOR IS :1 AND "
+						"begin >= :2 AND "
+						"begin < :3 "
+						"ORDER BY begin",
+						db.Key.from_path('user', guserid.email()),
+						datetime.datetime(year, month, 1),
+						datetime.datetime(nextyear, nextmonth, 1))
 
 		if withcursor != "":
 			data.with_cursor(withcursor)

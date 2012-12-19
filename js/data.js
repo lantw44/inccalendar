@@ -59,15 +59,21 @@ function inccal_fetch(year, month){
 	var calevent;
 	var eventobj;
 	var progcounter = 0;
+	var timecounter = 0;
 	var loadingstr = '載入中......';
 	var rq;
 	var i;
 	while(should_continue){
-	  	status_bar_set(loadingstr + ' ' + progcounter.toString());
+	  	status_bar_set(loadingstr + ' 已下載 ' + timecounter.toString() + 
+				' 次，共取得 ' + progcounter.toString() + ' 項資料');
 		rq = create_xmlhttp_object();
 		rq.open('POST', '/access/fetch', false);
 		rq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		postdata = 'year=' + year.toString() + '&month=' + month.toString();
+		if(month == null){
+			postdata = 'year=' + year.toString();
+		}else{
+			postdata = 'year=' + year.toString() + '&month=' + month.toString();
+		}
 		if(gqlcursor != null){
 			postdata = postdata + '&gqlcursor=' + encodeURIComponent(gqlcursor);
 		}
@@ -97,6 +103,7 @@ function inccal_fetch(year, month){
 				0, 0);
 			caleventlist.push(eventobj);
 		}
+		timecounter++;
 		progcounter += calevent.length;
 		try{
 			gqlcursor = retrdata.getElementsByTagName("gqlcursor")[0].childNodes[0].nodeValue;
