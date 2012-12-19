@@ -12,9 +12,9 @@
 {% endblock %}
 
 {% block onload %}
-	pushevent (); 
-	pushtestdata ();
 	setyear ();
+	pushevent (); 
+	<!-- pushtestdata (); -->
 	var switchlistobj = document.getElementById("switchlist")
 	switchlistobj.className += "selected";
 	switchlistobj.onclick = "";
@@ -69,10 +69,10 @@
 
 {% block body %}
 	<div id = "timebar" align = "center">
-		<input type = "button" value = "<" onclick = "changeyear (-1);"></input>
+		<input type = "button" value = "<" onclick = "changeyear (-1); pushevent ();"></input>
 		<span id = "year"> XXXX </span>
 		年
-		<input type = "button" value = ">" onclick = "changeyear (1);"></input>
+		<input type = "button" value = ">" onclick = "changeyear (1); pushevent ();"></input>
 	</div>
 	<div id = "searchbar" align = "center">
 		搜尋選項：

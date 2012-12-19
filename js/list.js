@@ -1,11 +1,18 @@
 ﻿function pushevent () {//將活動放入行事曆中
-	var calevent;
-	var dataclass = ["date", "week", "time", "title"];
-	var eventid, dataid;
-	// for (var month = 1 ; month <= 12 ; month++) {
-		// calevent = inccal_fetch (2012, month);
-		for (var i = 0 ; i < 10 ; i++) {
-			eventid = "event" + (i + 1);
+	var year = parseInt ($ ("#year").text ());
+	var dataclass = ["date", "week", "time", "title", "content"];
+	var Day = ["日", "一", "二", "三", "四", "五", "六"];
+	var eventid, dataid, datetime;
+	var calevent = new Array ();
+	for (var month = 1 ; month <= 12 ; month++) {
+		inccal_fetch (year, month);
+		for (var i = 0 ; i < caleventlist.length ; i++) {
+			calevent.push (caleventlist[i]);
+		}
+	}
+	for (var i = 0 ; i < calevent.length ; i++) {
+		eventid = "event" + (i + 1);
+		if ($ ("#" + eventid + "head").length == 0) {//這一行還沒有
 			$ ("#eventbody").append ("<tr id = \"" + eventid + "head\"></tr>");
 			$ ("#" + eventid + "head").addClass ("event");
 			for (var j = 0 ; j < 4 ; j++) {
@@ -17,9 +24,20 @@
 			$ ("#eventbody").append ("<tr id = \"" + eventid + "body\" class = \"event\"><td id = \"" + eventid + "content\"></td></tr>");
 			$ ("#" + eventid + "content").addClass ("content");
 			$ ("#" + eventid + "content").attr ({"colspan":"4"});
-			$ ("#" + eventid + "content").css ("display", "none");
 		}
-	// }
+		datetime = calevent[i]["datetime"];
+		$ ("#" + eventid + "date").text (datetime.getFullYear () + "." + (datetime.getMonth () + 1) + "." + datetime.getDate ());
+		$ ("#" + eventid + "week").text ("星期" + Day[datetime.getDay ()]);
+		$ ("#" + eventid + "time").text (datetime.getHours () + ":" + datetime.getMinutes ());
+		for (var j = 3 ; j < 5 ; j++) {
+			$ ("#" + eventid + dataclass[j]).text (calevent[i][dataclass[j]]);
+		}
+		$ ("#" + eventid + "content").css ("display", "none");
+	}
+	for (var i = calevent.length ; $ ("#event" + (i + 1) + "head").length > 0 ; i++) {//刪除多餘的空行
+		$ ("#event" + (i + 1) + "head").remove ();
+		$ ("#event" + (i + 1) + "body").remove ();
+	}
 }
 
 function searchevent () {//搜尋符合的活動
