@@ -103,7 +103,7 @@ function inccal_fetch(year, month){
 	status_bar_restore();
 }
 
-function inccal_send(calevt){
+function inccal_send(calevt, do_func){
 	var rq = create_xmlhttp_object();
 	var str = "";
 	str = 'icon=' + encodeURIComponent(calevt.icon.toString()) + '&' +
@@ -129,8 +129,11 @@ function inccal_send(calevt){
 		if(rq.readyState == 4){
 			if(rq.status == 200){
 				status_bar_set("資料已儲存");
+				if(do_func != null){
+					do_func();
+				}
 			}else{
-				status_bar_set("伺服器回傳" + rq.status.toString() + "錯誤");
+				status_bar_warning("伺服器回傳 " + rq.status.toString() + " 錯誤");
 			}
 		}
 	}

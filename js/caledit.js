@@ -394,9 +394,10 @@ function caledit_save_func(){
 	}else{
 		return false;
 	}
-	inccal_send(current_form);
-	saved_form = current_form;
-	caledit_ismodified = true;
+	inccal_send(current_form, function(){
+			saved_form = current_form;
+			caledit_ismodified = true;
+		});
 	return false; /* 這樣才不會真的 submit */
 }
 
