@@ -112,7 +112,7 @@ function inccal_send(calevt){
 		'remind=' + encodeURIComponent(calevt.remind.toString()) + '&' + 
 		'datafrom=' + encodeURIComponent(calevt.datafrom) + '&' +
 		'year=' + encodeURIComponent(calevt.datetime.getFullYear()) + '&' +
-		'month=' + encodeURIComponent(calevt.datetime.getMonth()) + '&' +
+		'month=' + encodeURIComponent(calevt.datetime.getMonth() + 1) + '&' +
 		'date=' + encodeURIComponent(calevt.datetime.getDate()) + '&' +
 		'hour=' + encodeURIComponent(calevt.datetime.getHours()) + '&' + 
 		'minute=' + encodeURIComponent(calevt.datetime.getMinutes());
@@ -124,5 +124,14 @@ function inccal_send(calevt){
 		rq.open('POST', '/access/update');
 		rq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		rq.send(str + '&key=' + encodeURIComponent(calevt.key));
+	}
+	rq.onreadystatechange = function(){
+		if(rq.readyState == 4){
+			if(rq.status == 200){
+				status_bar_set("資料已儲存");
+			}else{
+				status_bar_set("伺服器回傳" + rq.status.toString() + "錯誤");
+			}
+		}
 	}
 }

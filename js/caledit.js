@@ -73,7 +73,7 @@ function caledit_quit(){
 	caledit_clearoption();
 	caledit_clean();
 	if(caledit_ismodified){
-		calload();
+		setmonthcal();
 	}
 }
 
@@ -195,7 +195,7 @@ function caledit_fill(calevt){
 	contentobj = document.getElementById("caledit_static_content");
 	datafromobj = document.getElementById("caledit_datafrom");
 	yearobj.innerHTML = calevt.datetime.getFullYear();
-	monthobj.innerHTML = calevt.datetime.getMonth();
+	monthobj.innerHTML = calevt.datetime.getMonth() + 1;
 	dateobj.innerHTML = calevt.datetime.getDate();
 	hourobj.innerHTML = calevt.datetime.getHours();
 	minuteobj.innerHTML = calevt.datetime.getMinutes();
@@ -225,7 +225,7 @@ function caledit_fill(calevt){
 	remindobj = document.getElementById("caledit_dyn_remind");
 	contentobj = document.getElementById("caledit_dyn_content");
 	yearobj.value = calevt.datetime.getFullYear();
-	monthobj.value = calevt.datetime.getMonth();
+	monthobj.value = calevt.datetime.getMonth() + 1;
 	dateobj.value = calevt.datetime.getDate();
 	hourobj.value = calevt.datetime.getHours();
 	minuteobj.value = calevt.datetime.getMinutes();
@@ -328,7 +328,7 @@ function caledit_write_current(){
 	
 	current_form.datetime.setFullYear(
 		parseInt(yearobjw.value),
-		parseInt(monthobjw.value),
+		parseInt(monthobjw.value) - 1,
 		parseInt(dateobjw.value));
 	current_form.datetime.setHours(
 		parseInt(hourobjw.value),
