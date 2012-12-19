@@ -4,7 +4,7 @@ body {
 thead tr > td {
 	font-size:2em;
 }
-tbody#eventbody tr:hover{
+tbody#eventbody tr:hover {
 	background-color: #FFFF00;
 }
 #searchingoption, #searchingcontent{

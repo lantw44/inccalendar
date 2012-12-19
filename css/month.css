@@ -32,12 +32,9 @@ tbody#calbody td{
   width: 14.285%;
   color: black;
 }
-<<<<<<< HEAD
-tbody#calbody tr td:hover{
+tbody#calbody tr td:hover {
   background-color: #FFff00;
 }
-
-=======
 tbody#calbody td div{
   font-size: large;
 }
@@ -52,7 +49,6 @@ tbody#calbody td ul{
   overflow-y: hidden;
   max-height: 150px;
 }
->>>>>>> c5d88cf440779de0ef728e099fb23e9a6f14642b
 #timeselect_year, #timeselect_month{
   font-family: serif;
 }
