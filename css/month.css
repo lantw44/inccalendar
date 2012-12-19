@@ -13,7 +13,7 @@ div#timeselect{
   
 }
 div#timeselect input{
-  vertical-align: text-top;
+  vertical-align: middle;
 }
 div#timeedit_button {
   color:#EE0000;
@@ -25,7 +25,7 @@ table#cal{
 }
 thead tr{
   font-size: 70px;
-  font-family: º–∑¢≈È;
+  font-family: serif;
   color: #009900;
 }
 tbody#calbody td{
