@@ -48,5 +48,8 @@ class InsertEvent(webapp2.RequestHandler):
 
 		newcalevent.put()
 
+		self.response.headers['Content-Type'] = 'text/plain'
+		self.response.out.write(str(newcalevent.key()))
+
 app = webapp2.WSGIApplication([('/access/insert', InsertEvent)])
 

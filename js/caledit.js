@@ -4,7 +4,7 @@ var caledit_ismodified;
 var caledit_loaded;
 var current_form;
 var saved_form;
-var caledit_defmsg = "(Esc)返回 (Ctrl-M)切換編輯 (Ctrl-左)左側 (Ctrl-右)右側 (Alt-U)儲存 (Alt-R)捨棄";
+var caledit_defmsg = "(Esc)返回 (Ctrl-M)切換編輯 (Ctrl-左)左側 (Ctrl-右)右側 (Alt-U)新增或儲存 (Alt-K)刪除 (Alt-R)復原";
 
 function caledit(year, month, date){
 	var allbrowseobj = document.getElementsByName("calbrowse");
@@ -17,6 +17,7 @@ function caledit(year, month, date){
 	$(document).bind("keydown.caledit", "esc", caledit_quit);
 	$(document).bind("keydown.caledit", "alt+u", caledit_save_func);
 	$(document).bind("keydown.caledit", "alt+r", caledit_discard_func);
+	$(document).bind("keydown.caledit", "alt+k", caledit_delete_func);
 	status_bar_save();
 	status_bar_set(caledit_defmsg);
 	caledit_switchedit_disable();
@@ -76,6 +77,7 @@ function caledit_quit(){
 	caledit_clean();
 	if(caledit_ismodified){
 		setmonthcal();
+		setfocusblock(value_date);
 	}
 }
 
@@ -318,7 +320,6 @@ function caledit_validate(){
 		return false;
 	}
 
-	status_bar_set(caledit_defmsg);
 	return true;
 }
 
@@ -388,7 +389,11 @@ function caledit_loader(myself){
 			dataindex++;
 			status_bar_set(dataindex.toString() + " " + caledit_defmsg);
 			caledit_switchedit_disable();
-			document.getElementById("caledit_save").value = "儲存";
+			if(current_form.deleted){
+				document.getElementById("caledit_save").value = "重新插入";
+			}else{
+				document.getElementById("caledit_save").value = "儲存";
+			}
 			document.getElementById("caledit_delete").style.display = "inline";
 		}
 		caledit_select_oldval = myself.value;
@@ -404,6 +409,30 @@ function caledit_discard_func(){
 	caledit_fill(saved_form);
 }
 
+function caledit_delete_func(){
+	caledit_write_current();
+	if(current_form.key == null){
+		return;
+	}else{
+		inccal_remove(current_form, function(){
+			var selobj = document.getElementById("caledit_select");
+			var oldval = parseInt(caledit_select_oldval);
+			current_form.key = null;
+			current_form.deleted = true;
+			saved_form = current_form.clone();
+			activecalevt[oldval] = current_form.clone();
+			document.getElementById("calselopt" + 
+				caledit_select_oldval.toString()).innerHTML = 
+				'<刪>';
+			caledit_ismodified = true;
+			if(oldval < activecalevt.length - 1){
+				selobj.value = (oldval + 1).toString();
+				caledit_loader(selobj);
+			}
+		});
+	}
+}
+
 function caledit_save_func(){
 	var oldtree;
 	var newnode;
@@ -413,10 +442,11 @@ function caledit_save_func(){
 	}else{
 		return false;
 	}
-	inccal_send(current_form, function(){
+	inccal_send(current_form, function(resp){
 		if(current_form.key == null){
-			newcount = activecalevt.length + 1;
-			activecalevt[newcount - 1] = current_form.clone();
+			current_form.key = resp;
+			newcount = activecalevt.length;
+			activecalevt[newcount] = current_form.clone();
 			oldtree = document.getElementById("caledit_select");
 			newnode = document.createElement("option");
 			newnode.setAttribute("id", "calselopt" + newcount.toString());
@@ -438,7 +468,7 @@ function caledit_save_func(){
 					'<改> 其他日期';
 			}
 		}
-		saved_form = current_form;
+		saved_form = current_form.clone();
 		caledit_ismodified = true;
 	});
 	return false; /* 這樣才不會真的 submit */

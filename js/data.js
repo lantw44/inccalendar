@@ -9,6 +9,7 @@ function CalEvent(){
 	this.remind = 30;
 	this.datafrom = "native";
 	this.datetime = new Date();
+	this.deleted = false;
 	this.equal = function(another){
 		return this.key == another.key &&
 			this.equalIgnoreKey(another);
@@ -29,6 +30,7 @@ function CalEvent(){
 		newobj.icon = this.icon;
 		newobj.remind = this.remind;
 		newobj.datafrom = this.datafrom;
+		newobj.deleted = this.deleted;
 		newobj.datetime.setFullYear(
 			this.datetime.getFullYear(),
 			this.datetime.getMonth(),
@@ -133,6 +135,27 @@ function inccal_send(calevt, do_func){
 			if(rq.status == 200){
 				status_bar_set("資料已儲存");
 				if(do_func != null){
+					do_func(rq.responseText);
+				}
+			}else{
+				status_bar_warning("伺服器回傳 " + rq.status.toString() + " 錯誤");
+			}
+		}
+	}
+}
+
+function inccal_remove(calevt, do_func){
+	var rq = create_xmlhttp_object();
+	var str = "";
+	str = 'key=' + encodeURIComponent(calevt.key);
+	rq.open('POST', '/access/remove');
+	rq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	rq.send(str);
+	rq.onreadystatechange = function(){
+		if(rq.readyState == 4){
+			if(rq.status == 200){
+				status_bar_set("資料已刪除");
+				if(do_func != null){
 					do_func();
 				}
 			}else{
@@ -140,4 +163,5 @@ function inccal_send(calevt, do_func){
 			}
 		}
 	}
+
 }

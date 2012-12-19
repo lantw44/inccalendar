@@ -75,7 +75,7 @@ class FetchEvent(webapp2.RequestHandler):
 			data.with_cursor(withcursor)
 
 		eventroot = etree.Element('inccalender')
-		for entry in data.run(limit=10):
+		for entry in data.run(limit=50):
 			calevent = etree.SubElement(eventroot, 'calevent')
 			XMLBuildCalEvent(calevent, entry)
 

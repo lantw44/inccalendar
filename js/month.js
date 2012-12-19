@@ -356,7 +356,6 @@ function setmonthcal(){
 			i++;
 		}
 	}
-	inccal_fetch(value_year, value_month);
 	calload();
 }
 
