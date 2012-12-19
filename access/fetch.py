@@ -18,16 +18,18 @@ def XMLBuildCalEvent(calevent, entry):
 	newdata.text = entry.content
 	newdata = etree.SubElement(calevent, 'icon')
 	newdata.text = str(entry.icon)
-	newdata = etree.SubElement(calevent, 'beginyear')
+	newdata = etree.SubElement(calevent, 'year')
 	newdata.text = str(entry.begin.year)
-	newdata = etree.SubElement(calevent, 'beginmonth')
+	newdata = etree.SubElement(calevent, 'month')
 	newdata.text = str(entry.begin.month)
-	newdata = etree.SubElement(calevent, 'begindate')
+	newdata = etree.SubElement(calevent, 'date')
 	newdata.text = str(entry.begin.day)
-	newdata = etree.SubElement(calevent, 'beginhour')
+	newdata = etree.SubElement(calevent, 'hour')
 	newdata.text = str(entry.begin.hour)
-	newdata = etree.SubElement(calevent, 'beginminute')
+	newdata = etree.SubElement(calevent, 'minute')
 	newdata.text = str(entry.begin.minute)
+	newdata = etree.SubElement(calevent, 'remind')
+	newdata.text = str(entry.remind)
 	newdata = etree.SubElement(calevent, 'datafrom')
 	newdata.text = entry.datafrom
 
@@ -60,9 +62,6 @@ class FetchEvent(webapp2.RequestHandler):
 			nextmonth = month + 1
 			nextyear = year
 
-		if withcursor == "":
-			withcursor = None
-
 		data = db.GqlQuery("SELECT * FROM CalEvent "
 					"WHERE ANCESTOR IS :1 AND "
 					"begin >= :2 AND "
@@ -72,7 +71,8 @@ class FetchEvent(webapp2.RequestHandler):
 					datetime.datetime(year, month, 1),
 					datetime.datetime(nextyear, nextmonth, 1))
 
-		data.with_cursor(withcursor)
+		if withcursor != "":
+			data.with_cursor(withcursor)
 
 		eventroot = etree.Element('inccalender')
 		for entry in data.run(limit=10):

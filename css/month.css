@@ -15,6 +15,7 @@ div#timeedit_button :{
   color:#EE0000;
 }
 table#cal{
+  table-layout: fixed;
   min-width: 800px;
   width: 100%;
 }
@@ -31,10 +32,27 @@ tbody#calbody td{
   width: 14.285%;
   color: black;
 }
+<<<<<<< HEAD
 tbody#calbody tr td:hover{
   background-color: #FFff00;
 }
 
+=======
+tbody#calbody td div{
+  font-size: large;
+}
+tbody#calbody td ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  max-height: 150px;
+}
+>>>>>>> c5d88cf440779de0ef728e099fb23e9a6f14642b
 #timeselect_year, #timeselect_month{
   font-family: serif;
 }
@@ -57,6 +75,7 @@ tbody#calbody tr td:hover{
 #caledit_static_year, #caledit_static_month, #caledit_static_date,
 #caledit_static_hour, #caledit_static_minute, #caledit_static_remind
 {
+  text-align: right;
   display: inline-block;
   width: 40px;
 }

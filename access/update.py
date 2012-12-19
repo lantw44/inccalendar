@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-
 import cgi
 import datetime
 import webapp2
@@ -10,10 +7,10 @@ from google.appengine.ext import db
 
 from access import CalEvent
 
-class InsertEvent(webapp2.RequestHandler):
-	def get(self):
+class UpdateEvent (webapp2.RequestHandler) :
+	def get (self) :
 		return
-	def post(self):
+	def post (self) :
 		guserid = users.get_current_user()
 		if not guserid:
 			return
@@ -34,19 +31,16 @@ class InsertEvent(webapp2.RequestHandler):
 		);
 		thisdatafrom = self.request.get('datafrom')
 		thisremind = int(self.request.get('remind'))
-
-		newcalevent = CalEvent(
-		db.Key.from_path('user', guserid.email()),
-		content = thiscontent,
-		begin = thisbegin,
-		datafrom = thisdatafrom
-		)
-
-		newcalevent.title = thistitle
-		newcalevent.icon = thisicon
-		newcalevent.remind = thisremind
-
-		newcalevent.put()
-
-app = webapp2.WSGIApplication([('/access/insert', InsertEvent)])
-
+		mykey = self.request.get('key')
+		
+		eventdata = db.get(mykey)
+		eventdata.icon = thisicon
+		eventdata.title = thistitle
+		eventdata.content = thiscontent
+		eventdata.begin = thisbegin
+		eventdata.datafrom = thisdatafrom
+		eventdata.remind = thisremind
+		
+		eventdata.put()
+		
+app = webapp2.WSGIApplication([('/access/update', UpdateEvent)])

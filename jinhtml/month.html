@@ -9,15 +9,15 @@
   var switchmonthobj = document.getElementById("switchmonth");
   switchmonthobj.className += "selected";
   switchmonthobj.onclick = "";
-  status_bar_append("(Ctrl-L)清單模式 (Ctrl-左右)切換月份 (y)修改年 (m)修改月" 
-      + " (Enter)查看或編輯資料");
-  status_bar_append("(0-9)快速選擇日期");
 {% endblock %} 
   
 {% block headjs %}
   <script src="js/month.js" type="text/javascript"></script>
   <script src="js/caledit.js" type="text/javascript"></script>
+  <script src="js/data.js" type="text/javascript"></script>
   <script type="text/javascript">
+    var shortcut_mainmsg = "(Ctrl-L)清單模式 (Ctrl-左右)切換月份 (y)修改年 " + 
+      "(m)修改月 (Enter)查看或編輯資料 (0-9)快速選擇日期";
   	shortcut_bind();
   </script>
 {% endblock %}
@@ -61,11 +61,11 @@
         <input type="button" value="返回月曆" style="background-color: #00FF00; font-size: large;" onclick="caledit_quit()">
     </div>
     <div id="caledit_left">
-      <select id="caledit_select" size="20">
+      <select id="caledit_select" size="20" onchange="caledit_loader(this)">
       </select>
     </div>
     <div id="caledit_right">
-      <form id="cal" name="caleditform" onsubmit="">
+      <form id="cal" name="caleditform" onsubmit="return caledit_save_func()">
         <input id="caledit_switchedit" type="button" value="編輯" onclick="caledit_edit()">
         <span id="caledit_enabled"></span>
         <fieldset>
@@ -104,8 +104,8 @@
           資料來源：
           <span id="caledit_datafrom"></span>
         </fieldset>
-        <input type="submit" value="儲存">
-        <input type="button" value="取消">
+        <input id="caledit_save" type="submit" value="儲存">
+        <input id="caledit_discard" type="button" value="捨棄" onclick="caledit_discard_func()">
       </form>
     </div>
   </div>
