@@ -48,7 +48,6 @@ function create_xmlhttp_object(){
 
 function inccal_fetch(year, month){
 	status_bar_save();
-	status_bar_set('載入中......');
 	caleventok = false;
 	caleventlist = new Array();
 	var should_continue = true;
@@ -57,9 +56,12 @@ function inccal_fetch(year, month){
 	var retrdata;
 	var calevent;
 	var eventobj;
+	var progcounter = 0;
+	var loadingstr = '載入中......';
 	var rq;
 	var i;
 	while(should_continue){
+	  	status_bar_set(loadingstr + ' ' + progcounter.toString());
 		rq = create_xmlhttp_object();
 		rq.open('POST', '/access/fetch', false);
 		rq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -89,10 +91,11 @@ function inccal_fetch(year, month){
 			);
 			eventobj.datetime.setHours(
 				parseInt(calevent[i].getElementsByTagName("hour")[0].childNodes[0].nodeValue),
-				parseInt(calevent[i].getElementsByTagName("month")[0].childNodes[0].nodeValue),
+				parseInt(calevent[i].getElementsByTagName("minute")[0].childNodes[0].nodeValue),
 				0, 0);
 			caleventlist.push(eventobj);
 		}
+		progcounter += calevent.length;
 		try{
 			gqlcursor = retrdata.getElementsByTagName("gqlcursor")[0].childNodes[0].nodeValue;
 		}catch(err){

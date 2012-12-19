@@ -6,6 +6,7 @@
 {% block onload %}
   setyearmonth();
   setmonthcal();
+  setfocusblock(value_date);
   var switchmonthobj = document.getElementById("switchmonth");
   switchmonthobj.className += "selected";
   switchmonthobj.onclick = "";
@@ -99,7 +100,7 @@
           <input name="caledit_write" id="caledit_dyn_title" type="text">
           <br>
           內容：
-          <div name="caledit_read_block" id="caledit_static_content"></div>
+          <pre><div name="caledit_read_block" id="caledit_static_content"></div></pre>
           <textarea name="caledit_write_block" id="caledit_dyn_content" rows="6"></textarea>
           資料來源：
           <span id="caledit_datafrom"></span>

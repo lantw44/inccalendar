@@ -391,8 +391,16 @@ function setfocusblock(thisdt, reset){
 	thatobj.style.fontWeight = "bold";
 	setcookievalue(cookie_date, thisdt);
 	value_date = thisdt;
-	status_bar_set(value_year + "年" + value_month + "月" + thisdt + "日" +
-		" " + shortcut_mainmsg);
+	status_bar_set(value_year + "年" + value_month + "月" + thisdt + "日");
+	try{
+		if(alldata[thisdt].data.length <= 0){
+			throw false;
+		}
+		status_bar_append("(" + alldata[thisdt].data.length + "個活動)");
+	}catch(err){
+		status_bar_append("(沒有活動)");
+	}
+	status_bar_append(shortcut_mainmsg);
 }
 
 function movefocus_up(){
