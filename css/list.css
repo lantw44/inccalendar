@@ -51,3 +51,14 @@ div#unmatchedmessage {
 #event2, #event4, #event6, #event8, #event10{
 	background-color: #33FFFF;
 }
+.event {
+	cursor:pointer;
+}
+#timebar {
+	font-size:x-large;
+}
+#noeventmessage {
+	text-align:center;
+	font-size:2em;
+	display:none;
+}
