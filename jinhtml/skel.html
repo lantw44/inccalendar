@@ -16,10 +16,16 @@
 		window.location = "{{ logouturl }}";
 	}
 	function switch_month(){
-		window.location = "{{ mysimple }}?view=month";
+		window.location = "{{ myhost }}?view=month";
 	}
 	function switch_list(){
-		window.location = "{{ mysimple }}?view=list";
+		window.location = "{{ myhost }}?view=list";
+	}
+	function switch_import(){
+		window.location = "{{ myhost }}/port?function=import"
+	}
+	function switch_export(){
+		window.location = "{{ myhost }}/port?function=export"
 	}
 	window.onload = function(){
 		status_bar_init();
@@ -38,8 +44,8 @@
       <input type="button" value="清單" id="switchlist" onclick="switch_list()">
     </div>
     <div id="controlright">
-      <input type="button" value="匯入" id="buttonimport">
-      <input type="button" value="匯出" id="buttonexport">
+      <input type="button" value="匯入" id="buttonimport" onclick="switch_import()">
+      <input type="button" value="匯出" id="buttonexport" onclick="switch_export()">
       <input type="button" value="登出" id="googlelogout" onclick="google_logout()" style="background-color: darkgray">
     </div>
   </div>
