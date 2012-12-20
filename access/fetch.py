@@ -100,7 +100,6 @@ class FetchEvent(webapp2.RequestHandler):
 	
 		self.response.headers['Content-Type'] = 'text/xml; charset=UTF-8'
 		self.response.out.write(
-			etree.tostring(eventroot, pretty_print=True, xml_declaration=True,
-				encoding='UTF-8'))
+			etree.tostring(eventroot, xml_declaration=True, encoding='UTF-8'))
 
 app = webapp2.WSGIApplication([('/access/fetch', FetchEvent)])

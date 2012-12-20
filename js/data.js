@@ -44,7 +44,19 @@ function CalEvent(){
 
 function create_xmlhttp_object(){
 	var rq;
-	rq = new XMLHttpRequest();
+	try{
+		rq = new XMLHttpRequest();
+	}catch(err){
+		try{
+			rq = new ActiveXObject("Msxml2.XMLHTTP");
+		}catch(err){
+			try{
+				rq = new ActiveXObject("Microsoft.XMLHTTP");
+			}catch(err){
+				rq = null;
+			}
+		}
+	}
 	return rq;
 }
 
