@@ -1,5 +1,14 @@
 {% extends "jinhtml/skel.html" %}
 {% block headcss %}
+  <style type="text/css">
+    div.wholeform{
+      margin-top: 20px;
+      margin-left: 20px;
+    }
+    p.question{
+      font-size: xx-large;
+    }
+  </style>
 {% endblock %}
 
 {% block onload %}
@@ -9,7 +18,36 @@
 {% endblock %}
 
 {% block headjs %}
+  <script type="text/javascript" src="js/imnc.js"></script>
+  <script type="text/javascript">
+    function selsrc_initbut(){
+      if(document.getElementById("srcgcal").checked){
+        imgcal_init();
+      }else if(document.getElementById("srcnc").checked){
+        imnc_init();
+      }else{
+        status_bar_warning("請至少選取一個項目！");
+      }
+    }
+  </script>
 {% endblock %}
 
 {% block body %}
+  <div id="imstepforminit" class="wholeform">
+    <p class="question">請問您想要從哪裡匯入資料？</p>
+    <input type="radio" id="srcgcal" name="selsource" value="googlecal">Google 行事曆<br>
+    <input type="radio" id="srcnc" name="selsource" value="ntuceiba">臺大 CEIBA 網站<br><br>
+    <input type="button" value="下一步" onclick="selsrc_initbut()">
+  </div>
+  <div id="imntuceibainfo" class="wholeform" style="display: none;">
+    <p class="question">請問您想透過哪一種方式取得 CEIBA 網站上的資料？</p>
+    <input type="radio" id="nclogin" name="ncinfo" value="directlogin">透過帳號密碼直接登入 CEIBA 網站<br>
+    <input type="radio" id="ncupload" name="ncinfo" value="uploadpage">上傳 CEIBA 作業區的網頁檔案<br><br>
+    <input type="checkbox" id="ncviewagain" checked>匯入前檢視並修改內容（會導致較大的網路流量）<br>
+    <input type="checkbox" id="ncmerge" checked>與先前匯入的資料合併以避免重複匯入<br><br>
+    <input type="button" value="重新選擇來源" onclick="imnc_deinit()">
+    <input type="button" value="開始匯入">
+  </div>
+  <div id="imntuceibacheck" class="wholeform" style="display: none;">
+  </div>
 {% endblock %}
