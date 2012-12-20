@@ -1,5 +1,6 @@
 ﻿headdataclass = ["date", "week", "time", "title"];
 Day = ["日", "一", "二", "三", "四", "五", "六"];
+curpage = 1;
 
 function escapestring (str) {//用出' ' && '\n'
 	str = str.replace (/\n/g, "<br/>");
@@ -7,13 +8,13 @@ function escapestring (str) {//用出' ' && '\n'
 	return str;
 }
 
-function pushevent () {//將活動放入行事曆中
+function pushevent (start) {//將活動放入行事曆中
 	var year = parseInt ($ ("#year").text ());
 	var dataclass = ["date", "week", "time", "title", "content"];
-	var dataid, eventid, dataid, datetime, calevent;
-	inccal_fetch (year);
+	var dataid, eventid, dataid, datetime, calevent, maxevents;
 	calevent = caleventlist;
-	for (var i = 0 ; i < calevent.length ; i++) {
+	maxevents = Math.min (10, calevent.length - start);
+	for (var i = start ; i < start + maxevents ; i++) {
 		eventid = "event" + (i + 1);
 		if ($ ("#" + eventid + "head").length == 0) {//這一行還沒有
 			$ ("#eventbody").append ("<tr id = '" + eventid + "head'></tr>");
@@ -38,15 +39,9 @@ function pushevent () {//將活動放入行事曆中
 		$ ("#" + eventid + "title").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
 		$ ("#" + eventid + "content").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
 	}
-	for (var i = calevent.length ; $ ("#event" + (i + 1) + "head").length > 0 ; i++) {//刪除多餘的空行
+	for (var i = maxevents ; $ ("#event" + (i + 1) + "head").length > 0 ; i++) {//刪除多餘的空行
 		$ ("#event" + (i + 1) + "head").remove ();
 		$ ("#event" + (i + 1) + "body").remove ();
-	}
-	if (calevent.length == 0) {//沒有任何活動
-		$ ("#noeventmessage").css ("display", "block");
-	}
-	else {
-		$ ("#noeventmessage").css ("display", "none");
 	}
 }
 
@@ -149,6 +144,10 @@ function switchbacktonormalmode (eventid) {
 	}
 }
 
+function checkinput (eventid) {
+	
+}
+
 function updateevent (eventid) {
 	var dataclass = ["title", "content", "icon", "remind", "datafrom"];
 	var calevent = new CalEvent ();
@@ -225,18 +224,40 @@ function togglecontent (dataid) {
 	$ ("#" + geteventid (dataid) + "content").toggle (250);
 }
 
+function setinitialcss () {
+	$ (".event:even").css ("cursor", "pointer");
+	$ ("#prevpagebutton").attr ("disabled", true);
+	$ ("#nextpagebutton").attr ("disabled", (caleventlist.length <= 10));
+	if (caleventlist.length == 0) {//沒有任何活動
+		$ ("#noeventmessage").css ("display", "block");
+	}
+	else {
+		$ ("#noeventmessage").css ("display", "none");
+	}
+}
+
 function changeyear (delta) {
 	var year = $ ("#year").text ();
 	year = parseInt (year) + delta;
 	$ ("#year").text (year.toString ());
+	inccal_fetch (year);
+	pushevent (0);
+	setinitialcss ();
 }
 
 function setyear () {
 	var today = new Date ();
 	var year = today.getFullYear ();
 	$ ("#year").text (year);
+	inccal_fetch (year);
+	pushevent (0);
+	setinitialcss ();
 }
 
-function setinitialcss () {
-	$ (".event:even").css ("cursor", "pointer");
+function gopage (delta) {
+	curpage += delta;
+	pushevent ((curpage - 1) * 10);
+	$ ("#prevpagebutton").attr ("disabled", (curpage == 1));
+	$ ("#nextpagebutton").attr ("disabled", (curpage * 10 >= caleventlist.length));
 }
+	
