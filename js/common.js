@@ -32,7 +32,7 @@ function status_bar_append(msgstr){
 }
 
 function status_bar_clear(){
-	stbstr = ""
+	stbstr = "";
 	stbobj.innerHTML = stbstr;
 }
 
