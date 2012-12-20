@@ -117,6 +117,9 @@ function geteventid (dataid) {
 
 function changeweek (inputid) {
 	var eventid = geteventid (inputid.split ("input")[1]);
+	if (!checkinput (eventid)) {
+		return ;
+	}
 	var date = new Date ();
 	date.setFullYear (parseInt ($ ("#input" + eventid + "year").val ()));
 	date.setMonth (parseInt ($ ("#input" + eventid + "month").val ()) - 1);
@@ -144,11 +147,89 @@ function switchbacktonormalmode (eventid) {
 	}
 }
 
+function checkdate (year, month, date) {
+	var dates = [-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+		dates[2] = 29;
+	}
+	return date <= dates[month] && date > 0;
+}
+
 function checkinput (eventid) {
-	
+	var year, month, date, hour, minute;
+	year = $ ("#input" + eventid + "year").val ();
+	if (year == "" || isNaN (year)) {
+		status_bar_warning ("請輸入數字");
+		$ ("#input" + eventid + "year").css ("background-color", "red");
+		return false;
+	}
+	year = parseInt (year);
+	if (year < 1970) {
+		status_bar_warning ("請輸入大於1970的年份");
+		$ ("#input" + eventid + "year").css ("background-color", "red");
+		return false;
+	}
+	$ ("#input" + eventid + "year").css ("background-color", "white");
+	month = $ ("#input" + eventid + "month").val ();
+	if (month == "" || isNaN (month)) {
+		status_bar_warning ("請輸入數字");
+		$ ("#input" + eventid + "month").css ("background-color", "red");
+		return false;
+	}
+	month = parseInt (month);
+	if (month < 0 || month > 12) {
+		status_bar_warning ("請輸入正確的月份");
+		$ ("#input" + eventid + "month").css ("background-color", "red");
+		return false;
+	}
+	$ ("#input" + eventid + "month").css ("background-color", "white");
+	date = $ ("#input" + eventid + "date").val ();
+	if (date == "" || isNaN (date)) {
+		status_bar_warning ("請輸入數字");
+		$ ("#input" + eventid + "date").css ("background-color", "red");
+		return false;
+	}
+	date = parseInt (date);
+	if (!checkdate (year, month, date)) {
+		status_bar_warning ("請輸入正確的日期");
+		$ ("#input" + eventid + "date").css ("background-color", "red");
+		return false;
+	}
+	$ ("#input" + eventid + "date").css ("background-color", "white");
+	hour = $ ("#input" + eventid + "hour").val ();
+	if (hour == "" || isNaN (hour)) {
+		status_bar_warning ("請輸入數字");
+		$ ("#input" + eventid + "hour").css ("background-color", "red");
+		return false;
+	}
+	hour = parseInt (hour);
+	if (hour < 0 || hour > 24) {
+		status_bar_warning ("請輸入正確的時間");
+		$ ("#input" + eventid + "hour").css ("background-color", "red");
+		return false;
+	}
+	$ ("#input" + eventid + "hour").css ("background-color", "white");
+	minute = $ ("#input" + eventid + "minute").val ();
+	if (minute == "" || isNaN (minute)) {
+		status_bar_warning ("請輸入數字");
+		$ ("#input" + eventid + "minute").css ("background-color", "red");
+		return false;
+	}
+	minute = parseInt (minute);
+	if (minute < 0 || minute > 59) {
+		status_bar_warning ("請輸入正確的時間");
+		$ ("#input" + eventid + "minute").css ("background-color", "red");
+		return false;
+	}
+	$ ("#input" + eventid + "minute").css ("background-color", "white");
+	status_bar_set ("");
+	return true;
 }
 
 function updateevent (eventid) {
+	if (!checkinput (eventid)) {
+		return;
+	}
 	var dataclass = ["title", "content", "icon", "remind", "datafrom"];
 	var calevent = new CalEvent ();
 	calevent.key = caleventlist[parseInt (eventid.split ("event")[1]) - 1].key;
@@ -169,21 +250,28 @@ function updateevent (eventid) {
 function editevent (eventid) {
 	var dataclass = ["title", "content", "remind"];
 	var dateclass = ["year", "month", "date", "hour", "minute"];
+	var datafrom;
 	var timedata = new Array ();
 	var data = new Array ();
 	var thisevent = caleventlist[parseInt (eventid.split ("event")[1]) - 1];
 	$ ("#" + eventid + "body").slideDown (250);
 	//$ ("#" + eventid + "date").html ("<input type = 'date' id = 'input" + eventid + "date'></input>");	//firefox不支援
 	$ ("#" + eventid + "date").html ("<input type = 'text' id = 'input" + eventid + "year' size = '2' maxlength = '4' onkeyup = 'changeweek (this.id);' /> 年");	//size = 2 因為size是算中文字
-	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "month' size = '1' maxlength = '2' onkeyup = 'changeweek (this.id);'/> 月");
-	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "date' size = '1' maxlength = '2' onkeyup = 'changeweek (this.id);'/> 日");
-	$ ("#" + eventid + "time").html ("<input type = 'tetxt' id = 'input" + eventid + "hour' size = '1' maxlength = '2' /> 時 <br />");
-	$ ("#" + eventid + "time").append ("<input type = 'tetxt' id = 'input" + eventid + "minute' size = '1' maxlength = '2' /> 分");
+	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "month' size = '1' maxlength = '2' onkeyup = 'changeweek (this.id);' /> 月");
+	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "date' size = '1' maxlength = '2' onkeyup = 'changeweek (this.id);' /> 日");
+	$ ("#" + eventid + "time").html ("<input type = 'tetxt' id = 'input" + eventid + "hour' size = '1' maxlength = '2' onkeyup = 'checkinput (\"" + eventid + "\");' /> 時 <br />");
+	$ ("#" + eventid + "time").append ("<input type = 'tetxt' id = 'input" + eventid + "minute' size = '1' maxlength = '2' onkeyup = 'checkinput (\"" + eventid + "\");' /> 分");
 	$ ("#" + eventid + "title").html ("<input type = 'tetxt' id = 'input" + eventid + "title' size = '40' />");
 	$ ("#" + eventid + "content").html ("<div> 活動內容： </div><textarea id = 'input" + eventid + "content" + "'></textarea><br />");
 	$ ("#input" + eventid + "content").attr ({"rows":"5", "cols":"100"});
 	$ ("#" + eventid + "content").append ("提醒：<input type = 'tetxt' id = 'input" + eventid + "remind' size = '1' maxlength = '4' /> 分鐘前&nbsp;&nbsp;&nbsp;&nbsp;");
-	$ ("#" + eventid + "content").append ("資料來源： #include <行事曆.h>&nbsp;&nbsp;&nbsp;&nbsp;");
+	if (thisevent["datafrom"] == "native") {
+		datafrom = "include <行事曆.h>";
+	}
+	else {
+		datafrom = thisevent["datafrom"];
+	}
+	$ ("#" + eventid + "content").append ("資料來源： " + datafrom + "&nbsp;&nbsp;&nbsp;&nbsp;");
 	$ ("#" + eventid + "content").append ("<input type = 'button' value = '確認' class = 'okbutton' onclick = 'updateevent (\"" + eventid + "\");' />");
 	for (var i = 0 ; i < dataclass.length ; i++) {
 		if (dataclass[i] == "content") {
@@ -226,6 +314,8 @@ function togglecontent (dataid) {
 
 function setinitialcss () {
 	$ (".event:even").css ("cursor", "pointer");
+	$ (".event:even").css ("background-color", "#CCFFFF");
+	$ (".event:odd").css ("background-color", "#33FFFF");
 	$ ("#prevpagebutton").attr ("disabled", true);
 	$ ("#nextpagebutton").attr ("disabled", (caleventlist.length <= 10));
 	if (caleventlist.length == 0) {//沒有任何活動
@@ -257,6 +347,9 @@ function setyear () {
 function gopage (delta) {
 	curpage += delta;
 	pushevent ((curpage - 1) * 10);
+	$ (".event:even").css ("cursor", "pointer");
+	$ (".event:even").css ("background-color", "#CCFFFF");
+	$ (".event:odd").css ("background-color", "#33FFFF");
 	$ ("#prevpagebutton").attr ("disabled", (curpage == 1));
 	$ ("#nextpagebutton").attr ("disabled", (curpage * 10 >= caleventlist.length));
 }
