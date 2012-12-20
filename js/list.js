@@ -11,12 +11,12 @@ function escapestring (str) {//用出' ' && '\n'
 }
 
 function pushevent (start) {//將活動放入行事曆中
-	var year = parseInt ($ ("#year").text ());
 	var dataclass = ["date", "week", "time", "title", "content"];
 	var dataid, eventid, dataid, datetime, calevent, maxevents;
+	var i;
 	calevent = caleventlist;
 	maxevents = Math.min (10, calevent.length - start);
-	for (var i = start ; i < start + maxevents ; i++) {
+	for (var eventcase = start, i = 0 ; i < maxevents ; eventcase++, i++) {
 		eventid = "event" + (i + 1);
 		if ($ ("#" + eventid + "head").length == 0) {//這一行還沒有
 			$ ("#eventbody").append ("<tr id = '" + eventid + "head'></tr>");
@@ -31,17 +31,17 @@ function pushevent (start) {//將活動放入行事曆中
 			$ ("#" + eventid + "content").addClass ("content");
 			$ ("#" + eventid + "content").attr ("colspan","4");
 		}
-		datetime = calevent[i]["datetime"];
+		datetime = calevent[eventcase]["datetime"];
 		$ ("#" + eventid + "date").text (datetime.getFullYear () + "." + (datetime.getMonth () + 1) + "." + datetime.getDate ());
 		$ ("#" + eventid + "week").text ("星期" + Day[datetime.getDay ()]);
-		$ ("#" + eventid + "time").text (datetime.getHours () + ":" + datetime.getMinutes ());
-		$ ("#" + eventid + "title").text (calevent[i]["title"]);
-		$ ("#" + eventid + "content").html (escapestring (calevent[i]["content"]));
+		$ ("#" + eventid + "time").text (timetostring (datetime.getHours (), datetime.getMinutes ()));
+		$ ("#" + eventid + "title").text (calevent[eventcase]["title"]);
+		$ ("#" + eventid + "content").html (escapestring (calevent[eventcase]["content"]));
 		$ ("#" + eventid + "content").css ("display", "none");
 		$ ("#" + eventid + "title").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
 		$ ("#" + eventid + "content").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
 	}
-	for (var i = maxevents ; $ ("#event" + (i + 1) + "head").length > 0 ; i++) {//刪除多餘的空行
+	for (; $ ("#event" + (i + 1) + "head").length > 0 ; i++) {//刪除多餘的空行
 		$ ("#event" + (i + 1) + "head").remove ();
 		$ ("#event" + (i + 1) + "body").remove ();
 	}
@@ -139,7 +139,7 @@ function switchbacktonormalmode (eventid) {
 	title = $ ("#input" + eventid + "title").val ();
 	content = $ ("#input" + eventid + "content").val ();
 	$ ("#" + eventid + "date").text (year + "." + month + "." + date);
-	$ ("#" + eventid + "time").text (hour + ":" + minute);
+	$ ("#" + eventid + "time").text (timetostring (hour, minute));
 	$ ("#" + eventid + "title").text (title);
 	$ ("#" + eventid + "content").html (escapestring (content));
 	$ ("#" + eventid + "title").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
@@ -228,13 +228,17 @@ function checkinput (eventid) {
 	return true;
 }
 
+function getabsoluteeventid (eventid) {
+	return (curpage - 1) * 10 + parseInt (eventid.split ("event")[1]);
+}
+
 function updateevent (eventid) {
 	if (!checkinput (eventid)) {
 		return;
 	}
 	var dataclass = ["title", "content", "icon", "remind", "datafrom"];
 	var calevent = new CalEvent ();
-	calevent.key = caleventlist[parseInt (eventid.split ("event")[1]) - 1].key;
+	calevent.key = caleventlist[getabsoluteeventid (eventid) - 1].key;
 	for (var i = 0 ; i < dataclass.length ; i++) {
 		if ($ ("#input" + eventid + dataclass[i]).length > 0) {//存在這一個欄位
 			calevent[dataclass[i]] = $ ("#input" + eventid + dataclass[i]).val ();
@@ -245,6 +249,7 @@ function updateevent (eventid) {
 	calevent.datetime.setDate (parseInt ($ ("#input" + eventid + "date").val ()));
 	calevent.datetime.setHours (parseInt ($ ("#input" + eventid + "hour").val ()));
 	calevent.datetime.setMinutes (parseInt ($ ("#input" + eventid + "month").val ()));
+	caleventlist[getabsoluteeventid (eventid) - 1] = calevent;
 	inccal_send (calevent);
 	switchbacktonormalmode (eventid);
 }
@@ -324,11 +329,11 @@ function editevent (eventid) {
 function changesearchingbar (obj) {
 	if (obj.value == "date") {
 		$ ("#searchingdate").css ("display", "inline");
-		$ ("#searchingcontent").css ("display", "none");
+		$ ("#searchinginput").css ("display", "none");
 	}
 	else {
 		$ ("#searchingdate").css ("display", "none");
-		$ ("#searchingcontent").css ("display", "inline");
+		$ ("#searchinginput").css ("display", "inline");
 	}
 }
 
@@ -377,4 +382,16 @@ function gopage (delta) {
 	$ ("#prevpagebutton").attr ("disabled", (curpage == 1));
 	$ ("#nextpagebutton").attr ("disabled", (curpage * 10 >= caleventlist.length));
 }
-	
+
+function timetostring (hour, minute) {//12:0 => 12:00
+	if (typeof minute == "string") {
+		minute = parseInt (minute);
+	}
+	if (minute < 10) {
+		minute = "0" + minute;
+	}
+	return hour + ":" + minute;
+}
+
+function addnewevent () {
+}
