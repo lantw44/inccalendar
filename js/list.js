@@ -1,6 +1,8 @@
 ﻿headdataclass = ["date", "week", "time", "title"];
 Day = ["日", "一", "二", "三", "四", "五", "六"];
 curpage = 1;
+originevent = new Array (5);
+
 
 function escapestring (str) {//用出' ' && '\n'
 	str = str.replace (/\n/g, "<br/>");
@@ -247,6 +249,22 @@ function updateevent (eventid) {
 	switchbacktonormalmode (eventid);
 }
 
+function cancelupdateevent (eventid) {
+	for (var i = 0 ; i < headdataclass.length ; i++) {
+		$ ("#" + eventid + headdataclass[i]).text (originevent[i]);
+	}
+	$ ("#" + eventid + "content").html (originevent[4]);
+	$ ("#" + eventid + "title").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
+	$ ("#" + eventid + "content").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
+	for (var i = 0 ; i < headdataclass.length ; i++) {
+		$ ("#" + eventid + headdataclass[i]).attr ("onclick", "togglecontent (this.id)");
+	}
+}
+
+function resumeeditbutton () {
+	$ (".event input[type=button]").attr ("disabled", false);
+}
+
 function editevent (eventid) {
 	var dataclass = ["title", "content", "remind"];
 	var dateclass = ["year", "month", "date", "hour", "minute"];
@@ -254,6 +272,11 @@ function editevent (eventid) {
 	var timedata = new Array ();
 	var data = new Array ();
 	var thisevent = caleventlist[parseInt (eventid.split ("event")[1]) - 1];
+	for (var i = 0 ; i < headdataclass.length ; i++) {
+		originevent[i] = $ ("#" + eventid + headdataclass[i]).text ();
+	}
+	originevent[4] = $ ("#" + eventid + "content").html ();
+	$ (".event input[type=button]").attr ("disabled", true);		//停用其他活動的編輯
 	$ ("#" + eventid + "body").slideDown (250);
 	//$ ("#" + eventid + "date").html ("<input type = 'date' id = 'input" + eventid + "date'></input>");	//firefox不支援
 	$ ("#" + eventid + "date").html ("<input type = 'text' id = 'input" + eventid + "year' size = '2' maxlength = '4' onkeyup = 'changeweek (this.id);' /> 年");	//size = 2 因為size是算中文字
@@ -272,7 +295,8 @@ function editevent (eventid) {
 		datafrom = thisevent["datafrom"];
 	}
 	$ ("#" + eventid + "content").append ("資料來源： " + datafrom + "&nbsp;&nbsp;&nbsp;&nbsp;");
-	$ ("#" + eventid + "content").append ("<input type = 'button' value = '確認' class = 'okbutton' onclick = 'updateevent (\"" + eventid + "\");' />");
+	$ ("#" + eventid + "content").append ("<input type = 'button' value = '確認' class = 'okbutton' onclick = 'updateevent (\"" + eventid + "\"); resumeeditbutton ();' />");
+	$ ("#" + eventid + "content").append ("<input type = 'button' value = '取消' class = 'okbutton' onclick = 'cancelupdateevent (\"" + eventid + "\"); resumeeditbutton ();' />");
 	for (var i = 0 ; i < dataclass.length ; i++) {
 		if (dataclass[i] == "content") {
 			$ ("#input" + eventid + "content").text (thisevent[dataclass[i]]);//textarea
