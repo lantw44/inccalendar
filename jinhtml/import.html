@@ -5,8 +5,22 @@
       margin-top: 20px;
       margin-left: 20px;
     }
+    div.indented{
+      padding-left: 35px;
+    }
     p.question{
       font-size: xx-large;
+    }
+    input.loginfield{
+      width: 300px;
+    }
+    ul.nolistsymbol{
+      list-style-type: none;
+      margin-left: 20px;
+      margin-right: 0px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      padding: 0px;
     }
   </style>
 {% endblock %}
@@ -18,6 +32,7 @@
 {% endblock %}
 
 {% block headjs %}
+  <script type="text/javascript" src="js/data.js"></script>
   <script type="text/javascript" src="js/imnc.js"></script>
   <script type="text/javascript">
     function selsrc_initbut(){
@@ -42,11 +57,36 @@
   <div id="imntuceibainfo" class="wholeform" style="display: none;">
     <p class="question">請問您想透過哪一種方式取得 CEIBA 網站上的資料？</p>
     <input type="radio" id="nclogin" name="ncinfo" value="directlogin">透過帳號密碼直接登入 CEIBA 網站<br>
-    <input type="radio" id="ncupload" name="ncinfo" value="uploadpage">上傳 CEIBA 作業區的網頁檔案<br><br>
-    <input type="checkbox" id="ncviewagain" checked>匯入前檢視並修改內容（會導致較大的網路流量）<br>
+    <div class="indented">
+      網址：<input type="text" class="loginfield" id="ncloginurl" value="https://ceiba.ntu.edu.tw"><br>
+      認證：<input type="text" class="loginfield" id="ncloginauth" value="https://web2.cc.ntu.edu.tw/p/s/login2/p1.php"><br>
+      帳號：<input type="text" class="loginfield" id="ncloginacct"><br>
+      密碼：<input type="password" class="loginfield" id="ncloginpass"><br>
+    </div>
+    <br>
+    <input type="radio" id="ncupload" name="ncinfo" value="uploadpage">上傳 CEIBA 作業區的網頁檔案<br>
+    <div class="indented">
+      <form name="fileuploadform" action="access/echo" method="post" enctype="multipart/form-data">
+      檔案：<input name="echo" type="file" id="ncfile">
+      </form>
+    </div>
+    <br>
+    在「內容」欄位加入以下資訊：
+    <ul class="nolistsymbol">
+      <li><input type="checkbox" id="ncaddtitle">名稱</li>
+      <li><input type="checkbox" id="ncaddmember">成員</li>
+      <li><input type="checkbox" id="ncaddmethod">繳交方法</li>
+      <li><input type="checkbox" id="ncaddpercent">成績比重</li>
+      <li><input type="checkbox" id="ncadddue">繳交期限</li>
+      <li><input type="checkbox" id="ncaddlate">逾期繳交</li>
+      <li><input type="checkbox" id="ncaddsub">繳交日期</li>
+      <li><input type="checkbox" id="ncaddlate">作業評語</li>
+    </ul>
+    <br>
+    <input type="checkbox" id="ncviewagain" checked>匯入前檢視並修改內容（可能導致較大的網路流量）<br>
     <input type="checkbox" id="ncmerge" checked>與先前匯入的資料合併以避免重複匯入<br><br>
     <input type="button" value="重新選擇來源" onclick="imnc_deinit()">
-    <input type="button" value="開始匯入">
+    <input type="button" value="開始匯入" onclick="imnc_argok()">
   </div>
   <div id="imntuceibacheck" class="wholeform" style="display: none;">
   </div>
