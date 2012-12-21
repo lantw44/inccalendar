@@ -21,7 +21,7 @@ def XMLBuildNtuCaibaEvent(eleobj, cbobj):
 	newdata = etree.SubElement(eleobj, 'red')
 	newdata.text = str(cbobj.red)
 
-	if(cbobj.duedate == None):
+	if cbobj.duedate == None:
 		newdata = etree.SubElement(eleobj, 'dueyear')
 		newdata.text = ""
 		newdata = etree.SubElement(eleobj, 'duemonth')
@@ -40,25 +40,22 @@ def XMLBuildNtuCaibaEvent(eleobj, cbobj):
 		newdata = etree.SubElement(eleobj, 'duehour')
 		newdata.text = str(cbobj.duedate.hour)
 
-	if(cbobj.subdate == None):
-		newdata = etree.SubElement(eleobj, 'subyear')
-		newdata.text = ""
-		newdata = etree.SubElement(eleobj, 'submonth')
-		newdata.text = ""
-		newdata = etree.SubElement(eleobj, 'subdate')
-		newdata.text = ""
-		newdata = etree.SubElement(eleobj, 'subhour')
+	if cbobj.subdate == None:
+		newdata = etree.SubElement(eleobj, 'sub')
 		newdata.text = ""
 	else:
-		newdata = etree.SubElement(eleobj, 'subyear')
-		newdata.text = str(cbobj.duedate.year)
-		newdata = etree.SubElement(eleobj, 'submonth')
-		newdata.text = str(cbobj.duedate.month)
-		newdata = etree.SubElement(eleobj, 'subdate')
-		newdata.text = str(cbobj.duedate.day)
-		newdata = etree.SubElement(eleobj, 'subhour')
-		newdata.text = str(cbobj.duedate.hour)
+		newdata = etree.SubElement(eleobj, 'sub')
+		newdata.text = cbobj.subdate
 
+	newdata = etree.SubElement(eleobj, 'enabled')
+	newdata.text = str(cbobj.enabled)
+
+	if cbobj.key == None:
+		newdata = etree.SubElement(eleobj, 'key')
+		newdata.text = None
+	else:
+		newdata = etree.SubElement(eleobj, 'key')
+		newdata.text = str(cbobj.key)
 
 def ntuceiba_toxml(listobj):
 	xmlroot = etree.Element('ntuceiba')

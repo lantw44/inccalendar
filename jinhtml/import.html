@@ -56,7 +56,7 @@
   </div>
   <div id="imntuceibainfo" class="wholeform" style="display: none;">
     <p class="question">請問您想透過哪一種方式取得 CEIBA 網站上的資料？</p>
-    <input type="radio" id="nclogin" name="ncinfo" value="directlogin">透過帳號密碼直接登入 CEIBA 網站<br>
+    <input type="radio" id="nclogin" name="ncinfo" value="directlogin" checked>透過帳號密碼直接登入 CEIBA 網站<br>
     <div class="indented">
       網址：<input type="text" class="loginfield" id="ncloginurl" value="https://ceiba.ntu.edu.tw"><br>
       認證：<input type="text" class="loginfield" id="ncloginauth" value="https://web2.cc.ntu.edu.tw/p/s/login2/p1.php"><br>
@@ -67,7 +67,11 @@
     <input type="radio" id="ncupload" name="ncinfo" value="uploadpage">上傳 CEIBA 作業區的網頁檔案<br>
     <div class="indented">
       <form name="fileuploadform" action="access/echo" method="post" enctype="multipart/form-data">
-      檔案：<input name="echo" type="file" id="ncfile">
+      檔案：<input name="echo" type="file" id="ncfile"><br>
+	  編碼：<select id="ncfileenc">
+        <option value="Big5">Big5 (臺大 CEIBA 預設編碼)</option>
+		<option value="UTF-8">UTF-8</option>
+	  </select>
       </form>
     </div>
     <br>
@@ -80,14 +84,24 @@
       <li><input type="checkbox" id="ncadddue">繳交期限</li>
       <li><input type="checkbox" id="ncaddlate">逾期繳交</li>
       <li><input type="checkbox" id="ncaddsub">繳交日期</li>
-      <li><input type="checkbox" id="ncaddlate">作業評語</li>
+      <li><input type="checkbox" id="ncaddcomment">作業評語</li>
     </ul>
     <br>
-    <input type="checkbox" id="ncviewagain" checked>匯入前檢視並修改內容（可能導致較大的網路流量）<br>
-    <input type="checkbox" id="ncmerge" checked>與先前匯入的資料合併以避免重複匯入<br><br>
+    <input type="checkbox" id="ncviewagain" checked>選擇要匯入的項目（可能花費較長的時間和較大的網路流量）<br>
+    <input type="checkbox" id="ncmerge" checked>透過資料比對以避免重複匯入
+	<input type="radio" id="ncdupignore" name="ncallowoverwrite" checked>忽略
+	<input type="radio" id="ncdupupdate" name="ncallowoverwrite">取代
+	先前匯入的資料
+	<br>
+	<br>
     <input type="button" value="重新選擇來源" onclick="imnc_deinit()">
     <input type="button" value="開始匯入" onclick="imnc_argok()">
   </div>
   <div id="imntuceibacheck" class="wholeform" style="display: none;">
+  </div>
+  <div id="imntuceibacomplete" class="wholeform" style="display: none;">
+    <p class="question">資料匯入結果</p>
+  	<div id="ncimportresult">
+	</div>
   </div>
 {% endblock %}

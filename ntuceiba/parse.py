@@ -107,7 +107,7 @@ def ntuceiba_parser(fileobj):  # 如果第一行是亂七八糟的東西，請�
 		ncdata.setred(sinfo.red)
 
 		sinfo = ntuceiba_readcol(row[6])
-		ncdata.subdate = ntuceiba_parsedate(sinfo.data)
+		ncdata.subdate = sinfo.data
 		ncdata.setred(sinfo.red)
 
 		sinfo = ntuceiba_readcol(row[7])
