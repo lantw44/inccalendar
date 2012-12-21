@@ -1,8 +1,11 @@
-﻿headdataclass = ["date", "week", "time", "title"];
-Day = ["日", "一", "二", "三", "四", "五", "六"];
-curpage = 1;
-originevent = new Array (5);
-
+﻿var headdataclass = ["date", "week", "time", "title"];
+var Day = ["日", "一", "二", "三", "四", "五", "六"];
+var curpage;
+var originevent = new Array (5);
+var findcondition = new Array ();	//stack for find condition
+var caleventstack = new Array ();	//stack for calevent
+var calevent, curevent;			//calevent = current searched event		curevent.length <= 10
+var absoluteid = new Array ();	//stack    caleventlist id     size = calevent.length    range [1, n]
 
 function escapestring (str) {//用出' ' && '\n'
 	str = str.replace (/\n/g, "<br/>");
@@ -10,13 +13,15 @@ function escapestring (str) {//用出' ' && '\n'
 	return str;
 }
 
-function pushevent (start) {//將活動放入行事曆中
+function lastelement (arr) {
+	return arr[arr.length - 1];
+}
+
+function pushevent () {//將curevent活動放入行事曆中
 	var dataclass = ["date", "week", "time", "title", "content"];
-	var dataid, eventid, dataid, datetime, calevent, maxevents;
-	var i;
-	calevent = caleventlist;
-	maxevents = Math.min (10, calevent.length - start);
-	for (var eventcase = start, i = 0 ; i < maxevents ; eventcase++, i++) {
+	var dataid, eventid, dataid, datetime, maxevents, eventcase, i;
+	maxevents = Math.min (10, curevent.length);
+	for (i = 0 ; i < maxevents ; i++) {
 		eventid = "event" + (i + 1);
 		if ($ ("#" + eventid + "head").length == 0) {//這一行還沒有
 			$ ("#eventbody").append ("<tr id = '" + eventid + "head'></tr>");
@@ -31,12 +36,12 @@ function pushevent (start) {//將活動放入行事曆中
 			$ ("#" + eventid + "content").addClass ("content");
 			$ ("#" + eventid + "content").attr ("colspan","4");
 		}
-		datetime = calevent[eventcase]["datetime"];
+		datetime = curevent[i]["datetime"];
 		$ ("#" + eventid + "date").text (datetime.getFullYear () + "." + (datetime.getMonth () + 1) + "." + datetime.getDate ());
 		$ ("#" + eventid + "week").text ("星期" + Day[datetime.getDay ()]);
 		$ ("#" + eventid + "time").text (timetostring (datetime.getHours (), datetime.getMinutes ()));
-		$ ("#" + eventid + "title").text (calevent[eventcase]["title"]);
-		$ ("#" + eventid + "content").html (escapestring (calevent[eventcase]["content"]));
+		$ ("#" + eventid + "title").text (curevent[i]["title"]);
+		$ ("#" + eventid + "content").html (escapestring (curevent[i]["content"]));
 		$ ("#" + eventid + "content").css ("display", "none");
 		$ ("#" + eventid + "title").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
 		$ ("#" + eventid + "content").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
@@ -47,58 +52,147 @@ function pushevent (start) {//將活動放入行事曆中
 	}
 }
 
-function searchevent () {//搜尋符合的活動
+function clearformerinput () {
+	$ ("#searchinginput").val ("");
+	$ ("#searchingdatemonth").val ("");
+	$ ("#searchingdateday").val ("");
+}
+
+function checksearchinput () {
 	var option = $ ("#searchingoption").val ();
-	var events = $ (".event");
-	var matchedNum = 0;
-	if (option == "title") {
-		var string = $ ("#searchinginput").val ();
-		var titles = $ (".title");
-		for (var i = 0 ; i < titles.length ; i++) {
-			if (titles[i].innerHTML.search (string) != -1) {
-				$ ("#event" + (i + 1) + "head").css ("display", "table-row");
-				$ ("#event" + (i + 1) + "content").css ("display", "none");
-				matchedNum++;
-			}
-			else {//Not Match
-				$ ("#event" + (i + 1) + "head").css ("display", "none");
-				$ ("#event" + (i + 1) + "content").css ("display", "none");
-			}
+	if (option == "title" || option == "content") {
+	var string = $ ("#searchinginput").val ();
+		if (string == "") {
+			status_bar_warning ("請輸入搜尋資料");
+			$ ("#searchinginput").css ("background-color", "red");
+			return false;
 		}
+		$ ("#searchinginput").css ("background-color", "white");
 	}
 	else if (option == "date") {
 		var month = $ ("#searchingdatemonth").val ();
-		var day = $ ("#searchingdateday").val ();
-		var eventsdate = $ (".date");
-		var dateinfo = new Array ();
-		for (var i = 0 ; i < eventsdate.length ; i++) {
-			dateinfo = eventsdate[i].innerHTML.split (".");
-			if ((month == "" || dateinfo[1] == month) && (day == "" || dateinfo[2] == day)) {
-				$ ("#event" + (i + 1) + "head").css ("display", "table-row");
-				$ ("#event" + (i + 1) + "content").css ("display", "none");
-				matchedNum++;
+		var date = $ ("#searchingdateday").val ();
+		if (month == "" && date == "") {
+			status_bar_warning ("不可同時為空白");
+			$ ("#searchingdatemonth").css ("background-color", "red");
+			$ ("#searchingdateday").css ("background-color", "red");
+			return false;
+		}
+		if (month != "") {
+			if (isNaN (month)) {
+				status_bar_warning ("請輸入數字");
+				$ ("#searchingdatemonth").css ("background-color", "red");
+				return false;
 			}
-			else {//Not Match
-				$ ("#event" + (i + 1) + "head").css ("display", "none");
-				$ ("#event" + (i + 1) + "content").css ("display", "none");
+			month = parseInt (month);
+			if (month <= 0 || month > 12) {
+				status_bar_warning ("請輸入正確的月份");
+				$ ("#searchingdatemonth").css ("background-color", "red");
+				return false;
 			}
 		}
+		$ ("#searchingdatemonth").css ("background-color", "white");
+		if (date != "") {
+			if (isNaN (date)) {
+				status_bar_warning ("請輸入數字");
+				$ ("#searchingdateday").css ("background-color", "red");
+				return false;
+			}
+			date = parseInt (date);
+			if (!checkdate (parseInt ($ ("#year").text ()), month, date)) {
+				status_bar_warning ("請輸入正確的日期");
+				$ ("#searchingdateday").css ("background-color", "red");
+				return false;
+			}
+		}
+		$ ("#searchingdateday").css ("background-color", "white");
+	}
+	status_bar_set ("");
+	return true;
+}
+
+function sameaslastsearch () {
+	if (findcondition.length == 0) {
+		return false;
+	}
+	var lastcondition = lastelement (findcondition);
+	if (lastcondition[0] != $ ("#searchingoption").val ()) {
+		return false;
+	}
+	if (lastcondition[0] == "title" || lastcondition[0] == "content") {
+		return lastcondition[1] == $ ("#searchinginput").val ();
+	}
+	else if (lastcondition[0] == "date") {
+		return lastcondition[1] == $ ("#searchingdatemonth").val () && lastcondition[2] == $ ("#searchingdateday").val ();
+	}
+}
+
+function searchevent () {//搜尋符合的活動
+	if (!checksearchinput ()) {//輸入錯誤
+		return ;
+	}
+	if (sameaslastsearch ()) {//與上次搜尋一模一樣
+		return ;
+	}
+	caleventstack.push (calevent);	//save current calevent
+	var option = $ ("#searchingoption").val ();
+	var events = $ (".event");
+	var matchedNum = 0;
+	var arr = new Array ();
+	var currentabsid = absoluteid[absoluteid.length - 1];
+	var newcalevent = new Array ();
+	arr.push (option);
+	if (option == "title") {
+		var string = $ ("#searchinginput").val ();
+		arr.push (string);
+		findcondition.push (arr);
+		arr = new Array ();	//clear
+		for (var i = 0 ; i < calevent.length ; i++) {
+			if (calevent[i].title.search (string) != -1) {//match
+				arr.push (currentabsid[i]);
+				newcalevent.push (calevent[i]);
+				matchedNum++;
+			}
+		}
+		absoluteid.push (arr);
+	}
+	else if (option == "date") {
+		var month = $ ("#searchingdatemonth").val ();
+		var date = $ ("#searchingdateday").val ();
+		arr.push (month);
+		arr.push (date);
+		findcondition.push (arr);
+		arr = new Array ();	//clear
+		for (var i = 0 ; i < calevent.length ; i++) {
+			if ((month == "" || calevent[i].datetime.getMonth () + 1 == parseInt (month)) && (date == "" || calevent[i].datetime.getDate () == parseInt (date))) {//match
+				arr.push (currentabsid[i]);
+				newcalevent.push (calevent[i]);
+				matchedNum++;
+			}
+		}
+		absoluteid.push (arr);
 	}
 	else if (option == "content") {
-		var contents = $ (".content");
 		var string = $ ("#searchinginput").val ();
-		for (var i = 0 ; i < contents.length ; i++) {
-			if (contents[i].innerHTML.search (string) != -1) {
-				$ ("#event" + (i + 1) + "head").css ("display", "table-row");
-				$ ("#event" + (i + 1) + "content").css ("display", "none");
+		arr.push (string);
+		findcondition.push (arr);
+		arr = new Array ();	//clear
+		for (var i = 0 ; i < calevent.length ; i++) {
+			if (calevent[i].content.search (string) != -1) {//match
+				arr.push (currentabsid[i]);
+				newcalevent.push (calevent[i]);
 				matchedNum++;
 			}
-			else {//Not Match
-				$ ("#event" + (i + 1) + "head").css ("display", "none");
-				$ ("#event" + (i + 1) + "content").css ("display", "none");
-			}
 		}
+		absoluteid.push (arr);
 	}
+	calevent = newcalevent;
+	curevent = calevent.slice (0, 10);
+	pushevent ();
+	curpage = 1;
+	setnonchangingyearcss ();
+	$ ("#prevsearchbutton").css ("display", "inline-block");
+	$ ("#nosearchbutton").css ("display", "inline-block");
 	if (matchedNum == 0) {
 		$ ("#unmatchedmessage").css ("display", "block");
 	}
@@ -107,7 +201,59 @@ function searchevent () {//搜尋符合的活動
 	}
 }
 
-function geteventid (dataid) {
+function backtoprevsearch (status) {
+	clearformerinput ();
+	if (status == "nosearch") {
+		findcondition = findcondition.slice (0, 1);		//保留陣列型態
+		caleventstack = caleventstack.slice (0, 1);
+		absoluteid = absoluteid.slice (0, 2);
+	}
+	findcondition.pop ();
+	if (findcondition.length == 0) {//back to no search
+		$ ("#searchingoption").children ().each (function () {
+			if ($ (this).val () == "title") {
+				$ (this).attr ("selected", true);
+			}
+		});
+		$ ("#prevsearchbutton").css ("display", "none");
+		$ ("#nosearchbutton").css ("display", "none");
+	}
+	else {
+		var lastcondition = lastelement (findcondition);
+		$ ("#searchingoption").children ().each (function () {
+			if ($ (this).val () == lastcondition[0]) {
+				$ (this).attr ("selected", true);
+			}
+		});
+		if (lastcondition[0] == "title" || lastcondition[0] == "content") {
+			$ ("#searchinginput").val (lastcondition[1]);
+		}
+		else if (lastcondition[0] == "date") {
+			$ ("#searchingdatemonth").val (lastcondition[1]);
+			$ ("#searchingdateday").val (lastcondition[2]);
+		}
+	}
+	changesearchingbar ();
+	calevent = lastelement (caleventstack);
+	caleventstack.pop ();
+	curevent = calevent.slice (0, 10);
+	curpage = 1;
+	absoluteid.pop ();
+	pushevent ();
+	setnonchangingyearcss ();
+	$ ("#searchinginput").css ("background-color", "white");
+	$ ("#searchingdatemonth").css ("background-color", "white");
+	$ ("#searchingdateday").css ("background-color", "white");
+	status_bar_set ("");
+	if (curevent.length == 0) {
+		$ ("#unmatchedmessage").css ("display", "block");
+	}
+	else {
+		$ ("#unmatchedmessage").css ("display", "none");
+	}
+}
+
+function getcaleventid (dataid) {
 	var i;
 	for (i = 5 ; i < dataid.length ; i++) {
 		if (!(dataid[i] >= '0' && dataid[i] <= '9')) {
@@ -118,7 +264,7 @@ function geteventid (dataid) {
 }
 
 function changeweek (inputid) {
-	var eventid = geteventid (inputid.split ("input")[1]);
+	var eventid = getcaleventid (inputid.split ("input")[1]);
 	if (!checkinput (eventid)) {
 		return ;
 	}
@@ -154,7 +300,12 @@ function checkdate (year, month, date) {
 	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
 		dates[2] = 29;
 	}
-	return date <= dates[month] && date > 0;
+	if (month == "") {
+		return date > 0 && date < 32;
+	}
+	else {
+		return date <= dates[month] && date > 0;
+	}
 }
 
 function checkinput (eventid) {
@@ -228,29 +379,26 @@ function checkinput (eventid) {
 	return true;
 }
 
-function getabsoluteeventid (eventid) {
-	return (curpage - 1) * 10 + parseInt (eventid.split ("event")[1]);
-}
-
 function updateevent (eventid) {
 	if (!checkinput (eventid)) {
 		return;
 	}
 	var dataclass = ["title", "content", "icon", "remind", "datafrom"];
-	var calevent = new CalEvent ();
-	calevent.key = caleventlist[getabsoluteeventid (eventid) - 1].key;
+	var newevent = new CalEvent ();
+	var calevid = (curpage - 1) * 10 + parseInt (eventid.split ("event")[1]);
+	newevent.key = caleventlist[calevid - 1].key;
 	for (var i = 0 ; i < dataclass.length ; i++) {
 		if ($ ("#input" + eventid + dataclass[i]).length > 0) {//存在這一個欄位
-			calevent[dataclass[i]] = $ ("#input" + eventid + dataclass[i]).val ();
+			newevent[dataclass[i]] = $ ("#input" + eventid + dataclass[i]).val ();
 		}
 	}
-	calevent.datetime.setFullYear (parseInt ($ ("#input" + eventid + "year").val ()));
-	calevent.datetime.setMonth (parseInt ($ ("#input" + eventid + "month").val ()) - 1);
-	calevent.datetime.setDate (parseInt ($ ("#input" + eventid + "date").val ()));
-	calevent.datetime.setHours (parseInt ($ ("#input" + eventid + "hour").val ()));
-	calevent.datetime.setMinutes (parseInt ($ ("#input" + eventid + "month").val ()));
-	caleventlist[getabsoluteeventid (eventid) - 1] = calevent;
-	inccal_send (calevent);
+	newevent.datetime.setFullYear (parseInt ($ ("#input" + eventid + "year").val ()));
+	newevent.datetime.setMonth (parseInt ($ ("#input" + eventid + "month").val ()) - 1);
+	newevent.datetime.setDate (parseInt ($ ("#input" + eventid + "date").val ()));
+	newevent.datetime.setHours (parseInt ($ ("#input" + eventid + "hour").val ()));
+	newevent.datetime.setMinutes (parseInt ($ ("#input" + eventid + "month").val ()));
+	caleventlist[calevid - 1] = newevent;
+	inccal_send (newevent);
 	switchbacktonormalmode (eventid);
 }
 
@@ -276,7 +424,7 @@ function editevent (eventid) {
 	var datafrom;
 	var timedata = new Array ();
 	var data = new Array ();
-	var thisevent = caleventlist[parseInt (eventid.split ("event")[1]) - 1];
+	var thisevent = curevent[parseInt (eventid.split ("event")[1]) - 1];
 	for (var i = 0 ; i < headdataclass.length ; i++) {
 		originevent[i] = $ ("#" + eventid + headdataclass[i]).text ();
 	}
@@ -326,8 +474,8 @@ function editevent (eventid) {
 	}
 }
 
-function changesearchingbar (obj) {
-	if (obj.value == "date") {
+function changesearchingbar () {
+	if ($ ("#searchingoption").val () == "date") {
 		$ ("#searchingdate").css ("display", "inline");
 		$ ("#searchinginput").css ("display", "none");
 	}
@@ -338,7 +486,7 @@ function changesearchingbar (obj) {
 }
 
 function togglecontent (dataid) {
-	$ ("#" + geteventid (dataid) + "content").toggle (250);
+	$ ("#" + getcaleventid (dataid) + "content").toggle (250);
 }
 
 function setinitialcss () {
@@ -346,8 +494,8 @@ function setinitialcss () {
 	$ (".event:even").css ("background-color", "#CCFFFF");
 	$ (".event:odd").css ("background-color", "#33FFFF");
 	$ ("#prevpagebutton").attr ("disabled", true);
-	$ ("#nextpagebutton").attr ("disabled", (caleventlist.length <= 10));
-	if (caleventlist.length == 0) {//沒有任何活動
+	$ ("#nextpagebutton").attr ("disabled", (calevent.length <= 10));
+	if (curevent.length == 0) {//沒有任何活動
 		$ ("#noeventmessage").css ("display", "block");
 	}
 	else {
@@ -357,30 +505,56 @@ function setinitialcss () {
 
 function changeyear (delta) {
 	var year = $ ("#year").text ();
+	var arr = new Array ();
 	year = parseInt (year) + delta;
 	$ ("#year").text (year.toString ());
 	inccal_fetch (year);
-	pushevent (0);
+	calevent = caleventlist;
+	curevent = calevent.slice (0, 10);
+	caleventstack.length = 0;
+	findcondition.length = 0;
+	absoluteid.length = 0;
+	for (var i = 1 ; i <= calevent.length ; i++) {
+		arr.push (i);
+	}
+	absoluteid.push (arr);
+	pushevent ();
 	setinitialcss ();
 }
 
-function setyear () {
+function setyear () {		//initialize year
 	var today = new Date ();
 	var year = today.getFullYear ();
+	var arr = new Array ();
 	$ ("#year").text (year);
 	inccal_fetch (year);
-	pushevent (0);
+	calevent = caleventlist;
+	curevent = calevent.slice (0, 10);
+	curpage = 1;
+	caleventstack.length = 0;
+	findcondition.length = 0;
+	absoluteid.length = 0;
+	for (var i = 1 ; i <= calevent.length ; i++) {
+		arr.push (i);
+	}
+	absoluteid.push (arr);
+	pushevent ();
 	setinitialcss ();
 }
 
-function gopage (delta) {
-	curpage += delta;
-	pushevent ((curpage - 1) * 10);
+function setnonchangingyearcss () {//set cursor, even,odd color, next,prev page button
 	$ (".event:even").css ("cursor", "pointer");
 	$ (".event:even").css ("background-color", "#CCFFFF");
 	$ (".event:odd").css ("background-color", "#33FFFF");
 	$ ("#prevpagebutton").attr ("disabled", (curpage == 1));
-	$ ("#nextpagebutton").attr ("disabled", (curpage * 10 >= caleventlist.length));
+	$ ("#nextpagebutton").attr ("disabled", (curpage * 10 >= calevent.length));
+}
+
+function gopage (delta) {
+	curpage += delta;
+	curevent = calevent.slice ((curpage - 1) * 10, curpage * 10);
+	pushevent ();
+	setnonchangingyearcss ();
 }
 
 function timetostring (hour, minute) {//12:0 => 12:00
