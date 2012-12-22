@@ -176,9 +176,11 @@ function imnc_review(){
 	}
 	tableobj = document.getElementById("ncdatalist");
 	imnc_sendobjlist = new Array();
-	for(i=2; i<tableobj.childNodes.length; i++){
-		tableobj.removeChild(table.childNodes[i]);
-	}
+	try{
+		while(true){
+			tableobj.removeChild(tableobj.childNodes[2]);
+		}
+	}catch(err){}
 	for(i=0; i<ncevent.length; i++){
 		/* 新增一個 CalEvent 物件 */
 		calevtobj = new CalEvent();
