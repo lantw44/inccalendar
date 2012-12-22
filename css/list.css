@@ -61,7 +61,6 @@ div#unmatchedmessage {
 	display:inline-block;
 }
 .okbutton {
-	position:relative;
 	display:inline-block;
 	bottom:0px;
 	font-size:1em;

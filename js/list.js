@@ -19,11 +19,11 @@ function lastelement (arr) {
 
 function setneweventform () {
 	var dataclass = ["title", "content", "remind", "year", "month", "date", "hour", "minute"];
-	$ ("#" + "newevent" + "date").html ("<input type = 'text' id = 'input" + "newevent" + "year' size = '2' maxlength = '4' onkeyup = 'changeweek (this.id);' /> 年");	//size = 2 因為size是算中文字
-	$ ("#" + "newevent" + "date").append ("<input type = 'text' id = 'input" + "newevent" + "month' size = '1' maxlength = '2' onkeyup = 'changeweek (this.id);' /> 月");
-	$ ("#" + "newevent" + "date").append ("<input type = 'text' id = 'input" + "newevent" + "date' size = '1' maxlength = '2' onkeyup = 'changeweek (this.id);' /> 日");
-	$ ("#" + "newevent" + "time").html ("<input type = 'tetxt' id = 'input" + "newevent" + "hour' size = '1' maxlength = '2' onkeyup = 'checkinput (\"" + "newevent" + "\");' /> 時 <br />");
-	$ ("#" + "newevent" + "time").append ("<input type = 'tetxt' id = 'input" + "newevent" + "minute' size = '1' maxlength = '2' onkeyup = 'checkinput (\"" + "newevent" + "\");' /> 分");
+	$ ("#" + "newevent" + "date").html ("<input type = 'text' id = 'input" + "newevent" + "year' size = '2' maxlength = '4' onkeyup = 'inputkeyup (this.id);' /> 年");	//size = 2 因為size是算中文字
+	$ ("#" + "newevent" + "date").append ("<input type = 'text' id = 'input" + "newevent" + "month' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 月");
+	$ ("#" + "newevent" + "date").append ("<input type = 'text' id = 'input" + "newevent" + "date' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 日");
+	$ ("#" + "newevent" + "time").html ("<input type = 'tetxt' id = 'input" + "newevent" + "hour' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 時 <br />");
+	$ ("#" + "newevent" + "time").append ("<input type = 'tetxt' id = 'input" + "newevent" + "minute' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 分");
 	$ ("#" + "newevent" + "title").html ("<input type = 'tetxt' id = 'input" + "newevent" + "title' size = '40' />");
 	$ ("#" + "newevent" + "content").html ("<div> 活動內容： </div><textarea id = 'input" + "newevent" + "content" + "'></textarea><br />");
 	$ ("#input" + "newevent" + "content").attr ({"rows":"5", "cols":"100"});
@@ -202,7 +202,7 @@ function searchevent () {//搜尋符合的活動
 	var events = $ (".event");
 	var matchedNum = 0;
 	var arr = new Array ();
-	var currentabsid = absoluteid[absoluteid.length - 1];
+	var currentabsid = lastelement (absoluteid);
 	var newcalevent = new Array ();
 	arr.push (option);
 	if (option == "title") {
@@ -336,11 +336,7 @@ function getcaleventid (dataid) {
 	return dataid.substring (0, i);
 }
 
-function changeweek (inputid) {
-	var eventid = getcaleventid (inputid.split ("input")[1]);
-	if (!checkinput (eventid, true)) {
-		return ;
-	}
+function changeweek (eventid) {
 	var date = new Date ();
 	date.setFullYear (parseInt ($ ("#input" + eventid + "year").val ()));
 	date.setMonth (parseInt ($ ("#input" + eventid + "month").val ()) - 1);
@@ -519,6 +515,13 @@ function matchfindcondition (thisevent, condition) {
 
 function updateeventinsearching (newevent, absid) {//將新活動放入已搜尋活動
 	var update;
+	for (var i = 0 ; i < absoluteid.length ; i++) {		//更新活動id
+		for (var j = 0 ; j < absoluteid[i].length ; j++) {
+			if (absoluteid[i][j] >= absid) {
+				absoluteid[i][j]++;
+			}
+		}
+	}
 	if (caleventstack.length != 0) {//有搜尋過任何活動
 		var stackevent = caleventstack[0];	//沒有任何搜尋的活動陣列
 		var matchallcondition;
@@ -559,18 +562,19 @@ function updateeventinsearching (newevent, absid) {//將新活動放入已搜尋
 			}
 		}
 		if (matchallcondition && matchfindcondition (newevent, lastelement (findcondition))) {
+			var curabsid = lastelement (absoluteid);
 			update = false;
 			for (var i = 0 ; i < calevent.length ; i++) {//將新活動放入目前的活動陣列
 				if (datecompare (newevent.datetime, calevent[i].datetime)) {
 					calevent.splice (i, 0, newevent);
-					absoluteid[0].splice (i, 0, absid);
+					curabsid.splice (i, 0, absid);
 					update = true;
 					break;
 				}
 			}
 			if (!update) {
 				calevent.push (newevent);
-				absoluteid[0].push (absid);
+				curabsid.push (absid);
 			}
 		}
 	}
@@ -639,7 +643,9 @@ function updateevent (eventid) {
 		caleventlist[calevid - 1] = newevent;
 	}
 	switchbacktonormalmode (eventid);
-	inccal_send (newevent);
+	inccal_send (newevent, function (key) {
+		newevent.key = key;
+	});
 }
 
 function cancelupdateevent (eventid) {
@@ -677,6 +683,23 @@ function disableeditbutton () {		//停用其他活動的編輯  停用新增活�
 	$ ("#neweventblock").removeAttr ("onclick");
 }
 
+function inputkeyup (dataid) {		//dataid starts with 'input'
+	var eventid = getcaleventid (dataid.split ("input")[1]);
+	var datatype = dataid.split ("input" + eventid)[1];		//year, month, date, hour, minute
+	var inputcorrect;
+	if (datatype == "year" || datatype == "month" || datatype == "date") {
+		if (checkinput (eventid, true)) {
+			changeweek (eventid);
+			// changefocus (dataid);
+		}
+	}
+	else {
+		if (checkinput (eventid)) {
+			// changefocus (dataid);
+		}
+	}
+}
+
 function editevent (eventid) {
 	var dataclass = ["title", "content", "remind"];
 	var dateclass = ["year", "month", "date", "hour", "minute"];
@@ -691,11 +714,11 @@ function editevent (eventid) {
 	disableeditbutton ();
 	$ ("#" + eventid + "body").slideDown (250);
 	//$ ("#" + eventid + "date").html ("<input type = 'date' id = 'input" + eventid + "date'></input>");	//firefox不支援
-	$ ("#" + eventid + "date").html ("<input type = 'text' id = 'input" + eventid + "year' size = '2' maxlength = '4' onkeyup = 'changeweek (this.id);' /> 年");	//size = 2 因為size是算中文字
-	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "month' size = '1' maxlength = '2' onkeyup = 'changeweek (this.id);' /> 月");
-	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "date' size = '1' maxlength = '2' onkeyup = 'changeweek (this.id);' /> 日");
-	$ ("#" + eventid + "time").html ("<input type = 'tetxt' id = 'input" + eventid + "hour' size = '1' maxlength = '2' onkeyup = 'checkinput (\"" + eventid + "\");' /> 時 <br />");
-	$ ("#" + eventid + "time").append ("<input type = 'tetxt' id = 'input" + eventid + "minute' size = '1' maxlength = '2' onkeyup = 'checkinput (\"" + eventid + "\");' /> 分");
+	$ ("#" + eventid + "date").html ("<input type = 'text' id = 'input" + eventid + "year' size = '2' maxlength = '4' onkeyup = 'inputkeyup (this.id);' /> 年");	//size = 2 因為size是算中文字
+	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "month' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 月");
+	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "date' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 日");
+	$ ("#" + eventid + "time").html ("<input type = 'tetxt' id = 'input" + eventid + "hour' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 時 <br />");
+	$ ("#" + eventid + "time").append ("<input type = 'tetxt' id = 'input" + eventid + "minute' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 分");
 	$ ("#" + eventid + "title").html ("<input type = 'tetxt' id = 'input" + eventid + "title' size = '40' />");
 	$ ("#" + eventid + "content").html ("<div> 活動內容： </div><textarea id = 'input" + eventid + "content" + "'></textarea><br />");
 	$ ("#input" + eventid + "content").attr ({"rows":"5", "cols":"100"});
@@ -853,6 +876,7 @@ function deleteevent (eventid) {
 		id += (curpage - 1) * 10;	//calevent id
 		id = lastelement (absoluteid)[id - 1];	//absid
 		inccal_remove (caleventlist[id - 1]);
+		caleventlist.splice (id - 1, 1);
 		for (var i = 0 ; i < caleventstack.length ; i++) {
 			for (var j = 0 ; j < caleventstack[i].length ; j++) {
 				if (absoluteid[i][j] == id) {
@@ -869,14 +893,45 @@ function deleteevent (eventid) {
 				break;
 			}
 		}
+		for (var i = 0 ; i < absoluteid.length ; i++) {
+			for (var j = 0 ; j < absoluteid[i].length ; j++) {
+				if (absoluteid[i][j] > id) {
+					absoluteid[i][j]--;
+				}
+			}
+		}
 		curevent = calevent.slice ((curpage - 1) * 10, curpage * 10);
 		if (curevent.length == 0) {
 			if (curpage != 1) {
 				curpage--;
 				curevent = calevent.slice ((curpage - 1) * 10, curpage * 10);
 			}
+			else {
+				if (findcondition.length != 0) {//有搜尋過任何活動
+					$ ("#unmatchedmessage").css ("display", "block");
+				}
+				else {
+					$ ("#noeventmessage").css ("display", "block");
+				}
+			}
 		}
 		pushevent ();
 		setnonchangingyearcss ();
+	}
+}
+
+function changefocus (dataid) {		//dataid starts with 'input'
+	var eventid = getcaleventid (dataid.split ("input")[1]);
+	var datatype = dataid.split ("input" + eventid)[1];		//year, month, date, hour, minute
+	var currentinput = ["year", "month", "date", "hour", "minute"];
+	var correctlength = [4, 2, 2, 2, 2];
+	var nextinput = ["month", "date", "hour", "minute", "title"];
+	for (var i = 0 ; i < currentinput.length ; i++) {
+		if (datatype == currentinput[i]) {
+			if ($ ("#" + dataid).val ().length == correctlength[i]) {
+				$ ("#input" + eventid + nextinput[i]).select ();
+			}
+			break;
+		}
 	}
 }
