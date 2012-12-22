@@ -57,12 +57,6 @@ div#unmatchedmessage {
 	font-size:2em;
 	display:none;
 }
-.event .editbutton {
-	position:absolute;
-	right:0px;
-	font-size:1em;
-	display:none;
-}
 .event:hover .editbutton {
 	display:inline-block;
 }
@@ -88,4 +82,14 @@ div#unmatchedmessage {
 }
 #neweventblock:hover #neweventbutton {
 	color:black;
+}
+.title {
+	border-right-width:0px;
+}
+.editdeleteblock {
+	width:140px;
+}
+.editbutton {
+	font-size:1em;
+	display:none;
 }

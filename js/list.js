@@ -43,6 +43,27 @@ function pushneweventdata () {
 	$ ("#" + "newevent" + "week").text ("星期" + Day [today.getDay ()]);
 }
 
+function geteventidnumber (dataid) {
+	var str = dataid.split ("event")[1];
+	var i;
+	for (i = 0 ; i < str.length ; i++) {
+		if (!(str[i] >= '0' && str[i] <= '9')) {
+			break;
+		}
+	}
+	return parseInt (str.substring (0, i));
+}
+
+function sethovercss (dataid) {
+	$ ("#" + dataid).hover (function () {
+		$ ("#" + "event" + geteventidnumber (this.id) + "editbutton").css ("display", "inline-block");
+		$ ("#" + "event" + geteventidnumber (this.id) + "deletebutton").css ("display", "inline-block");
+		}, function () {
+		$ ("#" + "event" + geteventidnumber (this.id) + "editbutton").css ("display", "none");
+		$ ("#" + "event" + geteventidnumber (this.id) + "deletebutton").css ("display", "none");
+	});
+}
+
 function setinitialform () {//event1 ~ event10
 	var dataclass = ["date", "week", "time", "title", "content"];
 	var id, dataid, eventid;
@@ -55,10 +76,16 @@ function setinitialform () {//event1 ~ event10
 			$ ("#" + eventid + "head").append ("<td id = '" + dataid + "'></td>");
 			$ ("#" + dataid).addClass (dataclass[j]);
 			$ ("#" + dataid).attr ({"onclick":"togglecontent (this.id);"});
+			sethovercss (dataid);
 		}
+		$ ("#" + eventid + "head").append ("<td id = '" + eventid + "editdeleteblock' class = 'editdeleteblock'></td>");
+		$ ("#" + eventid + "editdeleteblock").html ("<input id = '" + eventid + "editbutton' type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")' />");
+		$ ("#" + eventid + "editdeleteblock").append ("<input id = '" + eventid + "deletebutton' type = 'button' value = '刪除' class = 'editbutton' onclick = 'deleteevent (\"" + eventid + "\")' />");
 		$ ("#eventbody").append ("<tr id = '" + eventid + "body' class = 'event'><td id = '" + eventid + "content'></td></tr>");
 		$ ("#" + eventid + "content").addClass ("content");
-		$ ("#" + eventid + "content").attr ("colspan","4");
+		$ ("#" + eventid + "content").attr ("colspan","5");
+		sethovercss (eventid + "content");
+		sethovercss (eventid + "editdeleteblock");
 	}
 	setneweventform ();
 }
@@ -79,8 +106,6 @@ function pushevent () {//將curevent活動放入行事曆中
 		$ ("#" + eventid + "title").text (curevent[i]["title"]);
 		$ ("#" + eventid + "content").html (escapestring (curevent[i]["content"]));
 		$ ("#" + eventid + "content").css ("display", "none");
-		$ ("#" + eventid + "title").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")' />");
-		$ ("#" + eventid + "content").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")' />");
 		$ ("#event" + (i + 1) + "head").css ("display", "table-row");
 		$ ("#event" + (i + 1) + "content").css ("display", "none");
 	}
@@ -626,8 +651,6 @@ function cancelupdateevent (eventid) {
 			$ ("#" + eventid + headdataclass[i]).text (originevent[i]);
 		}
 		$ ("#" + eventid + "content").html (originevent[4]);
-		$ ("#" + eventid + "title").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
-		$ ("#" + eventid + "content").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).attr ("onclick", "togglecontent (this.id)");
 		}
@@ -802,6 +825,7 @@ function gopage (delta) {
 	curevent = calevent.slice ((curpage - 1) * 10, curpage * 10);
 	pushevent ();
 	setnonchangingyearcss ();
+	status_bar_set ("");
 }
 
 function timetostring (hour, minute) {//12:0 => 12:00
@@ -820,4 +844,39 @@ function displayneweventinput () {
 	$ ("#neweventcontent").slideDown (250);
 	pushneweventdata ();
 	disableeditbutton ();
+}
+
+function deleteevent (eventid) {
+	var del = confirm ("確定要刪除此活動嗎?");
+	if (del) {
+		var id = parseInt (eventid.split ("event")[1]);
+		id += (curpage - 1) * 10;	//calevent id
+		id = lastelement (absoluteid)[id - 1];	//absid
+		inccal_remove (caleventlist[id - 1]);
+		for (var i = 0 ; i < caleventstack.length ; i++) {
+			for (var j = 0 ; j < caleventstack[i].length ; j++) {
+				if (absoluteid[i][j] == id) {
+					absoluteid[i].splice (j, 1);
+					caleventstack[i].splice (j, 1);
+					break;
+				}
+			}
+		}
+		for (var i = 0 ; i < calevent.length ; i++) {
+			if (lastelement (absoluteid)[i] == id) {
+				lastelement (absoluteid).splice (i, 1);
+				calevent.splice (i, 1);
+				break;
+			}
+		}
+		curevent = calevent.slice ((curpage - 1) * 10, curpage * 10);
+		if (curevent.length == 0) {
+			if (curpage != 1) {
+				curpage--;
+				curevent = calevent.slice ((curpage - 1) * 10, curpage * 10);
+			}
+		}
+		pushevent ();
+		setnonchangingyearcss ();
+	}
 }
