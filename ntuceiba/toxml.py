@@ -16,7 +16,7 @@ def XMLBuildNtuCaibaEvent(eleobj, cbobj):
 	newdata.text = cbobj.percent
 	newdata = etree.SubElement(eleobj, 'late')
 	newdata.text = str(cbobj.late)
-	newdate = etree.SubElement(eleobj, 'comment')
+	newdata = etree.SubElement(eleobj, 'comment')
 	newdata.text = cbobj.comment
 	newdata = etree.SubElement(eleobj, 'red')
 	newdata.text = str(cbobj.red)
