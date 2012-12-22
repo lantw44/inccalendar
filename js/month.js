@@ -291,6 +291,7 @@ function setmonthcal(){
 	var od_year;
 	var objdate = new Date();
 	var objcal;
+	var newbutton;
 	var i;
 	objdate.setFullYear(toyear, tomonth, todate);
 	while((od_day = objdate.getDay()) != 0){
@@ -318,6 +319,16 @@ function setmonthcal(){
 				"caledit(" + value_year + ", " + value_month + ", " +
 				todate + ")");
 			objcaldate.innerHTML = todate;
+			newbutton = document.createElement("input");
+			newbutton.setAttribute("id", "calbutton" + i.toString() + 
+				od_day.toString());
+			newbutton.setAttribute("type", "button");
+			newbutton.setAttribute("value", "進入");
+			newbutton.setAttribute("onclick",
+				"caledit(" + value_year + ", " + value_month + ", " +
+				todate + ")");
+			newbutton.style.display = "none";
+			objcaldate.appendChild(newbutton);
 			objcaldatalist.setAttribute("name", "datalist" + todate);
 			objcaldatalist.innerHTML = "";
 			alldata[todate] = new Object();
@@ -364,22 +375,27 @@ function resetblock(thisdt){
 		"cal" + alldata[thisdt].row + alldata[thisdt].col);
 	var oldobjtext = document.getElementById(
 		"caldate" + alldata[thisdt].row + alldata[thisdt].col);
+	var buttonobj = document.getElementById(
+		"calbutton" + alldata[thisdt].row + alldata[thisdt].col);
 	oldobj.style.borderColor = calfocus_bdc_org;
 	oldobj.style.borderWidth = "1px";
 	oldobjtext.style.color = "black";
 	oldobjtext.style.fontWeight = "normal";
+	buttonobj.style.display = "none";
 }
 
 function setfocusblock(thisdt, reset){
 	if(reset){
 		resetblock(value_date);
 	}
-	var thisobj, thatobj;
+	var thisobj, thatobj, buttonobj;
 	try{
 		thisobj = document.getElementById(
 			"cal" + alldata[thisdt].row + alldata[thisdt].col);
 		thatobj = document.getElementById(
 			"caldate" + alldata[thisdt].row + alldata[thisdt].col);
+		buttonobj = document.getElementById(
+			"calbutton" + alldata[thisdt].row + alldata[thisdt].col);
 	}catch(err){
 		return;
 	}
@@ -388,6 +404,7 @@ function setfocusblock(thisdt, reset){
 	thisobj.style.borderWidth = "3px";
 	thatobj.style.color = "green";
 	thatobj.style.fontWeight = "bold";
+	buttonobj.style.display = "inline";
 	setcookievalue(cookie_date, thisdt);
 	value_date = thisdt;
 	status_bar_set(value_year + "年" + value_month + "月" + thisdt + "日");
