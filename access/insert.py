@@ -37,12 +37,12 @@ class InsertEvent(webapp2.RequestHandler):
 
 		newcalevent = CalEvent(
 		db.Key.from_path('user', guserid.email()),
-		content = thiscontent,
+		title = thistitle,
 		begin = thisbegin,
 		datafrom = thisdatafrom
 		)
 
-		newcalevent.title = thistitle
+		newcalevent.content = thiscontent
 		newcalevent.icon = thisicon
 		newcalevent.remind = thisremind
 

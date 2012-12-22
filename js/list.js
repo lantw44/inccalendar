@@ -390,15 +390,15 @@ function checkdate (year, month, date) {
 }
 
 function checkinput (eventid, checkdatetimeonly) {
-	var content, year, month, date, hour, minute, remind;
+	var title, year, month, date, hour, minute, remind;
 	if (!checkdatetimeonly) {
-		content = $ ("#input" + eventid + "content").val ();
-		if (content == "") {
+		title = $ ("#input" + eventid + "title").val ();
+		if (title == "") {
 			status_bar_warning ("內容不可空白");
-			$ ("#input" + eventid + "content").css ("background-color", "red");
+			$ ("#input" + eventid + "title").css ("background-color", "red");
 			return false;
 		}
-		$ ("#input" + eventid + "content").css ("background-color", "white");
+		$ ("#input" + eventid + "title").css ("background-color", "white");
 	}
 	year = $ ("#input" + eventid + "year").val ();
 	if (year == "" || isNaN (year)) {
