@@ -127,7 +127,7 @@ function inccal_fetch(year, month){
 	status_bar_restore();
 }
 
-function inccal_send(calevt, do_func){
+function inccal_send(calevt, do_func, funcseconddata){
 	var rq = create_xmlhttp_object();
 	var str = "";
 	str = 'icon=' + encodeURIComponent(calevt.icon.toString()) + '&' +
@@ -153,7 +153,7 @@ function inccal_send(calevt, do_func){
 		if(rq.readyState == 4){
 			if(rq.status == 200){
 				if(do_func != null){
-					do_func(rq.responseText);
+					do_func(rq.responseText, funcseconddata);
 				}
 			}else{
 				status_bar_warning("伺服器回傳 " + rq.status.toString() + " 錯誤");

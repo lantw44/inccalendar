@@ -341,9 +341,6 @@ function imnc_review(){
 
 function imnc_singlesend(){
 	var i;
-	var resultobj = document.getElementById("ncimportresult");
-	var newbr;
-	var newtext;
 	document.getElementById("imntuceibacheck").style.display = "none";
 	document.getElementById("imntuceibacomplete").style.display = "block";
 	for(i=0; i<imnc_sendobjlist.length; i++){
@@ -351,11 +348,15 @@ function imnc_singlesend(){
 			if(document.getElementById("imncradio" + i.toString() + "create").checked){
 				imnc_sendobjlist.key = null;
 			}
-			newtext = document.createTextNode("送出第 " + (i+1).toString() + " 項資料");
-			newbr = document.createElement("br");
-			resultobj.appendChild(newtext);
-			resultobj.appendChild(newbr);
-			inccal_send(imnc_sendobjlist[i], null);
+			inccal_send(imnc_sendobjlist[i], function(keytrash, secdata){
+				var resultobj = document.getElementById("ncimportresult");
+				var newbr;
+				var newtext;
+				newtext = document.createTextNode("已儲存第 " + secdata.toString() + " 項資料");
+				newbr = document.createElement("br");
+				resultobj.appendChild(newtext);
+				resultobj.appendChild(newbr);
+			}, i+1);
 		}
 	}
 	status_bar_set("匯入工作已完成");
