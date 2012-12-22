@@ -22,6 +22,12 @@
       margin-bottom: 0px;
       padding: 0px;
     }
+    table#ncdatalist{
+      border-collapse: collapse;
+    }
+    table#ncdatalist td{
+      padding: 3px;
+    }
   </style>
 {% endblock %}
 
@@ -68,9 +74,9 @@
     <div class="indented">
       <form name="fileuploadform" action="access/echo" method="post" enctype="multipart/form-data">
       檔案：<input name="echo" type="file" id="ncfile"><br>
-	  編碼：<select id="ncfileenc">
-        <option value="Big5">Big5 (臺大 CEIBA 預設編碼)</option>
-		<option value="UTF-8">UTF-8</option>
+      編碼：<select id="ncfileenc">
+      <option value="Big5">Big5 (臺大 CEIBA 預設編碼)</option>
+      <option value="UTF-8">UTF-8</option>
 	  </select>
       </form>
     </div>
@@ -99,11 +105,11 @@
   </div>
   <div id="imntuceibacheck" class="wholeform" style="display: none;">
     <p id="ncdatalisttitle" class="question">可匯入的資料清單</p>
-    <table id="ncdatalist" border="1" style="border-collapse: collapse;">
+    <table id="ncdatalist" border="1">
       <tr>
         <td>編號</td>
         <td>動作</td>
-        <td>日期</td>
+        <td colspan="2">日期與時間</td>
         <td>標題</td>
         <td>成員</td>
         <td>繳交方法</td>
@@ -114,8 +120,8 @@
       </tr>
     </table>
     <br>
-    <input type="button" value="返回設定頁面">
-    <input type="button" value="確定">
+    <input type="button" value="返回設定頁面" onclick="imnc_checkopt()">
+    <input type="button" value="確定" onclick="imnc_singlesend()">
   </div>
   <div id="imntuceibacomplete" class="wholeform" style="display: none;">
     <p class="question">資料匯入結果</p>

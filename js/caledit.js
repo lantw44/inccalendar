@@ -443,6 +443,7 @@ function caledit_save_func(){
 		return false;
 	}
 	inccal_send(current_form, function(resp){
+    status_bar_set("資料已儲存");
 		if(current_form.key == null){
 			newcount = activecalevt.length;
 			activecalevt[newcount] = current_form.clone();

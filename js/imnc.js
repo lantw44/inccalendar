@@ -28,6 +28,11 @@ function imnc_deinit(){
 	document.getElementById("imntuceibainfo").style.display = "none";
 }
 
+function imnc_checkopt(){
+	document.getElementById("imntuceibainfo").style.display = "block";
+	document.getElementById("imntuceibacheck").style.display = "none";
+}
+
 function imnc_argok(){
 	status_bar_clear();
 	if(document.getElementById("nclogin").checked){
@@ -158,6 +163,9 @@ function imnc_review(){
 	var newtextnode;
 	var univar;  /* 萬用暫存變數 */
 	var defaultenabled; /* 預設情況下要不要插入這項目 */
+	var dyear, dmonth, ddate, dhour;
+	var eventtitle, eventcontent;
+	var strdate, strtime;
 	document.getElementById("imntuceibainfo").style.display = "none";
 	document.getElementById("imntuceibacheck").style.display = "block";
 	ncevent = imnc_xmlresponse.documentElement.getElementsByTagName("ncevent");
@@ -168,6 +176,9 @@ function imnc_review(){
 	}
 	tableobj = document.getElementById("ncdatalist");
 	imnc_sendobjlist = new Array();
+	for(i=2; i<tableobj.childNodes.length; i++){
+		tableobj.removeChild(table.childNodes[i]);
+	}
 	for(i=0; i<ncevent.length; i++){
 		/* 新增一個 CalEvent 物件 */
 		calevtobj = new CalEvent();
@@ -229,11 +240,125 @@ function imnc_review(){
 			newinput3.checked = true;
 		}
 
-		/* 設定預設狀況 */
-		
+		duedate = new Date();
+		dyear = parseInt(ncevent[i].getElementsByTagName("dueyear")[0].childNodes[0].nodeValue);
+		dmonth = parseInt(ncevent[i].getElementsByTagName("duemonth")[0].childNodes[0].nodeValue);
+		ddate = parseInt(ncevent[i].getElementsByTagName("duedate")[0].childNodes[0].nodeValue);
+		dhour = parseInt(ncevent[i].getElementsByTagName("duehour")[0].childNodes[0].nodeValue);
+		calevtobj.datetime = duedate;
+		calevtobj.datetime.setFullYear(dyear, dmonth - 1, ddate);
+		calevtobj.datetime.setHours(dhour, 0, 0);
+		strdate = calevtobj.datetime.toISOString().split('T');
+		strtime = strdate[1].split('.')[0];
+		strdate = strdate[0];
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(strdate);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(strtime);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+
+		eventtitle = ncevent[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
+		calevtobj.title = eventtitle;
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(eventtitle);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+
+		eventcontent = "";
+
+		if(document.getElementById("ncaddmember").checked){
+			eventcontent += "名稱：" + eventtitle + "\n";
+		}
+
+		univar = ncevent[i].getElementsByTagName("member")[0].childNodes[0].nodeValue;
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(univar);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+		if(document.getElementById("ncaddmember").checked){
+			eventcontent += "成員：" + univar + "\n";
+		}
+
+		univar = ncevent[i].getElementsByTagName("method")[0].childNodes[0].nodeValue;
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(univar);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+		if(document.getElementById("ncaddmethod").checked){
+			eventcontent += "繳交方法：" + univar + "\n";
+		}
+
+		univar = ncevent[i].getElementsByTagName("percent")[0].childNodes[0].nodeValue;
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(univar);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+		if(document.getElementById("ncaddpercent").checked){
+			eventcontent += "成績比重：" + univar + "\n";
+		}
+
+		if(document.getElementById("ncadddue").checked){
+			eventcontent += "繳交期限：" + strdate + " " + strtime + "\n";
+		}
+
+		univar = ncevent[i].getElementsByTagName("late")[0].childNodes[0].nodeValue;
+		univar = univar == 'True' ? "可以" : "不可以";
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(univar);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+		if(document.getElementById("ncaddlate").checked){
+			eventcontent += "逾期繳交：" + univar + "\n";
+		}
+
+		univar = ncevent[i].getElementsByTagName("sub")[0].childNodes[0].nodeValue;
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(univar);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+		if(document.getElementById("ncaddsub").checked){
+			eventcontent += "繳交日期：" + univar + "\n";
+		}
+
+		univar = ncevent[i].getElementsByTagName("comment")[0].childNodes[0].nodeValue;
+		newdata = document.createElement("td");
+		newtextnode = document.createTextNode(univar);
+		newdata.appendChild(newtextnode);
+		newrow.appendChild(newdata);
+		if(document.getElementById("ncaddcomment").checked){
+			eventcontent += "作業評語：" + univar + "\n";
+		}
+
+		/* 完成！ */
+		calevtobj.content = eventcontent;
 		tableobj.appendChild(newrow);
 		imnc_sendobjlist.push(calevtobj);
 	}
+}
+
+function imnc_singlesend(){
+	var i;
+	var resultobj = document.getElementById("ncimportresult");
+	var newbr;
+	var newtext;
+	document.getElementById("imntuceibacheck").style.display = "none";
+	document.getElementById("imntuceibacomplete").style.display = "block";
+	for(i=0; i<imnc_sendobjlist.length; i++){
+		if(!document.getElementById("imncradio" + i.toString() + "ignore").checked){
+			if(document.getElementById("imncradio" + i.toString() + "create").checked){
+				imnc_sendobjlist.key = null;
+			}
+			newtext = document.createTextNode("送出第 " + (i+1).toString() + " 項資料");
+			newbr = document.createElement("br");
+			resultobj.appendChild(newtext);
+			resultobj.appendChild(newbr);
+			inccal_send(imnc_sendobjlist[i], null);
+		}
+	}
+	status_bar_set("匯入工作已完成");
 }
 
 function imnc_login(){
