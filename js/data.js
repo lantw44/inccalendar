@@ -152,7 +152,6 @@ function inccal_send(calevt, do_func){
 	rq.onreadystatechange = function(){
 		if(rq.readyState == 4){
 			if(rq.status == 200){
-				status_bar_set("資料已儲存");
 				if(do_func != null){
 					do_func(rq.responseText);
 				}
