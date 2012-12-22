@@ -14,6 +14,12 @@ class UpdateEvent (webapp2.RequestHandler) :
 		guserid = users.get_current_user()
 		if not guserid:
 			return
+		mykey = self.request.get('key')
+		mykeyobj = db.Key(mykey)
+		if mykeyobj.parent().name() != guserid.email():
+			self.response.set_status(403)
+			return
+		
 		thisicon = int(self.request.get('icon'))
 		thistitle = self.request.get('title')
 		thiscontent = self.request.get('content')
@@ -31,7 +37,6 @@ class UpdateEvent (webapp2.RequestHandler) :
 		);
 		thisdatafrom = self.request.get('datafrom')
 		thisremind = int(self.request.get('remind'))
-		mykey = self.request.get('key')
 		
 		eventdata = db.get(mykey)
 		eventdata.icon = thisicon

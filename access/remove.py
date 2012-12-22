@@ -14,6 +14,9 @@ class RemoveEvent(webapp2.RequestHandler):
 		if not guserid:
 			return
 		thiskey = db.Key(self.request.get('key'))
+		if thiskey.parent().name() != guserid.email():
+			self.response.set_status(403)
+			return
 		thisobj = db.get(thiskey)
 		thisobj.delete()
 

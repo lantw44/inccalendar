@@ -35,11 +35,20 @@ def XMLBuildCalEvent(calevent, entry):
 
 class FetchEvent(webapp2.RequestHandler):
 	def get(self):		# GET 適用於已知 key 的狀況
+		guserid = users.get_current_user()
+		if not guserid:
+			return
+		
 		mykey = self.request.get('key')
 		eventroot = etree.Element('inccalender')
 		calevent = etree.SubElement(eventroot, 'calevent')
 		entrykey = db.Key(mykey)
+		if entrykey.parent().name() != guserid.email():
+			self.response.set_status(403)
+			return
+
 		entry = db.get(entrykey)
+
 		XMLBuildCalEvent(calevent, entry)
 
 		self.response.headers['Content-Type'] = 'text/xml; charset=UTF-8'
