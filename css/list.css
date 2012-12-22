@@ -22,7 +22,7 @@ td {
 	border-style:outset;
 	font-size:1.2em;
 }
-table#listcal {
+table#listcal, table#neweventtable {
 	border-width:1px 0px 0px 1px;
 	border-style:groove;
 	border-color:black;
@@ -56,4 +56,36 @@ div#unmatchedmessage {
 	text-align:center;
 	font-size:2em;
 	display:none;
+}
+.event .editbutton {
+	position:absolute;
+	right:0px;
+	font-size:1em;
+	display:none;
+}
+.event:hover .editbutton {
+	display:inline-block;
+}
+.okbutton {
+	position:relative;
+	display:inline-block;
+	bottom:0px;
+	font-size:1em;
+}
+#changepagebutton input[type=button] {
+	font-size:2.5em;
+}
+#prevsearchbutton, #nosearchbutton {
+	font-size:1em;
+	display:none;
+}
+#neweventbutton {
+	font-size:2.5em;
+	color:gray;
+}
+#neweventblock {
+	cursor:pointer;
+}
+#neweventblock:hover #neweventbutton {
+	color:black;
 }

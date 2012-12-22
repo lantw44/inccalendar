@@ -1,30 +1,12 @@
 {% extends "jinhtml/skel.html" %}
 {% block headcss %}
 	<link rel = "stylesheet" type = "text/css" href = "/css/list.css">
-	<style>
-		.event .editbutton {
-			position:absolute;
-			right:0px;
-			font-size:1em;
-			display:none;
-		}
-		.event:hover .editbutton {
-			display:inline-block;
-		}
-		.okbutton {
-			position:relative;
-			display:inline-block;
-			bottom:0px;
-			font-size:1em;
-		}
-		#changepagebutton input[type=button] {
-			font-size:2.5em;
-		}
-	</style>
 {% endblock %}
 
 {% block onload %}
+	setinitialform ();
 	setyear ();
+	setinitialcss ();
 	var switchlistobj = document.getElementById("switchlist")
 	switchlistobj.className += "selected";
 	switchlistobj.onclick = "";
@@ -33,34 +15,6 @@
 {% block headjs %}
 	<script src = "/js/data.js" type = "text/javascript"></script>
 	<script src = "/js/list.js" type = "text/javascript"></script>
-	<script>
-		function pushdata () {
-			var postdata = new Array ();
-			var datastring;
-			postdata.push ("title", "123");
-			postdata.push ("content", "eventcontent");
-			postdata.push ("icon", "5");
-			postdata.push ("year", "2012");
-			postdata.push ("month", "12");
-			postdata.push ("date", "16");
-			postdata.push ("hour", "10");
-			postdata.push ("minute", "10");
-			postdata.push ("datafrom", "google");
-			postdata.push ("remind", "77");
-			datastring = postdata[0] + "=" + postdata[1];
-			for (var i = 2 ; i < postdata.length ; i += 2) {
-				datastring += "&" + postdata[i] + "=" + postdata[i + 1];
-			}
-			$.ajax ({
-				type: "POST",
-				url: "/access/insert",
-				data: datastring,
-				success: function () {
-					alert ("POST SUCCESS!!");
-				}
-			});
-		}
-	</script>
 {% endblock %}
 
 {% block body %}
@@ -83,8 +37,24 @@
 			<input id = "searchingdateday" type = "text" size = "2" maxlength = "2" /> 日
 		</div>
 		<input type = "button" value = "搜尋" style = "font-size:1em;" onclick = "searchevent ();" />
-		<input id = "prevsearchbutton" type = "button" value = "返回" style = "font-size:1em;display:none;" onclick = "backtoprevsearch ();" />
-		<input id = "nosearchbutton" type = "button" value = "取消" style = "font-size:1em;display:none;" onclick = "backtoprevsearch ('nosearch');" />
+		<input id = "prevsearchbutton" type = "button" value = "返回" onclick = "backtoprevsearch ();" />
+		<input id = "nosearchbutton" type = "button" value = "取消" onclick = "backtoprevsearch ('nosearch');" />
+	</div>
+	<div id = "neweventblock" align = "center" onclick = "displayneweventinput ();">
+		<i id = "neweventbutton"> 新增活動 </i>
+	</div>
+	<div id = "neweventinputblock" align = "center">
+		<table id = "neweventtable" cellpadding = "0" cellspacing = "0" style = "width:100%;">
+			<tr id = "neweventhead">
+				<td id = "neweventdate" class = "date"></td>
+				<td id = "neweventweek" class = "week"></td>
+				<td id = "neweventtime" class = "time"></td>
+				<td id = "neweventtitle" class = "title"></td>
+			</tr>
+			<tr id = "neweventbody">
+				<td id = "neweventcontent" class = "content" colspan = "4"></td>
+			</tr>
+		</table>
 	</div>
 	<div align = "center">
 		<table id = "listcal" cellpadding = "0" cellspacing = "0" style = "width:100%;">
@@ -109,5 +79,4 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<input id = "nextpagebutton" type = "button" value = "下10筆" onclick = "gopage (1);" />
 	</div>
-	<button type = "button" onclick = "pushdata ();"> Click Me !! </button>
 {% endblock %}
