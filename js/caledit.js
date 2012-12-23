@@ -315,6 +315,10 @@ function caledit_validate(){
 		if(!isFinite(tmp)){
 			throw "請輸入正確的提醒時間！";
 		}
+		tmp = titleobjw.value;
+		if(tmp.length <= 0){
+			throw "標題不可為空白！";
+		}
 	}catch(err){
 		status_bar_warning(err);
 		return false;

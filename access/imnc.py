@@ -41,7 +41,7 @@ def ntuceiba_gaeds_update(listobj, useremail, fakencobj, titleadd):
 	updatelen = 0
 	for entry in listobj:
 		if entry.enabled:
-			contstr = "\n"
+			contstr = ""
 			if entry.key != None:
 				calevent = db.get(db.Key(entry.key))
 				updatelen = updatelen + 1
@@ -49,7 +49,8 @@ def ntuceiba_gaeds_update(listobj, useremail, fakencobj, titleadd):
 				calevent = CalEvent(
 					db.Key.from_path('user', useremail),
 					# 我在亂打...... 這個不重要
-					content="\n", begin=datetime(1, 1, 1), datafrom="ntuceiba")
+					title="臺大 CEIBA 匯入工具" , 
+					begin=datetime(1, 1, 1), datafrom="ntuceiba")
 				createlen = createlen + 1
 
 			if titleadd == None or titleadd == "":
