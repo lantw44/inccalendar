@@ -426,11 +426,14 @@ function caledit_delete_func(){
 			saved_form = current_form.clone();
 			activecalevt[oldval] = current_form.clone();
 			document.getElementById("calselopt" + 
-				caledit_select_oldval.toString()).innerHTML = 
+				caledit_select_oldval.toString()).textContent = 
 				'<刪>';
 			caledit_ismodified = true;
 			if(oldval < activecalevt.length - 1){
 				selobj.value = (oldval + 1).toString();
+				caledit_loader(selobj);
+			}else{
+				selobj.value = "new";
 				caledit_loader(selobj);
 			}
 		});
@@ -447,10 +450,11 @@ function caledit_save_func(){
 		return false;
 	}
 	inccal_send(current_form, function(resp){
-    status_bar_set("資料已儲存");
+		status_bar_set("資料已儲存");
 		if(current_form.key == null){
 			newcount = activecalevt.length;
 			activecalevt[newcount] = current_form.clone();
+			activecalevt[newcount].deleted = false;
 			activecalevt[newcount].key = resp;
 			oldtree = document.getElementById("caledit_select");
 			newnode = document.createElement("option");

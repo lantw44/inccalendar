@@ -7,7 +7,6 @@ import jinja2
 import webapp2
 
 from google.appengine.api import users
-from google.appengine.ext import db
 
 class MainPage(webapp2.RedirectHandler):
 	def get(self):

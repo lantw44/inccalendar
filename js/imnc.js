@@ -125,6 +125,7 @@ function imnc_upload_send(){
 		sendmsg += "&addcomment=1";
 	}
 
+	status_bar_set("送出連線要求......");
 	rq.send(sendmsg);
 	rq.onreadystatechange = function(){
 		var completemsg;
