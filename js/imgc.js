@@ -1,7 +1,7 @@
 function imgcal_init () {
 	$.ajax ({
 		type : "GET",
-		url : "/google/fetchgooglecal",
+		url : "/gcal/fetchgooglecal",
 		success : function (resurl) {
 			window.location = resurl;
 		}

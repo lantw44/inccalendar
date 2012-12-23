@@ -28,12 +28,12 @@ handlers:
   script: access.\1.app
   secure: always
 
-- url: /port.*
-  script: port.app
+- url: /gcal/(.*)
+  script: gcal.fetchgooglecal.app
   secure: always
 
-- url: /google/(.*)
-  script: google.fetchgooglecal.app
+- url: /port.*
+  script: port.app
   secure: always
 
 - url: /.*

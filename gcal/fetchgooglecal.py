@@ -49,4 +49,4 @@ class FetchGoogleCal (webapp2.RequestHandler) :
 		# feed = self.calendar_client.get_all_calendars_feed ()
 		# self.response.out.write (auth_token)
 
-app = webapp2.WSGIApplication ([('/google/fetchgooglecal', FetchGoogleCal)])
+app = webapp2.WSGIApplication ([('/gcal/fetchgooglecal', FetchGoogleCal)])
