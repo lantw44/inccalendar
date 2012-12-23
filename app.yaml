@@ -32,6 +32,10 @@ handlers:
   script: port.app
   secure: always
 
+- url: /google/(.*)
+  script: google.fetchgooglecal.app
+  secure: always
+
 - url: /.*
   script: main.app
   secure: always

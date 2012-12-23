@@ -394,7 +394,7 @@ function checkinput (eventid, checkdatetimeonly) {
 	if (!checkdatetimeonly) {
 		title = $ ("#input" + eventid + "title").val ();
 		if (title == "") {
-			status_bar_warning ("內容不可空白");
+			status_bar_warning ("標題不可空白");
 			$ ("#input" + eventid + "title").css ("background-color", "red");
 			return false;
 		}
@@ -633,6 +633,7 @@ function updateevent (eventid) {
 			pushevent ();
 			if (curevent.length != 0) {	//curevent.length有可能變多  不可能變少
 				$ ("#unmatchedmessage").css ("display", "none");
+				$ ("#noeventmessage").css ("display", "none");
 			}
 			setnonchangingyearcss ();
 		}
