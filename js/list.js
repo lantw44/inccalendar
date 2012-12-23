@@ -367,8 +367,6 @@ function switchbacktonormalmode (eventid) {
 		$ ("#" + eventid + "time").text (timetostring (hour, minute));
 		$ ("#" + eventid + "title").text (title);
 		$ ("#" + eventid + "content").html (escapestring (content));
-		$ ("#" + eventid + "title").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
-		$ ("#" + eventid + "content").append ("<input type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")'></input>");
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).attr ("onclick", "togglecontent (this.id)");
 		}
@@ -613,6 +611,9 @@ function updateevent (eventid) {
 	newevent.datetime.setHours (parseInt ($ ("#input" + eventid + "hour").val ()));
 	newevent.datetime.setMinutes (parseInt ($ ("#input" + eventid + "minute").val ()));
 	if (eventid == "newevent") {		//新增活動
+		inccal_send (newevent, function (key) {
+			newevent.key = key;
+		});
 		if (newevent.datetime.getFullYear () == parseInt ($ ("#year").text ())) {//新活動是目前這年的活動
 			var newabsid;
 			update = false;
@@ -640,13 +641,21 @@ function updateevent (eventid) {
 	}
 	else {							//編輯活動
 		var calevid = (curpage - 1) * 10 + parseInt (eventid.split ("event")[1]);
-		newevent.key = caleventlist[calevid - 1].key;
-		caleventlist[calevid - 1] = newevent;
+		var absid = lastelement (absoluteid)[calevid - 1];
+		newevent.key = caleventlist[absid - 1].key;
+		caleventlist[absid - 1] = newevent;
+		calevent[calevid - 1] = newevent;
+		curevent[parseInt (eventid.split ("event")[1]) - 1] = newevent;
+		for (var i = 0 ; i < caleventstack.length ; i++) {
+			for (var j = 0 ; j < caleventstack[i].length ; j++) {
+				if (absoluteid[i][j] == absid) {
+					caleventstack[i][j] = newevent;
+				}
+			}
+		}
+		inccal_send (newevent);
 	}
 	switchbacktonormalmode (eventid);
-	inccal_send (newevent, function (key) {
-		newevent.key = key;
-	});
 }
 
 function cancelupdateevent (eventid) {
