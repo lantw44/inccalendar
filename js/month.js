@@ -534,7 +534,7 @@ function calload(){
 		alldata[thisdate].data.push(caleventlist[i]);
 		ulobj = document.getElementsByName("datalist" + thisdate)[0];
 		liobj = document.createElement("li");
-		liobj.innerHTML = generate_display_string(caleventlist[i]);
+		liobj.textContent = generate_display_string(caleventlist[i]);
 		ulobj.appendChild(liobj);
 	}
 	

@@ -198,14 +198,14 @@ function caledit_fill(calevt){
 	remindobj = document.getElementById("caledit_static_remind");
 	contentobj = document.getElementById("caledit_static_content");
 	datafromobj = document.getElementById("caledit_datafrom");
-	yearobj.innerHTML = calevt.datetime.getFullYear();
-	monthobj.innerHTML = calevt.datetime.getMonth() + 1;
-	dateobj.innerHTML = calevt.datetime.getDate();
-	hourobj.innerHTML = calevt.datetime.getHours();
-	minuteobj.innerHTML = calevt.datetime.getMinutes();
-	titleobj.innerHTML = calevt.title;
-	remindobj.innerHTML = calevt.remind;
-	contentobj.innerHTML = calevt.content;
+	yearobj.textContent = calevt.datetime.getFullYear();
+	monthobj.textContent = calevt.datetime.getMonth() + 1;
+	dateobj.textContent = calevt.datetime.getDate();
+	hourobj.textContent = calevt.datetime.getHours();
+	minuteobj.textContent = calevt.datetime.getMinutes();
+	titleobj.textContent = calevt.title;
+	remindobj.textContent = calevt.remind;
+	contentobj.textContent = calevt.content;
 	switch(calevt.datafrom){
 		case 'native':
 			datafromobj.innerHTML = productname;
@@ -262,14 +262,14 @@ function caledit_copyback(){
 	remindobjw = document.getElementById("caledit_dyn_remind");
 	contentobjw = document.getElementById("caledit_dyn_content");
 
-	yearobj.innerHTML = yearobjw.value;
-	monthobj.innerHTML = monthobjw.value;
-	dateobj.innerHTML = dateobjw.value;
-	hourobj.innerHTML = hourobjw.value;
-	minuteobj.innerHTML = minuteobjw.value;
-	titleobj.innerHTML = titleobjw.value;
-	remindobj.innerHTML = remindobjw.value;
-	contentobj.innerHTML = contentobjw.value;
+	yearobj.textContent = yearobjw.value;
+	monthobj.textContent = monthobjw.value;
+	dateobj.textContent = dateobjw.value;
+	hourobj.textContent = hourobjw.value;
+	minuteobj.textContent = minuteobjw.value;
+	titleobj.textContent = titleobjw.value;
+	remindobj.textContent = remindobjw.value;
+	contentobj.textContent = contentobjw.value;
 }
 
 function caledit_validate(){
@@ -452,7 +452,7 @@ function caledit_save_func(){
 			newnode = document.createElement("option");
 			newnode.setAttribute("id", "calselopt" + newcount.toString());
 			newnode.value = newcount;
-			newnode.innerHTML = '<新> ' + 
+			newnode.textContent = '<新> ' + 
 				generate_display_string(current_form);
 			oldtree.appendChild(newnode);
 		}else{
@@ -461,11 +461,11 @@ function caledit_save_func(){
 				current_form.datetime.getMonth() == value_month - 1 &&
 				current_form.datetime.getDate() == value_date){
 				document.getElementById("calselopt" + 
-					caledit_select_oldval.toString()).innerHTML = 
+					caledit_select_oldval.toString()).textContent = 
 					'<改> ' + generate_display_string(current_form);
 			}else{
 				document.getElementById("calselopt" + 
-					caledit_select_oldval.toString()).innerHTML = 
+					caledit_select_oldval.toString()).textContent = 
 					'<改> 其他日期';
 			}
 		}
