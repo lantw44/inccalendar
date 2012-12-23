@@ -945,3 +945,15 @@ function changefocus (dataid) {		//dataid starts with 'input'
 		}
 	}
 }
+
+function checkifsearchevent (e) {
+	if (window.event) {
+		key = e.keyCode;
+	}
+	else if (e.which) {
+		key = e.which;
+	}
+	if (key == 13) {
+		searchevent ();
+	}
+}

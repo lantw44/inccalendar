@@ -32,10 +32,10 @@
 			<option value = "title" selected = "selected"> 標題 </option>
 			<option value = "content"> 內容 </option>
 		</select>
-		<input id = "searchinginput" type = "text" />
+		<input id = "searchinginput" type = "text" onkeydown = "checkifsearchevent (event);" />
 		<div id = "searchingdate" style = "display:none;">
-			<input id = "searchingdatemonth" type = "text" size = "2" maxlength = "2" /> 月
-			<input id = "searchingdateday" type = "text" size = "2" maxlength = "2" /> 日
+			<input id = "searchingdatemonth" type = "text" size = "2" maxlength = "2" onkeydown = "checkifsearchevent (event);" /> 月
+			<input id = "searchingdateday" type = "text" size = "2" maxlength = "2" onkeydown = "checkifsearchevent (event);" /> 日
 		</div>
 		<input type = "button" value = "搜尋" style = "font-size:1em;" onclick = "searchevent ();" />
 		<input id = "prevsearchbutton" type = "button" value = "返回" onclick = "backtoprevsearch ();" />
