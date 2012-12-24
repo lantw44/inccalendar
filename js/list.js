@@ -366,6 +366,7 @@ function switchbacktonormalmode (eventid) {
 		$ ("#" + eventid + "date").text (year + "." + month + "." + date);
 		$ ("#" + eventid + "time").text (timetostring (hour, minute));
 		$ ("#" + eventid + "title").text (title);
+		$ ("#" + eventid + "content").html ("<pre id = '" + eventid + "contentpre'></pre>");
 		$ ("#" + eventid + "contentpre").text (content);
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).attr ("onclick", "togglecontent (this.id)");
@@ -666,11 +667,13 @@ function cancelupdateevent (eventid) {
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).text (originevent[i]);
 		}
+		$ ("#" + eventid + "content").html ("<pre id = '" + eventid + "contentpre'></pre>"
 		$ ("#" + eventid + "contentpre").text (originevent[4]);
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).attr ("onclick", "togglecontent (this.id)");
 		}
 	}
+	status_bar_set ("");
 }
 
 function resumeeditbutton () {		//恢復其他活動的編輯  恢復新增活動
