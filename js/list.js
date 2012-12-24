@@ -81,7 +81,7 @@ function setinitialform () {//event1 ~ event10
 		$ ("#" + eventid + "head").append ("<td id = '" + eventid + "editdeleteblock' class = 'editdeleteblock'></td>");
 		$ ("#" + eventid + "editdeleteblock").html ("<input id = '" + eventid + "editbutton' type = 'button' value = '編輯' class = 'editbutton' onclick = 'editevent (\"" + eventid + "\")' />");
 		$ ("#" + eventid + "editdeleteblock").append ("<input id = '" + eventid + "deletebutton' type = 'button' value = '刪除' class = 'editbutton' onclick = 'deleteevent (\"" + eventid + "\")' />");
-		$ ("#eventbody").append ("<tr id = '" + eventid + "body' class = 'event'><td id = '" + eventid + "content'></td></tr>");
+		$ ("#eventbody").append ("<tr id = '" + eventid + "body' class = 'event'><td id = '" + eventid + "content'><pre id = '" + eventid + "contentpre'></pre></td></tr>");
 		$ ("#" + eventid + "content").addClass ("content");
 		$ ("#" + eventid + "content").attr ("colspan","5");
 		sethovercss (eventid + "content");
@@ -104,7 +104,7 @@ function pushevent () {//將curevent活動放入行事曆中
 		$ ("#" + eventid + "week").text ("星期" + Day[datetime.getDay ()]);
 		$ ("#" + eventid + "time").text (timetostring (datetime.getHours (), datetime.getMinutes ()));
 		$ ("#" + eventid + "title").text (curevent[i]["title"]);
-		$ ("#" + eventid + "content").html (escapestring (curevent[i]["content"]));
+		$ ("#" + eventid + "contentpre").text (curevent[i]["content"]);
 		$ ("#" + eventid + "content").css ("display", "none");
 		$ ("#event" + (i + 1) + "head").css ("display", "table-row");
 		$ ("#event" + (i + 1) + "content").css ("display", "none");
@@ -366,7 +366,7 @@ function switchbacktonormalmode (eventid) {
 		$ ("#" + eventid + "date").text (year + "." + month + "." + date);
 		$ ("#" + eventid + "time").text (timetostring (hour, minute));
 		$ ("#" + eventid + "title").text (title);
-		$ ("#" + eventid + "content").html (escapestring (content));
+		$ ("#" + eventid + "contentpre").text (content);
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).attr ("onclick", "togglecontent (this.id)");
 		}
@@ -666,7 +666,7 @@ function cancelupdateevent (eventid) {
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).text (originevent[i]);
 		}
-		$ ("#" + eventid + "content").html (originevent[4]);
+		$ ("#" + eventid + "contentpre").text (originevent[4]);
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).attr ("onclick", "togglecontent (this.id)");
 		}
@@ -720,7 +720,7 @@ function editevent (eventid) {
 	for (var i = 0 ; i < headdataclass.length ; i++) {
 		originevent[i] = $ ("#" + eventid + headdataclass[i]).text ();
 	}
-	originevent[4] = $ ("#" + eventid + "content").html ();
+	originevent[4] = $ ("#" + eventid + "contentpre").text ();
 	disableeditbutton ();
 	$ ("#" + eventid + "body").slideDown (250);
 	//$ ("#" + eventid + "date").html ("<input type = 'date' id = 'input" + eventid + "date'></input>");	//firefox不支援
