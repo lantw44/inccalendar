@@ -497,7 +497,7 @@ function caledit_createoption(){
 		newoption = document.createElement("option");
 		newoption.setAttribute("id", "calselopt" + i.toString());
 		newoption.value = i;
-		newoption.innerHTML = generate_display_string(addoption[i]);
+		newoption.textContent = generate_display_string(addoption[i]);
 		calselect.appendChild(newoption);
 		activecalevt.push(addoption[i].clone());
 	}
