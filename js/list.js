@@ -349,7 +349,6 @@ function switchbacktonormalmode (eventid) {
 		var checkclass = ["content", "remind", "year", "month", "date", "hour", "minute"];
 		$ ("#" + "newevent" + "head").css ("display", "none");
 		$ ("#" + "newevent" + "content").css ("display", "none");
-		$ ("#neweventblock").css ("display", "block");
 		for (var i = 0 ; i < checkclass.length ; i++) {
 			$ ("#input" + "newevent" + checkclass[i]).css ("background-color", "white");
 		}
@@ -667,7 +666,7 @@ function cancelupdateevent (eventid) {
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).text (originevent[i]);
 		}
-		$ ("#" + eventid + "content").html ("<pre id = '" + eventid + "contentpre'></pre>"
+		$ ("#" + eventid + "content").html ("<pre id = '" + eventid + "contentpre'></pre>");
 		$ ("#" + eventid + "contentpre").text (originevent[4]);
 		for (var i = 0 ; i < headdataclass.length ; i++) {
 			$ ("#" + eventid + headdataclass[i]).attr ("onclick", "togglecontent (this.id)");
@@ -678,22 +677,10 @@ function cancelupdateevent (eventid) {
 
 function resumeeditbutton () {		//恢復其他活動的編輯  恢復新增活動
 	$ (".editbutton").attr ("disabled", false);
-	$ ("#neweventblock").css ("cursor", "pointer");
-	$ ("#neweventblock").hover (function () {
-		$ ("#neweventbutton").css ("color", "black");
-		}, function () {
-		$ ("#neweventbutton").css ("color", "gray");
-	});
-	$ ("#neweventblock").attr ("onclick", "displayneweventinput ();");
 }
 
 function disableeditbutton () {		//停用其他活動的編輯  停用新增活動
 	$ (".editbutton").attr ("disabled", true);
-	$ ("#neweventblock").css ("cursor", "auto");	//編輯現有活動
-	$ ("#neweventblock").hover (function () {
-		$ ("#neweventbutton").css ("color", "gray");
-	});
-	$ ("#neweventblock").removeAttr ("onclick");
 }
 
 function inputkeyup (dataid) {		//dataid starts with 'input'
@@ -850,7 +837,6 @@ function setnonchangingyearcss () {//set cursor, even,odd color, next,prev page 
 	$ (".event:odd").css ("background-color", "#33FFFF");
 	$ ("#prevpagebutton").attr ("disabled", (curpage == 1));
 	$ ("#nextpagebutton").attr ("disabled", (curpage * 10 >= calevent.length));
-	$ ("#neweventblock").css ("display", "block");
 	$ ("#" + "newevent" + "head").css ("display", "none");
 	$ ("#" + "newevent" + "content").css ("display", "none");
 	resumeeditbutton ();
@@ -875,7 +861,6 @@ function timetostring (hour, minute) {//12:0 => 12:00
 }
 
 function displayneweventinput () {
-	$ ("#neweventblock").css ("display", "none");
 	$ ("#neweventhead").css ("display", "table-row");
 	$ ("#neweventcontent").slideDown (250);
 	pushneweventdata ();
