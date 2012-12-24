@@ -106,7 +106,7 @@ function inccal_fetch(year, month){
 			eventobj.datetime = new Date();
 			eventobj.datetime.setFullYear(
 				parseInt(XMLGetDataByTagName(calevent[i], "year")),
-				parseInt(XMLGetDataByTagName(calevent[i], "month")),
+				parseInt(XMLGetDataByTagName(calevent[i], "month") - 1),
 				parseInt(XMLGetDataByTagName(calevent[i], "date"))
 			);
 			eventobj.datetime.setHours(
