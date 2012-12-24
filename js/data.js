@@ -97,28 +97,28 @@ function inccal_fetch(year, month){
 		}
 		for(i=0; i<calevent.length; i++){
 			eventobj = new CalEvent();
-			eventobj.key = calevent[i].getElementsByTagName("key")[0].childNodes[0].nodeValue;
-			eventobj.title = calevent[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
-			eventobj.content = calevent[i].getElementsByTagName("content")[0].childNodes[0].nodeValue;
-			eventobj.icon = parseInt(calevent[i].getElementsByTagName("icon")[0].childNodes[0].nodeValue);
-			eventobj.remind = parseInt(calevent[i].getElementsByTagName("remind")[0].childNodes[0].nodeValue);
-			eventobj.datafrom = calevent[i].getElementsByTagName("datafrom")[0].childNodes[0].nodeValue;
+			eventobj.key = XMLGetDataByTagName(calevent[i], "key");
+			eventobj.title = XMLGetDataByTagName(calevent[i], "title");
+			eventobj.content = XMLGetDataByTagName(calevent[i], "content");
+			eventobj.icon = parseInt(XMLGetDataByTagName(calevent[i], "icon"));
+			eventobj.remind = parseInt(XMLGetDataByTagName(calevent[i], "remind"));
+			eventobj.datafrom = XMLGetDataByTagName(calevent[i], "datafrom");
 			eventobj.datetime = new Date();
 			eventobj.datetime.setFullYear(
-				parseInt(calevent[i].getElementsByTagName("year")[0].childNodes[0].nodeValue),
-				parseInt(calevent[i].getElementsByTagName("month")[0].childNodes[0].nodeValue - 1),
-				parseInt(calevent[i].getElementsByTagName("date")[0].childNodes[0].nodeValue)
+				parseInt(XMLGetDataByTagName(calevent[i], "year")),
+				parseInt(XMLGetDataByTagName(calevent[i], "month")),
+				parseInt(XMLGetDataByTagName(calevent[i], "date"))
 			);
 			eventobj.datetime.setHours(
-				parseInt(calevent[i].getElementsByTagName("hour")[0].childNodes[0].nodeValue),
-				parseInt(calevent[i].getElementsByTagName("minute")[0].childNodes[0].nodeValue),
+				parseInt(XMLGetDataByTagName(calevent[i], "hour")),
+				parseInt(XMLGetDataByTagName(calevent[i], "minute")),
 				0, 0);
 			caleventlist.push(eventobj);
 		}
 		timecounter++;
 		progcounter += calevent.length;
 		try{
-			gqlcursor = retrdata.getElementsByTagName("gqlcursor")[0].childNodes[0].nodeValue;
+			gqlcursor = XMLGetDataByTagName(retrdata, "gqlcursor");
 		}catch(err){
 			should_continue = false;
 		}

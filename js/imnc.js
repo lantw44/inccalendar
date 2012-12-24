@@ -188,11 +188,11 @@ function imnc_review(){
 		calevtobj.datafrom = "ntuceiba";
 
 		/* 先抓取 key 和 enabled 相關資料 */
-		univar = ncevent[i].getElementsByTagName("key")[0].childNodes;
-		if(univar.length > 0){
-			calevtobj.key = univar[0].nodeValue;
+		univar = XMLGetDataByTagName(ncevent[i], "key");
+		if(univar != ""){
+			calevtobj.key = univar;
 		}
-		univar = ncevent[i].getElementsByTagName("enabled")[0].childNodes[0].nodeValue;
+		univar = XMLGetDataByTagName(ncevent[i], "enabled");
 		if(univar == "False"){
 			defaultenabled = false;
 		}else{
@@ -244,10 +244,10 @@ function imnc_review(){
 		}
 
 		duedate = new Date();
-		dyear = parseInt(ncevent[i].getElementsByTagName("dueyear")[0].childNodes[0].nodeValue);
-		dmonth = parseInt(ncevent[i].getElementsByTagName("duemonth")[0].childNodes[0].nodeValue);
-		ddate = parseInt(ncevent[i].getElementsByTagName("duedate")[0].childNodes[0].nodeValue);
-		dhour = parseInt(ncevent[i].getElementsByTagName("duehour")[0].childNodes[0].nodeValue);
+		dyear = parseInt(XMLGetDataByTagName(ncevent[i], "dueyear"));
+		dmonth = parseInt(XMLGetDataByTagName(ncevent[i], "duemonth"));
+		ddate = parseInt(XMLGetDataByTagName(ncevent[i], "duedate"));
+		dhour = parseInt(XMLGetDataByTagName(ncevent[i], "duehour"));
 		calevtobj.datetime = duedate;
 		calevtobj.datetime.setFullYear(dyear, dmonth - 1, ddate);
 		calevtobj.datetime.setHours(dhour, 0, 0);
@@ -263,7 +263,7 @@ function imnc_review(){
 		newdata.appendChild(newtextnode);
 		newrow.appendChild(newdata);
 
-		eventtitle = ncevent[i].getElementsByTagName("title")[0].childNodes[0].nodeValue;
+		eventtitle = XMLGetDataByTagName(ncevent[i], "title");
 		calevtobj.title = eventtitle;
 		newdata = document.createElement("td");
 		newtextnode = document.createTextNode(eventtitle);
@@ -276,7 +276,7 @@ function imnc_review(){
 			eventcontent += "名稱：" + eventtitle + "\n";
 		}
 
-		univar = ncevent[i].getElementsByTagName("member")[0].childNodes[0].nodeValue;
+		univar = XMLGetDataByTagName(ncevent[i], "member");
 		newdata = document.createElement("td");
 		newtextnode = document.createTextNode(univar);
 		newdata.appendChild(newtextnode);
@@ -285,7 +285,7 @@ function imnc_review(){
 			eventcontent += "成員：" + univar + "\n";
 		}
 
-		univar = ncevent[i].getElementsByTagName("method")[0].childNodes[0].nodeValue;
+		univar = XMLGetDataByTagName(ncevent[i], "method");
 		newdata = document.createElement("td");
 		newtextnode = document.createTextNode(univar);
 		newdata.appendChild(newtextnode);
@@ -294,7 +294,7 @@ function imnc_review(){
 			eventcontent += "繳交方法：" + univar + "\n";
 		}
 
-		univar = ncevent[i].getElementsByTagName("percent")[0].childNodes[0].nodeValue;
+		univar = XMLGetDataByTagName(ncevent[i], "percent");
 		newdata = document.createElement("td");
 		newtextnode = document.createTextNode(univar);
 		newdata.appendChild(newtextnode);
@@ -307,7 +307,7 @@ function imnc_review(){
 			eventcontent += "繳交期限：" + strdate + " " + strtime + "\n";
 		}
 
-		univar = ncevent[i].getElementsByTagName("late")[0].childNodes[0].nodeValue;
+		univar = XMLGetDataByTagName(ncevent[i], "late");
 		univar = univar == 'True' ? "可以" : "不可以";
 		newdata = document.createElement("td");
 		newtextnode = document.createTextNode(univar);
@@ -317,7 +317,7 @@ function imnc_review(){
 			eventcontent += "逾期繳交：" + univar + "\n";
 		}
 
-		univar = ncevent[i].getElementsByTagName("sub")[0].childNodes[0].nodeValue;
+		univar = XMLGetDataByTagName(ncevent[i], "sub");
 		newdata = document.createElement("td");
 		newtextnode = document.createTextNode(univar);
 		newdata.appendChild(newtextnode);
@@ -326,7 +326,7 @@ function imnc_review(){
 			eventcontent += "繳交日期：" + univar + "\n";
 		}
 
-		univar = ncevent[i].getElementsByTagName("comment")[0].childNodes[0].nodeValue;
+		univar = XMLGetDataByTagName(ncevent[i], "comment");
 		newdata = document.createElement("td");
 		newtextnode = document.createTextNode(univar);
 		newdata.appendChild(newtextnode);

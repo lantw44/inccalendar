@@ -73,3 +73,13 @@ function add_zero_padding(num, digits){
 	}
 	return newnum;
 }
+
+function XMLGetDataByTagName(element, tagname){
+	var univar;
+	univar = element.getElementsByTagName(tagname)[0].childNodes;
+	if(univar.length > 0){
+		return univar[0].nodeValue;
+	}else{
+		return "";
+	}
+}
