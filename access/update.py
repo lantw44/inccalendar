@@ -36,7 +36,11 @@ class UpdateEvent (webapp2.RequestHandler) :
 		minute = thisbeginminute
 		);
 		thisdatafrom = self.request.get('datafrom')
-		thisremind = int(self.request.get('remind'))
+		thisremind = None
+		try:
+			thisremind = int(self.request.get('remind'))
+		except:
+			pass
 		
 		eventdata = db.get(mykey)
 		eventdata.icon = thisicon

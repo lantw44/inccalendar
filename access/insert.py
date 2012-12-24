@@ -33,7 +33,11 @@ class InsertEvent(webapp2.RequestHandler):
 		minute = thisbeginminute
 		);
 		thisdatafrom = self.request.get('datafrom')
-		thisremind = int(self.request.get('remind'))
+		thisremind = None
+		try:
+			thisremind = int(self.request.get('remind'))
+		except:
+			pass
 
 		newcalevent = CalEvent(
 		db.Key.from_path('user', guserid.email()),
