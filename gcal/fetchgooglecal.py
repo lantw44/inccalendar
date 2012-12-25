@@ -70,9 +70,14 @@ class FetchGoogleCal (webapp2.RequestHandler) :
 					begin = begintime,
 					datafrom = 'google'
 					)
+					
 					if event.content.text :
 						event.content.text = unicode (event.content.text, "utf-8")
 						newcalevent.content = event.content.text
+					else :
+						newcalevent.content = u"沒有任何內容"
+					
+					newcalevent.icon = 0
 					newcalevent.remind = 30
 					newcalevent.put ()
 					
