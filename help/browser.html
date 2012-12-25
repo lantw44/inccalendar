@@ -1,0 +1,91 @@
+{% extends "jinhtml/skel.html" %}
+{% block headcss %}
+  <link rel="stylesheet" href="css/help.css" type="text/css">
+{% endblock %}
+
+{% block onload %}
+  document.getElementById("helplinkbar").style.display = "block";
+{% endblock %}
+
+{% block headjs %}
+{% endblock %}
+
+{% block body %}
+  <div id="helpwholepage">
+    <p class="helptitle">已測試的瀏覽器（更新日期：2012/12/25）</p>
+    <div class="helpcontent">
+      <table border="1">
+        <tr>
+          <td>瀏覽器名稱</td>
+          <td>作業系統</td>
+          <td>結果</td>
+        </tr>
+        <tr>
+          <td>Mozilla Firefox 17</td>
+          <td>Fedora 17 (GNU/Linux)</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr>
+          <td>Mozilla Firefox 17</td>
+          <td>Microsoft Windows XP</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr>
+          <td>Google Chrome 23</td>
+          <td>Fedora 17 (GNU/Linux)</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr>
+          <td>Chromium 23</td>
+          <td>Arch Linux (GNU/Linux)</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr>
+          <td>Chromium 23</td>
+          <td>FreeBSD 9.1-PRERELEASE</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr>
+          <td>Chromium 25</td>
+          <td>Fedora 17 (GNU/Linux)</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr>
+          <td>Chromium 26</td>
+          <td>Fedora 17 (GNU/Linux)</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr>
+          <td>Chromium 26</td>
+          <td>Fedora 17 (GNU/Linux)</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr style="cursor: pointer" onclick="alert('月曆版無法顯示資料也無法編輯、不支援 HTML5 FileReader')">
+          <td>Internet Explorer 9</td>
+          <td>Windows 2008 Server R2</td>
+          <td><img alt="失敗" src="http://koji.fedoraproject.org/koji-static/images/failed.png"></td>
+        </tr>
+        <tr>
+          <td>Internet Explorer 10</td>
+          <td>Windows 8</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr style="cursor: pointer" onclick="alert('快速鍵衝突以及月曆版是否修改過的檢測有誤');">
+          <td>Opera 12</td>
+          <td>Fedora 17 (GNU/Linux)</td>
+          <td><img alt="失敗" src="http://koji.fedoraproject.org/koji-static/images/failed.png"></td>
+        </tr>
+        <tr>
+          <td>SeaMonkey 2.12</td>
+          <td>Fedora 17 (GNU/Linux)</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+        <tr>
+          <td>GNOME Epiphany 3.4.3</td>
+          <td>Fedora 17 (GNU/Linux)</td>
+          <td><img alt="成功" src="http://koji.fedoraproject.org/koji-static/images/complete.png"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+{% endblock %}

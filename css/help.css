@@ -4,6 +4,12 @@ p.helptitle{
 div.helpcontent{
 	padding-left: 20px;
 }
+div.helpcontent table{
+	border-collapse: collapse;
+}
+div.helpcontent table td{
+	padding: 3px;
+}
 div#helpwholepage{
 	padding-left: 35px;
 }
