@@ -18,7 +18,9 @@ function CalEvent(){
 		return this.title == another.title && 
 			this.content == another.content &&
 			this.icon == another.icon &&
-			this.remind == another.remind &&
+			(this.remind == another.remind ||
+			 ((isNaN(this.remind) || this.remind == null) && 
+			  (isNaN(another.remind) || another.remind == null))) &&
 			this.datafrom == another.datafrom &&
 			this.datetime.toString() == another.datetime.toString();
 	}
@@ -102,6 +104,9 @@ function inccal_fetch(year, month){
 			eventobj.content = XMLGetDataByTagName(calevent[i], "content");
 			eventobj.icon = parseInt(XMLGetDataByTagName(calevent[i], "icon"));
 			eventobj.remind = parseInt(XMLGetDataByTagName(calevent[i], "remind"));
+			if(!isFinite(eventobj.remind)){
+				eventobj.remind = null;
+			}
 			eventobj.datafrom = XMLGetDataByTagName(calevent[i], "datafrom");
 			eventobj.datetime = new Date();
 			eventobj.datetime.setFullYear(
