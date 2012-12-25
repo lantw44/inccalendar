@@ -39,18 +39,22 @@ class FetchGoogleCal (webapp2.RequestHandler) :
 					starttime = when.start_time.split ('T')
 					
 					date = starttime[0].split ('-')
-					time = starttime[1].split (':')
-					
 					for i in range (0, len (date)) :
 						date[i] = unicode (date[i])
-					for i in range (0, len (time)) :
-						time[i] = unicode (time[i])
 					
 					year = int (date[0])
 					month = int (date[1])
 					day = int (date[2])
-					hour = int (time[0])
-					minute = int (time[1])
+					
+					if len (starttime) == 1 :	#全天的活動
+						hour = 0
+						minute = 0
+					else :
+						time = starttime[1].split (':')
+						for i in range (0, len (time)) :
+							time[i] = unicode (time[i])
+						hour = int (time[0])
+						minute = int (time[1])
 					
 					begintime = datetime.datetime (
 					year = year,
@@ -66,11 +70,13 @@ class FetchGoogleCal (webapp2.RequestHandler) :
 					begin = begintime,
 					datafrom = 'google'
 					)
-					event.content.text = unicode (event.content.text, "utf-8")
-					newcalevent.content = event.content.text
-					
+					if event.content.text :
+						event.content.text = unicode (event.content.text, "utf-8")
+						newcalevent.content = event.content.text
+					newcalevent.remind = 30
 					newcalevent.put ()
-			self.redirect (self.request.host_url, permanent = True)
+					
+		self.redirect (self.request.host_url, permanent = True)
 		
 		# token_request_url = gdata.auth.generate_auth_sub_url (self.request.uri, ('http://www.google.com/calendar/feeds/default/',))
 		# auth_token = gdata.auth.extract_auth_sub_token_from_url (token_request_url)

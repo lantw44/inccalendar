@@ -726,6 +726,12 @@ function editevent (eventid) {
 	if (thisevent["datafrom"] == "native") {
 		datafrom = "include <行事曆.h>";
 	}
+	else if (thisevent["datafrom"] == "google") {
+		datafrom = "Google 行事曆"
+	}
+	else if (thisevent["datafrom"] == "ntuceiba") {
+		datafrom = "臺大 CEIBA 網站"
+	}
 	else {
 		datafrom = thisevent["datafrom"];
 	}
