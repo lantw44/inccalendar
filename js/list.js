@@ -677,10 +677,12 @@ function cancelupdateevent (eventid) {
 
 function resumeeditbutton () {		//恢復其他活動的編輯  恢復新增活動
 	$ (".editbutton").attr ("disabled", false);
+	$ ("#neweventblock").attr ("disabled", true);
 }
 
 function disableeditbutton () {		//停用其他活動的編輯  停用新增活動
 	$ (".editbutton").attr ("disabled", true);
+	$ ("#neweventblock").attr ("disabled", false);
 }
 
 function inputkeyup (dataid) {		//dataid starts with 'input'
