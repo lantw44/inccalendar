@@ -40,7 +40,7 @@ class FetchGoogleCal (webapp2.RequestHandler) :
 					
 					date = starttime[0].split ('-')
 					for i in range (0, len (date)) :
-						date[i] = unicode (date[i])
+						date[i] = unicode (date[i], "utf-8")
 					
 					year = int (date[0])
 					month = int (date[1])
@@ -52,7 +52,7 @@ class FetchGoogleCal (webapp2.RequestHandler) :
 					else :
 						time = starttime[1].split (':')
 						for i in range (0, len (time)) :
-							time[i] = unicode (time[i])
+							time[i] = unicode (time[i], "utf-8")
 						hour = int (time[0])
 						minute = int (time[1])
 					
@@ -64,9 +64,14 @@ class FetchGoogleCal (webapp2.RequestHandler) :
 					minute = minute
 					)
 					
+					if event.title.text :
+						title = unicode (event.title.text, "utf-8")
+					else :
+						title = u"沒有標題"
+					
 					newcalevent = CalEvent (
 					db.Key.from_path('user', guserid.email()),
-					title = unicode (event.title.text),
+					title = title,
 					begin = begintime,
 					datafrom = 'google'
 					)

@@ -22,12 +22,12 @@ function setneweventform () {
 	$ ("#" + "newevent" + "date").html ("<input type = 'text' id = 'input" + "newevent" + "year' size = '2' maxlength = '4' onkeyup = 'inputkeyup (this.id);' /> 年");	//size = 2 因為size是算中文字
 	$ ("#" + "newevent" + "date").append ("<input type = 'text' id = 'input" + "newevent" + "month' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 月");
 	$ ("#" + "newevent" + "date").append ("<input type = 'text' id = 'input" + "newevent" + "date' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 日");
-	$ ("#" + "newevent" + "time").html ("<input type = 'tetxt' id = 'input" + "newevent" + "hour' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 時 <br />");
-	$ ("#" + "newevent" + "time").append ("<input type = 'tetxt' id = 'input" + "newevent" + "minute' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 分");
-	$ ("#" + "newevent" + "title").html ("<input type = 'tetxt' id = 'input" + "newevent" + "title' size = '40' />");
+	$ ("#" + "newevent" + "time").html ("<input type = 'text' id = 'input" + "newevent" + "hour' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 時 <br />");
+	$ ("#" + "newevent" + "time").append ("<input type = 'text' id = 'input" + "newevent" + "minute' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 分");
+	$ ("#" + "newevent" + "title").html ("<input type = 'text' id = 'input" + "newevent" + "title' size = '40' />");
 	$ ("#" + "newevent" + "content").html ("<div> 活動內容： </div><textarea id = 'input" + "newevent" + "content" + "'></textarea><br />");
 	$ ("#input" + "newevent" + "content").attr ({"rows":"5", "cols":"100"});
-	$ ("#" + "newevent" + "content").append ("提醒：<input type = 'tetxt' id = 'input" + "newevent" + "remind' size = '1' maxlength = '4' /> 分鐘前&nbsp;&nbsp;&nbsp;&nbsp;");
+	$ ("#" + "newevent" + "content").append ("提醒：<input type = 'text' id = 'input" + "newevent" + "remind' size = '1' maxlength = '4' /> 分鐘前&nbsp;&nbsp;&nbsp;&nbsp;");
 	$ ("#" + "newevent" + "content").append ("資料來源： " + "include <行事曆.h>" + "&nbsp;&nbsp;&nbsp;&nbsp;");
 	$ ("#" + "newevent" + "content").append ("<input type = 'button' value = '確認' class = 'okbutton' onclick = 'updateevent (\"" + "newevent" + "\"); resumeeditbutton ();' />");
 	$ ("#" + "newevent" + "content").append ("<input type = 'button' value = '取消' class = 'okbutton' onclick = 'cancelupdateevent (\"" + "newevent" + "\"); resumeeditbutton ();' />");
@@ -717,12 +717,12 @@ function editevent (eventid) {
 	$ ("#" + eventid + "date").html ("<input type = 'text' id = 'input" + eventid + "year' size = '2' maxlength = '4' onkeyup = 'inputkeyup (this.id);' /> 年");	//size = 2 因為size是算中文字
 	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "month' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 月");
 	$ ("#" + eventid + "date").append ("<input type = 'text' id = 'input" + eventid + "date' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 日");
-	$ ("#" + eventid + "time").html ("<input type = 'tetxt' id = 'input" + eventid + "hour' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 時 <br />");
-	$ ("#" + eventid + "time").append ("<input type = 'tetxt' id = 'input" + eventid + "minute' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 分");
-	$ ("#" + eventid + "title").html ("<input type = 'tetxt' id = 'input" + eventid + "title' size = '40' />");
+	$ ("#" + eventid + "time").html ("<input type = 'text' id = 'input" + eventid + "hour' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 時 <br />");
+	$ ("#" + eventid + "time").append ("<input type = 'text' id = 'input" + eventid + "minute' size = '1' maxlength = '2' onkeyup = 'inputkeyup (this.id);' /> 分");
+	$ ("#" + eventid + "title").html ("<input type = 'text' id = 'input" + eventid + "title' size = '40' />");
 	$ ("#" + eventid + "content").html ("<div> 活動內容： </div><textarea id = 'input" + eventid + "content" + "'></textarea><br />");
 	$ ("#input" + eventid + "content").attr ({"rows":"5", "cols":"100"});
-	$ ("#" + eventid + "content").append ("提醒：<input type = 'tetxt' id = 'input" + eventid + "remind' size = '1' maxlength = '4' /> 分鐘前&nbsp;&nbsp;&nbsp;&nbsp;");
+	$ ("#" + eventid + "content").append ("提醒：<input type = 'text' id = 'input" + eventid + "remind' size = '1' maxlength = '4' /> 分鐘前&nbsp;&nbsp;&nbsp;&nbsp;");
 	if (thisevent["datafrom"] == "native") {
 		datafrom = "include <行事曆.h>";
 	}
