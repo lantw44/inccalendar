@@ -1,0 +1,24 @@
+{% extends "jinhtml/skel.html" %}
+{% block headcss %}
+  <link rel="stylesheet" href="css/help.css" type="text/css">
+{% endblock %}
+
+{% block onload %}
+  document.getElementById("helplinkbar").style.display = "block";
+{% endblock %}
+
+{% block headjs %}
+{% endblock %}
+
+{% block body %}
+  <div id="helpwholepage">
+    <p class="helptitle">這個網站的來源</p>
+	<div class="helpcontent">
+	  這個網站原先是「計算機概論」課程的期末作業，而我們決定繼續維護這個程式，因此可能和原先報告時有許多差異。若要存取舊的、已不在維護的版本，請按<a href="https://2.inccalender.appspot.com">這裡</a>。
+	</div>
+	<p class="helptitle">這個網站的程式</p>
+	<div class="helpcontent">
+	  本站的所有程式碼可在 Google code 上的 <a href="http://code.google.com/p/inccalendar/">inccalendar</a> 專案此取得，您可以依據 GNU GPL 第二版或以後發布版本自由散布這個程式。
+	</div>
+  </div>
+{% endblock %}

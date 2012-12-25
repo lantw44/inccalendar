@@ -40,6 +40,17 @@ div#controlright{
 	right: 2px;
 	text-align: right;
 }
+div#helplinkbar{
+	text-align: center;
+	font-size: x-large;
+}
+div#helplinkbar a{
+	text-decoration: none;
+	border-width: 1px;
+	border-style: solid;
+	margin: 2px;
+	padding: 2px;
+}
 div#statusbar{
 	position: fixed;
 	left: 0px;

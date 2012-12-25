@@ -6,6 +6,7 @@ import os
 import jinja2
 import webapp2
 
+from jinja2 import TemplateNotFound
 from google.appengine.api import users
 
 class HelpPage(webapp2.RedirectHandler):
@@ -38,8 +39,12 @@ class HelpPage(webapp2.RedirectHandler):
 				'myhost': myhost
 			}
 		
-		jinhtml = jinenv.get_template('help/' + page + '.html')
-		self.response.out.write(jinhtml.render(jintemvar))
+		try:
+			jinhtml = jinenv.get_template('help/' + page + '.html')
+			self.response.out.write(jinhtml.render(jintemvar))
+		except TemplateNotFound:
+			self.response.set_status(404)
+			self.response.out.write(u'抱歉，查無此文件。')
 		
 
 jinenv = jinja2.Environment(

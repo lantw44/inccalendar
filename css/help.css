@@ -1,0 +1,9 @@
+p.helptitle{
+	font-size: x-large;
+}
+div.helpcontent{
+	padding-left: 20px;
+}
+div#helpwholepage{
+	padding-left: 35px;
+}
