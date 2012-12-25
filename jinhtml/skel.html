@@ -27,6 +27,9 @@
 	function switch_export(){
 		window.location = "{{ myhost }}/port?function=export"
 	}
+	function switch_doc(){
+		window.location = "{{ myhost }}/help"
+	}
 	window.onload = function(){
 		status_bar_init();
 		{% block onload %}{% endblock %}
@@ -46,7 +49,8 @@
     <div id="controlright">
       <input type="button" value="匯入" id="buttonimport" onclick="switch_import()">
       <input type="button" value="匯出" id="buttonexport" onclick="switch_export()">
-      <input type="button" value="登出" id="googlelogout" onclick="google_logout()" style="background-color: darkgray">
+	  <input type="button" value="說明" id="aboutandhelp" onclick="switch_doc()" style="background-color: firebrick;">
+      <input type="button" value="{{ logouttext }}" id="googlelogout" onclick="google_logout()" style="background-color: darkgray">
     </div>
   </div>
   <div id="statusbar">

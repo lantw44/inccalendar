@@ -1,5 +1,5 @@
 application: inccalender
-version: 2
+version: 3
 runtime: python27
 api_version: 1
 threadsafe: false
@@ -31,6 +31,10 @@ handlers:
 - url: /gcal/(.*)
   script: gcal.fetchgooglecal.app
   secure: always
+
+- url: /help.*
+  script: help.app
+  secure: optional
 
 - url: /port.*
   script: port.app

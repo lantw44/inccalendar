@@ -19,6 +19,7 @@ class MainPage(webapp2.RedirectHandler):
 			logouturl = cgi.escape(users.create_logout_url(myurl))
 			jintemvar = {
 				'logouturl': logouturl,
+				'logouttext': u'登出',
 				'productname': productname,
 				'googleuser': guserid,
 				'myhost': myhost
