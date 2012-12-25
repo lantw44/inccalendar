@@ -311,8 +311,11 @@ function caledit_validate(){
 		if(!isFinite(tmp) || tmp < 0 || tmp >= 60){
 			throw "請輸入正確的時間（分鐘）！";
 		}
-		tmp = parseInt(remindobjw.value);
-		if(!isFinite(tmp)){
+		tmp = remindobjw.value;
+		if(tmp == "NaN"){
+			tmp = "";
+		}
+		if(tmp != "" && !isFinite(parseInt(tmp))){
 			throw "請輸入正確的提醒時間！";
 		}
 		tmp = titleobjw.value;
